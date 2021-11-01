@@ -1,88 +1,40 @@
-# tailwind-react-next.js-typescript-eslint-jest-starter
+## Registration Form
+---
 
-Starter template for building a project using React, Typescript, Next.js, Jest, TailwindCSS and ESLint.
+* responsive design
+  * form is framed only on large devices. for tablets and mobile the form is taking the entire width
+  * background for lg screens is a gradient
+* field validation
+  * 1st step
+  * email - valid email
+  * max 50 chars
+  * password
+    * 8 - 12 chars length
+    * must not include 1st part of email (before @), first name or last name (case insensitive check)
+    * must include at least 1 number
+    * no special characters
+  * special questions
+    * only letters
+    * 2 - 30 length
+  * 2nd step
+    * first name and last name
+      * only letters, spaces, apostrophes and dashes
+      * cannot have 2 or more  space/apostrophe/dash next to each other (--, '',  )
+      * 2 to 30 chars
+    * date of birth (dob)
+      * must be a valid date
+      * must be over 18
+  * gender
+  * 3rd step
+    * confirmation is required
+* must show validation errors under input
+* stepper component must be clickable
+  * can click on next step only if current is valid
+* must be able to go between steps via browser navigation (back/forward buttons)
 
-## Setup Instructions
+stack: nextjs, tailwing, typescript
 
-1. Clone or download the project.
-2. `cd` in the project directory.
-3. If you cloned the project, make sure you remove the remote reference to this project by running `git remote rm origin`.
-4. Copy `.env.example` to `.env` as that file is used to load up all your environment variables.
-4. Run `yarn install` or `npm install` to install all dependencies.
-
-## Commands
-
-- `yarn dev`: To start a local development server.
-- `yarn test`: To run the entire unit test suite using `jest`.
-- `yarn test:ci`: To run tests on CI.
-- `yarn lint`: To run the ESLint based linter to find out the issues in the project.
-- `yarn format`: To autoformat all the issues.
-- `yarn export`: Run this after running `yarn analyze` to export a build copy.
-- `yarn production`: To export a production build. Use `yarn start` to serve that.
-
-- `yarn upgrade --latest`: To upgrade all packages to their latest versions (could include breaking changes).
-
-## Code Structure
-
-All source code is located in the `src/` directory.
-
-1. All Next.js entrypoints are housed in the `src/pages` directory as a default.
-
-    - Currently has `_app.tsx` which imports TailwindCSS.
-    - There's also a sample `index.tsx`.
-
-    **NOTE:** Feel free to move `pages` outside of `src/` if that's what you prefer. You'll just need to restart your local development server and everything should continue working as normal.
-
-2. `src/components` are all stateless reusable components.
-3. `src/css` folder is there just to house any CSS.
-
-    - Currently contains the TailwindCSS initialization CSS file.
-
-4. All env variables are available in `.env` files (`.env` file isn't committed). Whenever you update `.env`, please update `.env.example` and `.env.test` and `next.config.js` to proxy all environment variables properly.
-
-    - You can access these variables in the app source code anywhere using `process.env.<VAR_NAME>`.
-
-If you feel like changing the directory structure, please change the appropriate settings in the following files:
-
-- `.swcrc`
-- `jest.config.js`
-- `postcss.config.js`
-- `tsconfig.json`
-- The `lint` and the `format` scripts in `package.json`
-
-## Note
-
-1. This project removes the `x-powered-by` response header via `next.config.js` by marking the `poweredByHeader` property as `false`.
-
-2. If you wish to use `Enzyme` instead of `React Testing Library`, please refer to [this commit](https://github.com/abhishekbhardwaj/tailwind-react-next.js-typescript-eslint-jest-starter/commit/58bde782bef1050cc91a20fccecb7c6e4a6216aa). Enzyme was removed with that commit.
-
-3. If you wish to use Babel instead of SWC (introduced with the Next.js v12 upgrade), please remove the `.swcrc` file and add a `.babelrc` file at the root with the following:
-
-```
-{
-    "presets": [
-        "next/babel"
-    ],
-    "plugins": [
-        [
-            "module-resolver",
-            {
-                "root": [
-                    "./"
-                ],
-                "alias": {
-                    "@src": "./src"
-                },
-                "extensions": [
-                    ".js",
-                    ".jsx",
-                    ".ts",
-                    ".tsx"
-                ]
-            }
-        ]
-    ]
-}
-```
-
-Also, run `yarn add -D @babel/core babel-plugin-module-resolver eslint-import-resolver-babel-module` to install Babel's dependencies.
+* must develop using TDD approach
+* create a simple header and footer of your choosing 
+* pixel perfect is not required. Designed are simply there for directions - you can simplify them 
+* work as a team
