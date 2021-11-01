@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 export enum ValidationStatus {
   Pending = "Pending",
@@ -12,19 +12,18 @@ export type IUseValidation<T> = [
   errorMessage: string,
 ];
 
-export type IUseValidationRule<T = any> = [
+export type IUseValidationRule<T> = [
   test: (value: T) => boolean,
   message: string,
 ];
 
-interface IUseValidationOptions<T = any, U = null> {
-  rules: IUseValidationRule[];
-  onValid?: () => T;
-  onError?: () => string;
-  context?: [_: React.Context<U>, fieldName: string];
+export interface IUseValidationOptions<T> {
+  rules: IUseValidationRule<T>[];
+  onValid?: (value: T) => void;
+  onError?: (message: string, value: T) => void;
 }
 
-export const useValidation = <T> (options: IUseValidationOptions): IUseValidation<T> => {
+export const useValidation = <T> (options: IUseValidationOptions<T>): IUseValidation<T> => {
   const [status, setStatus] = useState(ValidationStatus.Pending);
   const [error, setError] = useState<string>("");
 
@@ -33,10 +32,12 @@ export const useValidation = <T> (options: IUseValidationOptions): IUseValidatio
     if (errorMessage) {
       setStatus(ValidationStatus.Error);
       setError(errorMessage);
+      options.onError?.(errorMessage, value);
     } else {
       setStatus(ValidationStatus.Valid);
+      options.onValid?.(value);
     }
-  }, [options.rules]);
+  }, [options.rules, options.onValid, options.onError]);
 
   return [onChange, status, error];
 };
