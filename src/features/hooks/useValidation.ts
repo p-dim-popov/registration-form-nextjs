@@ -27,3 +27,5 @@ interface IUseValidationOptions<T = any, U = null> {
 export const useValidation = <T> (options: IUseValidationOptions): IUseValidation<T> => {
   return [() => {}, ValidationStatus.Pending, ""];
 };
+
+export default useValidation;
