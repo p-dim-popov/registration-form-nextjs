@@ -1,10 +1,11 @@
 import { useValidation } from "@src/features/hooks/useValidation";
+import { isRequired } from "@src/features/rule-creators/ruleCreators";
 
 describe("useValidation", () => {
   it("should return tuple with onChange, status, error", () => {
     const result = useValidation<string>({
       rules: [
-        [(value) => !!value, "Field is required!"],
+        isRequired(),
       ],
     });
     expect(result).toBeInstanceOf(Array);
