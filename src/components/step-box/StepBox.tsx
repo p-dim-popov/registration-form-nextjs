@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import RegisterContext, { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { useRouter } from "next/router";
+import classNames from "classnames";
 
 export enum StepBoxStatus {
     Active = "Active",
@@ -19,8 +20,23 @@ const StepBox: React.FC<IStepBoxProps> = ({ children, title, forPage }) => {
 
     const isActive = context.page === forPage;
     return (
-        <div role="button" className="cursor-pointer" onClick={() => router.push(forPage)} tabIndex={0}>
-            <div className={isActive ? "bg-blue" : "bg-gray"}>{children}</div>
+        <div
+            role="button"
+            className={classNames({
+                "cursor-pointer flex flex-col items-center": true,
+            })}
+            onClick={() => router.push(forPage)}
+            tabIndex={0}
+        >
+            <div
+                className={classNames({
+                    "rounded-full h-14 w-14 py-3 px-5 text-2xl font-bold": true,
+                    "bg-gray-700 text-white": isActive,
+                    "bg-gray-300 text-gray-400": !isActive,
+                })}
+            >
+                {children}
+            </div>
             <h3>{title}</h3>
         </div>
     );
