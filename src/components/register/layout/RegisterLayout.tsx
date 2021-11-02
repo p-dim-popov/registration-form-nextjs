@@ -1,25 +1,21 @@
-import React, { useReducer } from "react";
+import React, { useState } from "react";
 import RegisterFormHeader from "@src/components/register/RegisterFormHeader/RegisterFormHeader";
 import RegisterContext from "@src/features/contexts/register-context/RegisterContext";
 
 export type IFormDataValue = string | number | boolean;
-export type IRegisterLayoutState = { [name: string]: IFormDataValue };
+export type IRegisterLayoutState = ({ [fieldName: string]: IFormDataValue });
 
 // declared as function to be used generic (eslint breaks if arrow is used/mistaken for JSX)
-function RegisterLayout<T>({ children }: React.PropsWithChildren<T>) {
-  const [state, setState] = useReducer(
-    (prevState: IRegisterLayoutState = {}, action: IRegisterLayoutState) => ({
-      ...prevState,
-      ...action,
-    }),
-    {},
-  );
+function RegisterLayout<TProps, TFormState extends IRegisterLayoutState>({
+  children,
+}: React.PropsWithChildren<TProps>) {
+  const [state, setState] = useState<TFormState>({} as unknown as TFormState);
 
   return (
     <RegisterContext.Provider
       value={{
         formData: state,
-        set: (fieldName) => (value) => setState({ [fieldName]: value }),
+        set: (fieldName) => (value) => setState({ ...state, [fieldName]: value }),
       }}
     >
       <RegisterFormHeader />
