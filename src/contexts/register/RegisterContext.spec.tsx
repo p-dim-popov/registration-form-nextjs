@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import React from "react";
-import RegisterContext, { RegisterPages } from "@src/contexts/register-context/RegisterContext";
+import RegisterContext, { RegisterPages } from "@src/contexts/register/RegisterContext";
 
 describe("RegisterContext", () => {
     it("should have default page (account-details)", () => {

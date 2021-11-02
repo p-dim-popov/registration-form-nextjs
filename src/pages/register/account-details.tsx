@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import type { NextPageWithLayout } from "@src/pages/_app";
-import { RegisterPages } from "@src/contexts/register-context/RegisterContext";
+import { RegisterPages } from "@src/contexts/register/RegisterContext";
 
 const AccountDetails: NextPageWithLayout = () => {
   return (

@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import RegisterLayout from "@src/components/register/layout/RegisterLayout";
-import { RegisterPages } from "@src/contexts/register-context/RegisterContext";
+import { RegisterPages } from "@src/contexts/register/RegisterContext";
 
 describe("Layout", () => {
     it("should have 3 navigation buttons, 1 submit button, contact us link and children", () => {
