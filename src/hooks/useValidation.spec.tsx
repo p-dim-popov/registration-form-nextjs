@@ -1,4 +1,4 @@
-import { IUseValidationOptions, useValidation, ValidationStatus } from '@src/features/hooks/useValidation'
+import { IUseValidationOptions, useValidation, ValidationStatus } from '@src/hooks/useValidation'
 import { isEqualOrGraterThan, isRequired } from '@src/features/rule-creators/ruleCreators'
 import React from 'react'
 import { render, screen } from '@testing-library/react'

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import RegisterFormHeader from "@src/components/register/RegisterFormHeader/RegisterFormHeader";
-import RegisterContext, { RegisterPages } from "@src/features/contexts/register-context/RegisterContext";
+import RegisterContext, { RegisterPages } from "@src/contexts/register-context/RegisterContext";
 import RegisterFormFooter from "@src/components/register/RegisterFormFooter/RegisterFormFooter";
 
 export type IFormDataValue = string | number | boolean;

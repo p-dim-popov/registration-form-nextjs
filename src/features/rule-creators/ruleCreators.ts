@@ -1,4 +1,4 @@
-import { IUseValidationRule } from "@src/features/hooks/useValidation";
+import { IUseValidationRule } from "@src/hooks/useValidation";
 
 export interface ICreateMessageOptions {
   name?: string;
