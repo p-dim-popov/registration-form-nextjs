@@ -1,21 +1,29 @@
 import React from "react";
-import { IUseValidationOptions } from "@src/hooks/useValidation";
+import useValidation, { IUseValidationOptions } from "@src/hooks/useValidation";
 
-export interface IInputProps<T> {
+export interface IInputProps {
     id: string;
     label?: string;
-    validation?: IUseValidationOptions<T>;
+    validation?: IUseValidationOptions<string>;
     showValidationStatus?: boolean;
     inlineLabel?: boolean;
 }
 
-function Input<T>({
+const Input: React.FC<IInputProps> = ({
     id, label = id, validation, showValidationStatus, inlineLabel,
-}: React.PropsWithChildren<IInputProps<T>>) {
+}) => {
+    const [onChange,, errorMessage] = useValidation(validation ?? { rules: [] });
+
     return (
         <>
             {!inlineLabel && <label htmlFor={id}>{label}</label>}
-            <input id={id} name={id} placeholder={label} />
+            <input
+                onChange={(event) => onChange(event.target.value)}
+                id={id}
+                name={id}
+                placeholder={label}
+            />
+            <div>{errorMessage}</div>
         </>
     );
 }

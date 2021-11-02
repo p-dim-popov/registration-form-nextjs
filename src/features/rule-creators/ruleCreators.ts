@@ -13,8 +13,8 @@ const createField = <T>(options: ICreateMessageOptions = {}) => ({
     isRequired: [
         (value: T) => !!value, createMessage(options, (field: string) => `${field} is required!`),
     ] as IUseValidationRule<T>,
-    isEqualOrGraterThan: (number: number): IUseValidationRule<number> => [
-        ((value: number) => value >= number), createMessage(options, (field: string) => `${field} should be equal or greater than ${number}!`),
+    isEqualOrGraterThan: (number: number): IUseValidationRule<T> => [
+        ((value: T) => +value >= number), createMessage(options, (field: string) => `${field} should be equal or greater than ${number}!`),
     ],
 });
 
