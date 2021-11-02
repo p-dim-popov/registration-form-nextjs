@@ -5,6 +5,18 @@ import RegisterContext, {
     IRegisterContext,
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
+import userEvent from "@testing-library/user-event";
+
+const routePushMock = jest.fn();
+jest.mock("next/router", () => ({
+    useRouter: () => ({
+        push: routePushMock,
+    }),
+}));
+
+afterEach(() => {
+    jest.resetAllMocks();
+});
 
 describe("StepBox", () => {
     it("should render div with role button", () => {
@@ -49,5 +61,20 @@ describe("StepBox", () => {
             default:
                 throw Error();
         }
+    });
+
+    it("should navigate through click", () => {
+        const { container } = render(
+            <RegisterContext.Provider
+                value={{ page: RegisterPage.ContactDetails } as IRegisterContext}
+            >
+                <StepBox title="TEST" forPage={RegisterPage.UserDetails}>1</StepBox>
+            </RegisterContext.Provider>,
+        );
+
+        const button = container.querySelector(".cursor-pointer");
+        userEvent.click(button!);
+
+        expect(routePushMock).toBeCalledWith(RegisterPage.UserDetails);
     });
 });
