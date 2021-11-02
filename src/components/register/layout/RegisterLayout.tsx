@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import RegisterFormHeader from "@src/components/register/RegisterFormHeader";
+import RegisterFormHeader from "@src/components/register/RegisterFormHeader/RegisterFormHeader";
 import RegisterContext from "@src/features/contexts/register-context/RegisterContext";
 
 export type IFormDataValue = string | number | boolean;
