@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import RegisterFormHeader from "@src/components/register/form-header/RegisterFormHeader";
-import RegisterContext, { RegisterPages } from "@src/contexts/register/RegisterContext";
+import RegisterContext, { RegisterPage } from "@src/contexts/register/RegisterContext";
 import RegisterFormFooter from "@src/components/register/form-footer/RegisterFormFooter";
 
 export type IFormDataValue = string | number | boolean;
 export type IRegisterLayoutState = ({ [fieldName: string]: IFormDataValue });
 
 export interface IRegisterLayoutProps {
-    page: RegisterPages;
+    page: RegisterPage;
 }
 
 // declared as function to be used generic (eslint breaks if arrow is used/mistaken for JSX)
