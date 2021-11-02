@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import RegisterFormHeader from "@src/components/register/RegisterFormHeader/RegisterFormHeader";
+import RegisterFormHeader from "@src/components/register/form-header/RegisterFormHeader";
 import RegisterContext, { RegisterPages } from "@src/contexts/register/RegisterContext";
-import RegisterFormFooter from "@src/components/register/RegisterFormFooter/RegisterFormFooter";
+import RegisterFormFooter from "@src/components/register/form-footer/RegisterFormFooter";
 
 export type IFormDataValue = string | number | boolean;
 export type IRegisterLayoutState = ({ [fieldName: string]: IFormDataValue });

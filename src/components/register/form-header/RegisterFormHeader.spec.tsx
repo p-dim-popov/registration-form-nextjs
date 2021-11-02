@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import RegisterFormHeader from "@src/components/register/RegisterFormHeader/RegisterFormHeader";
+import RegisterFormHeader from "@src/components/register/form-header/RegisterFormHeader";
 
 describe("RegisterFormHeader", () => {
     it("should have three buttons", () => {
