@@ -1,7 +1,7 @@
 import React from "react";
 
 const Stepper: React.FC = ({ children }) => (
-    <>{children}</>
+    <div className="flex flex-row">{children}</div>
 );
 
 export default Stepper;
