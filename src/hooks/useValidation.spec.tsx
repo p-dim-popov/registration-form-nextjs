@@ -1,5 +1,5 @@
 import { IUseValidationOptions, useValidation, ValidationStatus } from "@src/hooks/useValidation";
-import { isEqualOrGraterThan, isRequired } from "@src/features/rule-creators/ruleCreators";
+import Field from "@src/features/rule-creators/ruleCreators";
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -7,7 +7,7 @@ import userEvent from "@testing-library/user-event";
 describe("useValidation", () => {
     it("should return tuple with onChange, status, error", () => {
         const Mock: React.FC = () => {
-            const result = useValidation<string>({ rules: [isRequired()] });
+            const result = useValidation<string>({ rules: [Field.isRequired] });
 
             expect(result).toBeInstanceOf(Array);
             const [onChange, state, errorMessage] = result;
@@ -23,7 +23,7 @@ describe("useValidation", () => {
 
     it("should have initial state pending", () => {
         const Mock: React.FC = () => {
-            const [, status] = useValidation<string>({ rules: [isRequired()] });
+            const [, status] = useValidation<string>({ rules: [Field.isRequired] });
             expect(status).toEqual(ValidationStatus.Pending);
 
             return <></>;
@@ -52,7 +52,7 @@ describe("useValidation", () => {
             [ValidationStatus.Valid, 20],
             [ValidationStatus.Error, 4],
         ])("should have %s status", (expectedStatus: ValidationStatus, value: number) => {
-            render(<Mock rules={[isEqualOrGraterThan(18)()]} />);
+            render(<Mock rules={[Field().isEqualOrGraterThan(18)]} />);
             const inputElement = screen.getByTestId("TEST_INPUT");
 
             userEvent.type(inputElement, String(value));
@@ -69,7 +69,7 @@ describe("useValidation", () => {
             const onValidMock = jest.fn();
             const onErrorMock = jest.fn();
             render(<Mock
-                rules={[isEqualOrGraterThan(18)()]}
+                rules={[Field({ name: "Age" }).isEqualOrGraterThan(18)]}
                 onValid={onValidMock}
                 onError={onErrorMock}
             />);
