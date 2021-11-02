@@ -1,9 +1,22 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react'
-import { AppProps } from 'next/app'
+import React, { ReactElement, ReactNode } from "react";
+import { AppProps } from "next/app";
 
-import '@src/styles/tailwind.css'
+import "@src/styles/tailwind.css";
+import { NextPage } from "next";
 
-const App = ({ Component, pageProps }: AppProps) => <Component {...pageProps} />
+export type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode
+};
 
-export default App
+export type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+};
+
+const App = ({ Component, pageProps }: AppPropsWithLayout) => {
+  const getLayout = Component.getLayout || ((page) => page);
+
+  return getLayout(<Component {...pageProps} />);
+};
+
+export default App;
