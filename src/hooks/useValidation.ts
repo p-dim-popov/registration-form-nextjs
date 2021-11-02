@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 
 export enum ValidationStatus {
-  Pending = "Pending",
-  Valid = "Valid",
-  Error = "Error",
+    Pending = "Pending",
+    Valid = "Valid",
+    Error = "Error",
 }
 
 export type IUseValidation<T> = [
@@ -18,28 +18,28 @@ export type IUseValidationRule<T> = [
 ];
 
 export interface IUseValidationOptions<T> {
-  rules: IUseValidationRule<T>[];
-  onValid?: (value: T) => void;
-  onError?: (message: string, value: T) => void;
+    rules: IUseValidationRule<T>[];
+    onValid?: (value: T) => void;
+    onError?: (message: string, value: T) => void;
 }
 
 export const useValidation = <T> (options: IUseValidationOptions<T>): IUseValidation<T> => {
-  const [status, setStatus] = useState(ValidationStatus.Pending);
-  const [error, setError] = useState<string>("");
+    const [status, setStatus] = useState(ValidationStatus.Pending);
+    const [error, setError] = useState<string>("");
 
-  const onChange = useCallback((value: T) => {
-    const [, errorMessage] = options.rules.find(([test]) => !test(value)) || [];
-    if (errorMessage) {
-      setStatus(ValidationStatus.Error);
-      setError(errorMessage);
-      options.onError?.(errorMessage, value);
-    } else {
-      setStatus(ValidationStatus.Valid);
-      options.onValid?.(value);
-    }
-  }, [options.rules, options.onValid, options.onError]);
+    const onChange = useCallback((value: T) => {
+        const [, errorMessage] = options.rules.find(([test]) => !test(value)) || [];
+        if (errorMessage) {
+            setStatus(ValidationStatus.Error);
+            setError(errorMessage);
+            options.onError?.(errorMessage, value);
+        } else {
+            setStatus(ValidationStatus.Valid);
+            options.onValid?.(value);
+        }
+    }, [options.rules, options.onValid, options.onError]);
 
-  return [onChange, status, error];
+    return [onChange, status, error];
 };
 
 export default useValidation;
