@@ -16,11 +16,23 @@ describe("Input", () => {
     it.each([
         [{ id: "TEST" }, "TEST"],
         [{ id: "TEST", label: "TEST_LABEL" }, "TEST_LABEL"],
-    ])("should show correct placeholder: (%s) (%s)", (props, expectedLabel) => {
+    ])("should show correct label: (%s) (%s)", (props, expectedLabel) => {
         // eslint-disable-next-line react/jsx-props-no-spreading
         render(<Input<string> {...props} />);
 
         const input = screen.queryByLabelText(expectedLabel);
+
+        expect(input).toBeInTheDocument();
+    });
+
+    it.each([
+        [{ id: "TEST" }, "TEST"],
+        [{ id: "TEST", label: "TEST_LABEL" }, "TEST_LABEL"],
+    ])("should show correct placeholder: (%s) (%s)", (props, expectedLabel) => {
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        render(<Input<string> {...props} inlineLabel />);
+
+        const input = screen.queryByPlaceholderText(expectedLabel);
 
         expect(input).toBeInTheDocument();
     });

@@ -6,15 +6,16 @@ export interface IInputProps<T> {
     label?: string;
     validation?: IUseValidationOptions<T>;
     showValidationStatus?: boolean;
+    inlineLabel?: boolean;
 }
 
 function Input<T>({
-    id, label = id, validation, showValidationStatus,
+    id, label = id, validation, showValidationStatus, inlineLabel,
 }: React.PropsWithChildren<IInputProps<T>>) {
     return (
         <>
-            <label htmlFor={id}>{label}</label>
-            <input id={id} name={id} />
+            {!inlineLabel && <label htmlFor={id}>{label}</label>}
+            <input id={id} name={id} placeholder={label} />
         </>
     );
 }
