@@ -8,8 +8,15 @@ export interface IInputProps<T> {
     showValidationStatus?: boolean;
 }
 
-function Input<T>(props: React.PropsWithChildren<IInputProps<T>>) {
-    return <input />;
+function Input<T>({
+    id, label = id, validation, showValidationStatus,
+}: React.PropsWithChildren<IInputProps<T>>) {
+    return (
+        <>
+            <label htmlFor={id}>{label}</label>
+            <input id={id} name={id} />
+        </>
+    );
 }
 
 export default Input;
