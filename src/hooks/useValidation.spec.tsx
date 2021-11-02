@@ -10,10 +10,10 @@ describe("useValidation", () => {
             const result = useValidation<string>({ rules: [Field.isRequired] });
 
             expect(result).toBeInstanceOf(Array);
-            const [onChange, state, errorMessage] = result;
+            const [onChange, state, errorMessages] = result;
             expect(onChange).toBeInstanceOf(Function);
             expect(typeof state).toEqual("string");
-            expect(typeof errorMessage).toEqual("string");
+            expect(errorMessages).toBeInstanceOf(Array);
 
             return <></>;
         };
@@ -79,5 +79,32 @@ describe("useValidation", () => {
 
             expect(expectedStatus === ValidationStatus.Valid ? onValidMock : onErrorMock).toBeCalled();
         });
+    });
+
+    it.each([
+        [true],
+        [false],
+    ])("should have early return - %s", (earlyReturn) => {
+        const Mock: React.FC = () => {
+            const [onChange,, errors] = useValidation({ rules: [[() => false, "TEST-1"], [() => false, "TEST-2"]], earlyReturn });
+            return (
+                <div>
+                    <input data-testid="INPUT" onChange={(event) => onChange(event.target.value)} />
+                    <div data-testid="ERROR_DIV">{errors}</div>
+                </div>
+            );
+        };
+        render(<Mock />);
+
+        userEvent.type(screen.getByTestId("INPUT"), "TEST");
+
+        const errorDiv = screen.getByTestId("ERROR_DIV");
+        expect(errorDiv.textContent).toMatch("TEST-1");
+        const expectSecondMessage = expect(errorDiv.textContent);
+        if (earlyReturn) {
+            expectSecondMessage.not.toMatch("TEST-2");
+        } else {
+            expectSecondMessage.toMatch("TEST-2");
+        }
     });
 });
