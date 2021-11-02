@@ -5,6 +5,8 @@
   * form is framed only on large devices. for tablets and mobile the form is taking the entire width
   * background for lg screens is a gradient
 * field validation
+  * show inline validation errors on input focus out
+  * continue button/stepper validation should be triggered on every change
   * 1st step
   * email - valid email
   * max 50 chars
@@ -38,3 +40,10 @@ stack: nextjs, tailwing, typescript
 * create a simple header and footer of your choosing 
 * pixel perfect is not required. Designed are simply there for directions - you can simplify them 
 * work as a team
+
+### Examples
+
+![](spec/image_00.png)
+![](spec/image_01.png)
+![](spec/image_02.png)
+![](spec/image_03.png)
