@@ -53,10 +53,10 @@ describe("StepBox", () => {
             //     expectWrapper.toHaveClass("bg-green");
             //     break;
             case RegisterPage.UserDetails:
-                expectWrapper.toHaveClass("bg-blue");
+                expectWrapper.toHaveClass(..."bg-gray-700 text-white".split(" "));
                 break;
             case RegisterPage.ContactDetails:
-                expectWrapper.toHaveClass("bg-gray");
+                expectWrapper.toHaveClass(..."bg-gray-300 text-gray-400".split(" "));
                 break;
             default:
                 throw Error();
