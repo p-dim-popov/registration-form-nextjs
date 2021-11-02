@@ -13,7 +13,7 @@ const Input: React.FC<IInputProps> = ({
     id, label = id, validation, showValidationStatus, inlineLabel,
 }) => {
     const validationMessages = validation?.rules.map(([,e]) => e);
-    const [onChange,, errorMessage] = useValidation(validation ?? { rules: [] });
+    const [onChange,, errorMessages] = useValidation(validation ?? { rules: [] });
 
     return (
         <div>
@@ -31,7 +31,7 @@ const Input: React.FC<IInputProps> = ({
                             {validationMessages?.map((m) => (<div key={m} className="bg-gray-900">{m}</div>))}
                         </div>
                     )
-                    : (<div className="bg-red-300">{errorMessage}</div>)
+                    : (<div className="bg-red-300">{errorMessages}</div>)
             }
         </div>
     );
