@@ -6,17 +6,17 @@ import "@src/styles/tailwind.css";
 import { NextPage } from "next";
 
 export type NextPageWithLayout = NextPage & {
-  getLayout?: (page: ReactElement) => ReactNode
+    getLayout?: (page: ReactElement) => ReactNode
 };
 
 export type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
+    Component: NextPageWithLayout
 };
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
-  const getLayout = Component.getLayout || ((page) => page);
+    const getLayout = Component.getLayout || ((page) => page);
 
-  return getLayout(<Component {...pageProps} />);
+    return getLayout(<Component {...pageProps} />);
 };
 
 export default App;
