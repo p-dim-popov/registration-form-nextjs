@@ -1,7 +1,15 @@
 import React from "react";
 
-const StepBox: React.FC = () => (
-    <div role="button" className="cursor-pointer" />
+export interface IStepBoxProps {
+    boxContent?: string;
+    title?: string;
+}
+
+const StepBox: React.FC<IStepBoxProps> = ({ boxContent, title }) => (
+    <div role="button" className="cursor-pointer">
+        <div>{boxContent}</div>
+        <h3>{title}</h3>
+    </div>
 );
 
 export default StepBox;
