@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import RegisterFormHeader from "@src/components/register/RegisterFormHeader/RegisterFormHeader";
 import RegisterContext, { RegisterPages } from "@src/features/contexts/register-context/RegisterContext";
+import RegisterFormFooter from "@src/components/register/RegisterFormFooter/RegisterFormFooter";
 
 export type IFormDataValue = string | number | boolean;
 export type IRegisterLayoutState = ({ [fieldName: string]: IFormDataValue });
@@ -26,9 +27,7 @@ function RegisterLayout<TFormState extends IRegisterLayoutState>({
     >
       <RegisterFormHeader />
       {children}
-      <button type="button">Continue</button>
-      {/* This is intended to be opened as external link */}
-      <a target="_blank" href="/contact-us">Contact us</a>
+      <RegisterFormFooter />
     </RegisterContext.Provider>
   );
 }
