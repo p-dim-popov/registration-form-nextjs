@@ -1,6 +1,10 @@
 import React from "react";
-import RegisterForm from "@src/components/register/RegisterForm";
+import Link from "next/link";
 
-const Register: React.FC = () => <RegisterForm />;
+const Register: React.FC = () => (
+  <Link href="/register/account-details" passHref>
+    <button type="button">Begin</button>
+  </Link>
+);
 
 export default Register;
