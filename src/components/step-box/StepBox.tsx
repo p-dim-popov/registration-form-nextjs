@@ -8,17 +8,16 @@ export enum StepBoxStatus {
 }
 
 export interface IStepBoxProps {
-    boxContent?: string;
     title?: string;
     forPage: RegisterPage;
 }
 
-const StepBox: React.FC<IStepBoxProps> = ({ boxContent, title, forPage }) => {
+const StepBox: React.FC<IStepBoxProps> = ({ children, title, forPage }) => {
     const context = useContext(RegisterContext);
     const isActive = context.page === forPage;
     return (
         <div role="button" className="cursor-pointer">
-            <div className={isActive ? "bg-blue" : "bg-gray"}>{boxContent}</div>
+            <div className={isActive ? "bg-blue" : "bg-gray"}>{children}</div>
             <h3>{title}</h3>
         </div>
     );

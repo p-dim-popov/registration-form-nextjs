@@ -8,14 +8,14 @@ import RegisterContext, {
 
 describe("StepBox", () => {
     it("should render div with role button", () => {
-        const { container } = render(<StepBox forPage={RegisterPage.UserDetails} />);
+        const { container } = render(<StepBox forPage={RegisterPage.UserDetails}>2</StepBox>);
         const box = container.querySelector("div");
         expect(box).toBeInTheDocument();
         expect(box).toHaveClass("cursor-pointer");
     });
 
     it("should have title and box content", () => {
-        render(<StepBox forPage={RegisterPage.UserDetails} title="Account Details" boxContent="1" />);
+        render(<StepBox forPage={RegisterPage.UserDetails} title="Account Details">1</StepBox>);
 
         expect(screen.queryByText("Account Details")).toBeInTheDocument();
         expect(screen.queryByText("1")).toBeInTheDocument();
@@ -30,11 +30,11 @@ describe("StepBox", () => {
             <RegisterContext.Provider
                 value={{ page } as IRegisterContext}
             >
-                <StepBox boxContent="1" title="TEST" forPage={RegisterPage.UserDetails} />
+                <StepBox title="TEST" forPage={RegisterPage.UserDetails}>1</StepBox>
             </RegisterContext.Provider>,
         );
 
-        const expectWrapper = expect(container.firstElementChild);
+        const expectWrapper = expect(container.firstElementChild?.firstElementChild);
         switch (page) {
             // TODO: check if step is valid/completed and mark it green
             // case RegisterPage.AccountDetails:
