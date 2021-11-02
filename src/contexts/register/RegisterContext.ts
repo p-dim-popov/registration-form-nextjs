@@ -11,9 +11,9 @@ export interface IRegisterContext {
 }
 
 export enum RegisterPage {
-    AccountDetails = "AccountDetails",
-    ContactDetails = "ContactDetails",
-    UserDetails = "UserDetails",
+    AccountDetails = "/register/account-details",
+    ContactDetails = "/register/contact-details",
+    UserDetails = "/register/user-details",
 }
 
 const RegisterContext = React.createContext<IRegisterContext>({
