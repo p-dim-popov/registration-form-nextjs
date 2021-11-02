@@ -12,10 +12,11 @@ export interface IInputProps {
 const Input: React.FC<IInputProps> = ({
     id, label = id, validation, showValidationStatus, inlineLabel,
 }) => {
+    const validationMessages = validation?.rules.map(([,e]) => e);
     const [onChange,, errorMessage] = useValidation(validation ?? { rules: [] });
 
     return (
-        <>
+        <div>
             {!inlineLabel && <label htmlFor={id}>{label}</label>}
             <input
                 onChange={(event) => onChange(event.target.value)}
@@ -23,9 +24,17 @@ const Input: React.FC<IInputProps> = ({
                 name={id}
                 placeholder={label}
             />
-            <div>{errorMessage}</div>
-        </>
+            {
+                showValidationStatus
+                    ? (
+                        <div>
+                            {validationMessages?.map((m) => (<div key={m} className="bg-gray-900">{m}</div>))}
+                        </div>
+                    )
+                    : (<div className="bg-red-300">{errorMessage}</div>)
+            }
+        </div>
     );
-}
+};
 
 export default Input;

@@ -39,15 +39,27 @@ describe("Input", () => {
         expect(input).toBeInTheDocument();
     });
 
-    it("should show validation status", () => {
+    it.each([
+        [true],
+        [false],
+    ])("should show validation status - %s", (showValidationStatus) => {
         const rule = Field.isEqualOrGraterThan(18);
-        render(<Input id="TEST" validation={{ rules: [rule] }} />);
+        render(<Input id="TEST" validation={{ rules: [rule] }} showValidationStatus={showValidationStatus} />);
+
+        const [, errorMessage] = rule;
+        let element = screen.queryByText(errorMessage);
+        const expectElement = expect(element);
+        if (showValidationStatus) {
+            expectElement.toBeInTheDocument();
+            expect(element).toHaveClass("bg-gray-900");
+        } else {
+            expectElement.not.toBeInTheDocument();
+        }
 
         const input = screen.getByLabelText("TEST");
         userEvent.type(input, "4");
 
-        const [, errorMessage] = rule;
-        const element = screen.queryByText(errorMessage);
+        element = screen.queryByText(errorMessage);
         expect(element).toBeInTheDocument();
     });
 });
