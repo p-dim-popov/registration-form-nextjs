@@ -1,4 +1,4 @@
-import { IUseValidationRule } from "@src/hooks/useValidation";
+import { IUseValidationRule } from "@src/hooks/useValidation/useValidation";
 import { IFormContext } from "@src/contexts/form/FormContext";
 
 export interface ICreateMessageOptions {

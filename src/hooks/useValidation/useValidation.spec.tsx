@@ -1,4 +1,4 @@
-import { IUseValidationOptions, useValidation, ValidationStatus } from "@src/hooks/useValidation";
+import { IUseValidationOptions, useValidation, ValidationStatus } from "@src/hooks/useValidation/useValidation";
 import Field from "@src/features/rule-creators/ruleCreators";
 import React, { useContext, useEffect } from "react";
 import { render, screen } from "@testing-library/react";
@@ -94,7 +94,7 @@ describe("useValidation", () => {
         const Mock: React.FC = () => {
             const [onChange, start, errors] = useValidation({ rules: [[() => false, "TEST-1"], [() => false, "TEST-2"]], earlyReturn });
 
-            useEffect(start, []);
+            useEffect(start, [start]);
 
             return (
                 <div>
@@ -120,7 +120,7 @@ describe("useValidation", () => {
     it("should receive optional context", () => {
         const predicateMock = jest.fn();
         const testData = {
-            data: {}, definitions: {}, set: () => () => {}, value: "TEST",
+            data: {}, definitions: {}, set: () => () => {}, setDefinitionFor: () => () => {}, value: "TEST",
         };
         const TestContext = React.createContext<IFormContext>(testData);
         const Mock: React.FC = () => {
@@ -146,7 +146,7 @@ describe("useValidation", () => {
         ["NOT_TEST", true],
     ])("should work with context as expected", (val: string, isDifferent: boolean) => {
         const TestContext = React.createContext<{ value: string } & IFormContext>({
-            data: {}, definitions: {}, set: () => () => {}, value: "TEST",
+            data: {}, definitions: {}, set: () => () => {}, setDefinitionFor: () => () => {}, value: "TEST",
         });
         const Mock: React.FC = () => {
             const context = useContext(TestContext);

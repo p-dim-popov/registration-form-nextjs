@@ -1,5 +1,5 @@
 import React from "react";
-import { IUseValidationRule, ValidationStatus } from "@src/hooks/useValidation";
+import { IUseValidationRule, ValidationStatus } from "@src/hooks/useValidation/useValidation";
 import {
     IRegisterLayoutState,
 } from "@src/components/register/layout/RegisterLayout";

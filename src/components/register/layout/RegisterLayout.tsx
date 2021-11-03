@@ -4,7 +4,7 @@ import RegisterContext, {
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
 import RegisterFormFooter from "@src/components/register/form-footer/RegisterFormFooter";
-import { ValidationStatus } from "@src/hooks/useValidation";
+import { ValidationStatus } from "@src/hooks/useValidation/useValidation";
 import { IFormData, IFormDefinitions } from "@src/contexts/form/FormContext";
 
 export type IRegisterLayoutState = ({ [fieldName: string]: IFormData });

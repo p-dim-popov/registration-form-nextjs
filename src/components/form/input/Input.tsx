@@ -1,5 +1,5 @@
 import React from "react";
-import useValidation, { IUseValidationOptions, ValidationStatus } from "@src/hooks/useValidation";
+import useValidation, { IUseValidationOptions, ValidationStatus } from "@src/hooks/useValidation/useValidation";
 import classNames from "classnames";
 import { IFormContext } from "@src/contexts/form/FormContext";
 
