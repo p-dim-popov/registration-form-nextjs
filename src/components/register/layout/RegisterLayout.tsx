@@ -45,6 +45,17 @@ const RegisterLayout: React.FC<IRegisterLayoutProps> = ({
                 set: (fieldName) => (value) => setFormData({ ...formData, [fieldName]: value }),
                 page,
                 definitions: allPagesFormDefinitions,
+                setDefinitionFor: (
+                    fieldName,
+                ) => (
+                    definition,
+                ) => setAllPagesFormDefinitions({
+                    ...allPagesFormDefinitions,
+                    [page]: {
+                        ...allPagesFormDefinitions[page],
+                        [fieldName]: definition,
+                    },
+                }),
             }}
         >
             <RegisterFormHeader />
