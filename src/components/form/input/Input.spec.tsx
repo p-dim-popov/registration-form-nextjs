@@ -57,7 +57,9 @@ describe("Input", () => {
         }
 
         const input = screen.getByLabelText("TEST");
+        input.focus();
         userEvent.type(input, "4");
+        userEvent.tab();
 
         element = screen.queryByText(errorMessage);
         expect(element).toBeInTheDocument();
@@ -68,7 +70,9 @@ describe("Input", () => {
         render(<Input id="TEST" validation={{ rules: [rule] }} />);
 
         const input = screen.getByLabelText("TEST");
+        input.focus();
         userEvent.type(input, "4");
+        userEvent.tab();
 
         const [, errorMessage] = rule;
         const element = screen.queryByText(errorMessage);

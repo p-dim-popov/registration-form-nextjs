@@ -13,7 +13,9 @@ const Input: React.FC<IInputProps> = ({
     id, label = id, validation, showValidationStatus, inlineLabel,
 }) => {
     const validationMessages = validation?.rules.map(([,e]) => e);
-    const [onChange, status, errorMessages] = useValidation(validation ?? { rules: [] });
+    const [
+        onChange, startValidating, errorMessages, status,
+    ] = useValidation(validation ?? { rules: [] });
 
     return (
         <div>
@@ -26,6 +28,7 @@ const Input: React.FC<IInputProps> = ({
                 id={id}
                 name={id}
                 placeholder={label}
+                onBlur={startValidating}
             />
             {showValidationStatus && (
                 <div>

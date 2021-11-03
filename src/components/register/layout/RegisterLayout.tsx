@@ -29,7 +29,7 @@ const RegisterLayout: React.FC<IRegisterLayoutProps> = ({
     ] = useState<{ [page in RegisterPage]?: IFormDefinitions }>({});
 
     useEffect(() => {
-        if (!allFormDefinitions[page]) {
+        if (formDefinitions && !allFormDefinitions[page]) {
             setAllFormDefinitions({ ...allFormDefinitions, [page]: formDefinitions });
         }
     }, [allFormDefinitions, formDefinitions, page]);

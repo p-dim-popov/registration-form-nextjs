@@ -1,6 +1,6 @@
 import { IUseValidationOptions, useValidation, ValidationStatus } from "@src/hooks/useValidation";
 import Field from "@src/features/rule-creators/ruleCreators";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
@@ -10,10 +10,11 @@ describe("useValidation", () => {
             const result = useValidation<string>({ rules: [Field().isRequired] });
 
             expect(result).toBeInstanceOf(Array);
-            const [onChange, state, errorMessages] = result;
+            const [onChange, startValidating, errorMessages, status] = result;
             expect(onChange).toBeInstanceOf(Function);
-            expect(typeof state).toEqual("string");
+            expect(startValidating).toBeInstanceOf(Function);
             expect(errorMessages).toBeInstanceOf(Array);
+            expect(typeof status).toEqual("string");
 
             return <></>;
         };
@@ -23,7 +24,7 @@ describe("useValidation", () => {
 
     it("should have initial state pending", () => {
         const Mock: React.FC = () => {
-            const [, status] = useValidation<string>({ rules: [Field().isRequired] });
+            const [,,, status] = useValidation<string>({ rules: [Field().isRequired] });
             expect(status).toEqual(ValidationStatus.Pending);
 
             return <></>;
@@ -34,11 +35,15 @@ describe("useValidation", () => {
 
     describe("status changes", () => {
         const Mock: React.FC<IUseValidationOptions<number>> = ({ onValid, onError, rules }) => {
-            const [onChange, status] = useValidation<number>({
+            const [onChange, startValidating, errors, status] = useValidation<number>({
                 rules,
                 onValid,
                 onError,
             });
+
+            useEffect(() => {
+                startValidating();
+            }, []);
 
             return (
                 <>
@@ -86,7 +91,10 @@ describe("useValidation", () => {
         [false],
     ])("should have early return - %s", (earlyReturn) => {
         const Mock: React.FC = () => {
-            const [onChange,, errors] = useValidation({ rules: [[() => false, "TEST-1"], [() => false, "TEST-2"]], earlyReturn });
+            const [onChange, start, errors] = useValidation({ rules: [[() => false, "TEST-1"], [() => false, "TEST-2"]], earlyReturn });
+
+            useEffect(start, []);
+
             return (
                 <div>
                     <input data-testid="INPUT" onChange={(event) => onChange(event.target.value)} />
@@ -113,7 +121,9 @@ describe("useValidation", () => {
         const TestContext = React.createContext("CONTEXT_DATA");
         const Mock: React.FC = () => {
             const context = useContext(TestContext);
-            const [onChange,, errors] = useValidation({ rules: [[predicateMock, "TEST-1"]], context });
+            const [onChange, start, status, errors] = useValidation({ rules: [[predicateMock, "TEST-1"]], context });
+            useEffect(start, [start]);
+
             return (
                 <div>
                     <input data-testid="INPUT" onChange={(event) => onChange(event.target.value)} />
@@ -134,10 +144,12 @@ describe("useValidation", () => {
         const TestContext = React.createContext({ value: "TEST" });
         const Mock: React.FC = () => {
             const context = useContext(TestContext);
-            const [onChange,, errors] = useValidation({
+            const [onChange, start, errors] = useValidation({
                 rules: [Field<string, typeof context>().isDifferentThan((c) => c.value, "ERROR_HERE")],
                 context,
             });
+            useEffect(start, [start]);
+
             return (
                 <div>
                     <input data-testid="INPUT" onChange={(event) => onChange(event.target.value)} />
@@ -155,5 +167,33 @@ describe("useValidation", () => {
         } else {
             expectErrorDiv.toMatch("ERROR_HERE");
         }
+    });
+
+    it("should have startValidating method", () => {
+        const Mock: React.FC = () => {
+            const [onChange, startValidating,, status] = useValidation({
+                rules: [Field().isRequired],
+            });
+
+            return (
+                <div>
+                    <input data-testid="INPUT" onChange={(event) => onChange(event.target.value)} />
+                    <div data-testid="STATUS">{status}</div>
+                    <button type="button" onClick={startValidating} data-testid="BUTTON" />
+                </div>
+            );
+        };
+        render(<Mock />);
+
+        userEvent.type(screen.getByTestId("INPUT"), "TEST");
+
+        const statusDiv = screen.getByTestId("STATUS");
+        expect(statusDiv.textContent).toEqual(ValidationStatus.Pending);
+
+        const startValidatingButton = screen.getByTestId("BUTTON");
+        userEvent.click(startValidatingButton);
+
+        userEvent.type(screen.getByTestId("INPUT"), "TEST");
+        expect(statusDiv.textContent).toEqual(ValidationStatus.Valid);
     });
 });
