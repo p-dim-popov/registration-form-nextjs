@@ -18,8 +18,6 @@ const createField = <T>(options: ICreateMessageOptions = {}) => ({
     ],
 });
 
-const genericField = createField<string>();
-export type IRuleCreator<T> =
-  ((options?: ICreateMessageOptions) => typeof genericField) & (typeof genericField);
-const Field: IRuleCreator<any> = Object.assign(createField, genericField);
-export default Field;
+export const genericField = createField<string>();
+
+export default createField;

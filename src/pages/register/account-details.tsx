@@ -26,8 +26,8 @@ AccountDetails.getLayout = (page: ReactElement) => (
     <RegisterLayout
         page={RegisterPage.AccountDetails}
         formDefinitions={{
-            email: [Field.isRequired],
-            password: [Field.isRequired],
+            email: [Field().isRequired],
+            password: [Field().isRequired],
         }}
     >
         {page}

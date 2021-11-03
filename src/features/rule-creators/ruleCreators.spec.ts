@@ -19,7 +19,7 @@ describe("ruleCreators", () => {
     });
 
     it("should create rule with correct message when used default", () => {
-        const [, errorMessage] = Field.isEqualOrGraterThan(18);
+        const [, errorMessage] = Field().isEqualOrGraterThan(18);
         expect(errorMessage).toEqual("Field should be equal or greater than 18!");
     });
 });

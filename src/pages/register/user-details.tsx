@@ -23,10 +23,10 @@ UserDetails.getLayout = (page: ReactElement) => (
     <RegisterLayout
         page={RegisterPage.UserDetails}
         formDefinitions={{
-            firstName: [Field.isRequired],
-            lastName: [Field.isRequired],
-            dob: [Field.isRequired],
-            gender: [Field.isRequired],
+            firstName: [Field().isRequired],
+            lastName: [Field().isRequired],
+            dob: [Field().isRequired],
+            gender: [Field().isRequired],
         }}
     >
         {page}

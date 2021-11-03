@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { render, screen } from "@testing-library/react";
 import RegisterLayout, {
-    IFormData,
     IRegisterLayoutState,
 } from "@src/components/register/layout/RegisterLayout";
 import RegisterContext, { RegisterPage } from "@src/contexts/register/RegisterContext";
@@ -30,7 +29,7 @@ describe("Layout", () => {
         render(
             <RegisterLayout
                 page={RegisterPage.AccountDetails}
-                formDefinitions={{ firstName: [Field.isRequired] }}
+                formDefinitions={{ firstName: [Field().isRequired] }}
             >
                 <Mock />
             </RegisterLayout>,

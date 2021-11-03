@@ -7,7 +7,7 @@ import userEvent from "@testing-library/user-event";
 describe("useValidation", () => {
     it("should return tuple with onChange, status, error", () => {
         const Mock: React.FC = () => {
-            const result = useValidation<string>({ rules: [Field.isRequired] });
+            const result = useValidation<string>({ rules: [Field().isRequired] });
 
             expect(result).toBeInstanceOf(Array);
             const [onChange, state, errorMessages] = result;
@@ -23,7 +23,7 @@ describe("useValidation", () => {
 
     it("should have initial state pending", () => {
         const Mock: React.FC = () => {
-            const [, status] = useValidation<string>({ rules: [Field.isRequired] });
+            const [, status] = useValidation<string>({ rules: [Field().isRequired] });
             expect(status).toEqual(ValidationStatus.Pending);
 
             return <></>;

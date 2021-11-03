@@ -21,7 +21,7 @@ ContactDetails.getLayout = (page: ReactElement) => (
     <RegisterLayout
         page={RegisterPage.ContactDetails}
         formDefinitions={{
-            hasAgreed: [Field.isRequired],
+            hasAgreed: [Field().isRequired],
         }}
     >
         {page}
