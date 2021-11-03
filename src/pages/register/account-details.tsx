@@ -28,6 +28,7 @@ const AccountDetails: NextPageWithLayout = () => {
                     rules: (formDefinitions?.password as []) || [],
                 }}
                 inlineLabel
+                showValidationStatus
             />
 
             <section>

@@ -1,5 +1,6 @@
 import React from "react";
 import useValidation, { IUseValidationOptions, ValidationStatus } from "@src/hooks/useValidation";
+import classNames from "classnames";
 
 export interface IInputProps<T, TContext> {
     id: string;
@@ -20,19 +21,28 @@ function Input<T, TContext>({
     return (
         <div>
             {!inlineLabel && <label htmlFor={id}>{label}</label>}
-            {status === ValidationStatus.Error && !showValidationStatus && (
-                <div className="bg-red-300">{errorMessages}</div>
-            )}
+            {status === ValidationStatus.Error && !showValidationStatus && errorMessages
+                .map((m) => (<div className="bg-red-300 text-white">{m}</div>))}
             <input
                 onChange={(event) => onChange(event.target.value as unknown as T)}
                 id={id}
                 name={id}
                 placeholder={label}
                 onBlur={startValidating}
+                className="border p-3"
             />
             {showValidationStatus && (
                 <div>
-                    {validationMessages?.map((m) => (<div key={m} className="text-gray-900">{m}</div>))}
+                    {validationMessages?.map((m) => {
+                        const showError = status === ValidationStatus.Pending
+                          || (status === ValidationStatus.Error && errorMessages.includes(m));
+                        const className = classNames({
+                            "text-gray-400": showError,
+                            "text-green-700": !showError,
+                        });
+
+                        return (<div key={m} className={className}>{m}</div>);
+                    })}
                 </div>
             )}
         </div>
