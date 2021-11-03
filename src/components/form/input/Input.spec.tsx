@@ -43,7 +43,7 @@ describe("Input", () => {
         [true],
         [false],
     ])("should show validation status - %s", (showValidationStatus) => {
-        const rule = Field().isEqualOrGraterThan(18);
+        const rule = Field().isEqualOrGreaterThan(18);
         render(<Input id="TEST" validation={{ rules: [rule] }} showValidationStatus={showValidationStatus} />);
 
         const [, errorMessage] = rule;
@@ -64,7 +64,7 @@ describe("Input", () => {
     });
 
     it("should show error between label and input", () => {
-        const rule = Field().isEqualOrGraterThan(18);
+        const rule = Field().isEqualOrGreaterThan(18);
         render(<Input id="TEST" validation={{ rules: [rule] }} />);
 
         const input = screen.getByLabelText("TEST");

@@ -52,7 +52,7 @@ describe("useValidation", () => {
             [ValidationStatus.Valid, 20],
             [ValidationStatus.Error, 4],
         ])("should have %s status", (expectedStatus: ValidationStatus, value: number) => {
-            render(<Mock rules={[Field().isEqualOrGraterThan(18)]} />);
+            render(<Mock rules={[Field().isEqualOrGreaterThan(18)]} />);
             const inputElement = screen.getByTestId("TEST_INPUT");
 
             userEvent.type(inputElement, String(value));
@@ -69,7 +69,7 @@ describe("useValidation", () => {
             const onValidMock = jest.fn();
             const onErrorMock = jest.fn();
             render(<Mock
-                rules={[Field({ name: "Age" }).isEqualOrGraterThan(18)]}
+                rules={[Field({ name: "Age" }).isEqualOrGreaterThan(18)]}
                 onValid={onValidMock}
                 onError={onErrorMock}
             />);
