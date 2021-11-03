@@ -1,8 +1,9 @@
 import React from "react";
 import useValidation, { IUseValidationOptions, ValidationStatus } from "@src/hooks/useValidation";
 import classNames from "classnames";
+import { IFormContext } from "@src/contexts/form/FormContext";
 
-export interface IInputProps<T, TContext> {
+export interface IInputProps<T, TContext extends IFormContext = any> {
     id: string;
     label?: string;
     validation?: IUseValidationOptions<T, TContext>;
@@ -10,7 +11,7 @@ export interface IInputProps<T, TContext> {
     inlineLabel?: boolean;
 }
 
-function Input<T, TContext>({
+function Input<T, TContext extends IFormContext = any>({
     id, label = id, validation, showValidationStatus, inlineLabel,
 }: React.PropsWithChildren<IInputProps<T, TContext>>) {
     const validationMessages = validation?.rules.map(([,e]) => e);

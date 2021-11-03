@@ -5,7 +5,14 @@ import FormContext from "./FormContext";
 describe("FormContext", () => {
     it("should have definitions, data, and setter", () => {
         const { container } = render(
-            <FormContext.Provider value={{ data: {}, definitions: {}, set: () => () => {} }}>
+            <FormContext.Provider
+                value={{
+                    data: {},
+                    definitions: {},
+                    set: () => () => {},
+                    setDefinitionFor: () => () => {},
+                }}
+            >
                 <FormContext.Consumer>
                     {((props) => <div>{JSON.stringify(props)}</div>)}
                 </FormContext.Consumer>

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { IFormContext } from "@src/contexts/form/FormContext";
 
 export enum ValidationStatus {
     Pending = "Pending",
@@ -14,12 +15,12 @@ export type IUseValidation<T> = [
   status: ValidationStatus,
 ];
 
-export type IUseValidationRule<T, TContext = null> = [
+export type IUseValidationRule<T, TContext extends IFormContext = any> = [
   test: (value?: T, context?: TContext) => boolean,
   message: string,
 ];
 
-export interface IUseValidationOptions<T, TContext = null> {
+export interface IUseValidationOptions<T, TContext extends IFormContext = any> {
     rules: IUseValidationRule<T, TContext>[];
     onValid?: (value: T) => void;
     onError?: (messages: string[], value: T) => void;
@@ -27,7 +28,7 @@ export interface IUseValidationOptions<T, TContext = null> {
     context?: TContext,
 }
 
-export const useValidation = <T, TContext = null> ({
+export const useValidation = <T, TContext extends IFormContext = any> ({
     rules,
     context,
     earlyReturn,

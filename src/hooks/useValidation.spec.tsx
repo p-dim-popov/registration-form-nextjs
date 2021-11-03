@@ -3,6 +3,7 @@ import Field from "@src/features/rule-creators/ruleCreators";
 import React, { useContext, useEffect } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { IFormContext } from "@src/contexts/form/FormContext";
 
 describe("useValidation", () => {
     it("should return tuple with onChange, status, error", () => {
@@ -118,7 +119,10 @@ describe("useValidation", () => {
 
     it("should receive optional context", () => {
         const predicateMock = jest.fn();
-        const TestContext = React.createContext("CONTEXT_DATA");
+        const testData = {
+            data: {}, definitions: {}, set: () => () => {}, value: "TEST",
+        };
+        const TestContext = React.createContext<IFormContext>(testData);
         const Mock: React.FC = () => {
             const context = useContext(TestContext);
             const [onChange, start, status, errors] = useValidation({ rules: [[predicateMock, "TEST-1"]], context });
@@ -134,14 +138,16 @@ describe("useValidation", () => {
         render(<Mock />);
 
         userEvent.type(screen.getByTestId("INPUT"), "T");
-        expect(predicateMock).toBeCalledWith("T", "CONTEXT_DATA");
+        expect(predicateMock).toBeCalledWith("T", testData);
     });
 
     it.each([
         ["TEST", false],
         ["NOT_TEST", true],
     ])("should work with context as expected", (val: string, isDifferent: boolean) => {
-        const TestContext = React.createContext({ value: "TEST" });
+        const TestContext = React.createContext<{ value: string } & IFormContext>({
+            data: {}, definitions: {}, set: () => () => {}, value: "TEST",
+        });
         const Mock: React.FC = () => {
             const context = useContext(TestContext);
             const [onChange, start, errors] = useValidation({

@@ -17,6 +17,7 @@ const RegisterContext = React.createContext<IRegisterContext>({
     set: () => () => {},
     page: RegisterPage.AccountDetails,
     definitions: {},
+    setDefinitionFor: () => () => {},
 });
 
 RegisterContext.displayName = "RegisterContext";

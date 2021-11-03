@@ -1,4 +1,5 @@
 import { IUseValidationRule } from "@src/hooks/useValidation";
+import { IFormContext } from "@src/contexts/form/FormContext";
 
 export interface ICreateMessageOptions {
     name?: string;
@@ -9,7 +10,7 @@ const capitalizeFirst = (value: string) => `${value[0].toLocaleUpperCase()}${val
 
 export const createMessage = (options: ICreateMessageOptions, defaultCreator: (field: string) => string) => options.message || capitalizeFirst(defaultCreator(options.name || "field"));
 
-const createField = <T, TContext = null>(options: ICreateMessageOptions = {}) => ({
+const createField = <T, TContext extends IFormContext = any>(options: ICreateMessageOptions = {}) => ({
     isRequired: [
         (value) => !!value, createMessage(options, (field: string) => `${field} is required!`),
     ] as IUseValidationRule<T, TContext>,
