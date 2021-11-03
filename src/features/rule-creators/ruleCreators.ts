@@ -12,14 +12,14 @@ export const createMessage = (options: ICreateMessageOptions, defaultCreator: (f
 const createField = <T>(options: ICreateMessageOptions = {}) => ({
     isRequired: [
         (value: T) => !!value, createMessage(options, (field: string) => `${field} is required!`),
-    ] as IUseValidationRule<T>,
-    isEqualOrGraterThan: (number: number): IUseValidationRule<T> => [
+    ] as IUseValidationRule,
+    isEqualOrGraterThan: (number: number): IUseValidationRule => [
         ((value: T) => +value >= number), createMessage(options, (field: string) => `${field} should be equal or greater than ${number}!`),
     ],
 });
 
-const genericRule = createField();
-export type IRuleCreator =
-  (<T>(options?: ICreateMessageOptions) => typeof genericRule) & typeof genericRule;
-const Field: IRuleCreator = Object.assign(createField, createField());
+const genericField = createField<string>();
+export type IRuleCreator<T> =
+  ((options?: ICreateMessageOptions) => typeof genericField) & (typeof genericField);
+const Field: IRuleCreator<any> = Object.assign(createField, genericField);
 export default Field;

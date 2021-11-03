@@ -12,13 +12,13 @@ export type IUseValidation<T> = [
   errorMessages: string[],
 ];
 
-export type IUseValidationRule<T> = [
-  test: (value: T) => boolean,
+export type IUseValidationRule = [
+  test: (value: any) => boolean,
   message: string,
 ];
 
 export interface IUseValidationOptions<T> {
-    rules: IUseValidationRule<T>[];
+    rules: IUseValidationRule[];
     onValid?: (value: T) => void;
     onError?: (messages: string[], value: T) => void;
     earlyReturn?: boolean;
