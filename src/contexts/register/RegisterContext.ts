@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    IFormData,
+    IFormData, IFormDefinitions,
     IRegisterLayoutState,
 } from "@src/components/register/layout/RegisterLayout";
 
@@ -8,6 +8,7 @@ export interface IRegisterContext {
     formData: IRegisterLayoutState;
     set: (fieldName: string) => (value: IFormData) => void;
     page: RegisterPage;
+    allFormDefinitions: { [page in RegisterPage]?: IFormDefinitions }
 }
 
 export enum RegisterPage {
@@ -20,6 +21,7 @@ const RegisterContext = React.createContext<IRegisterContext>({
     formData: {},
     set: () => () => {},
     page: RegisterPage.AccountDetails,
+    allFormDefinitions: {},
 });
 
 export default RegisterContext;

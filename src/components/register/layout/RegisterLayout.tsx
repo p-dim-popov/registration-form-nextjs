@@ -11,9 +11,11 @@ export interface IFormData {
 
 export type IRegisterLayoutState = ({ [fieldName: string]: IFormData });
 
+export type IFormDefinitions = { [fieldName: string]: IUseValidationRule[] };
+
 export interface IRegisterLayoutProps {
     page: RegisterPage;
-    formDefinitions?: { [fieldName: string]: IUseValidationRule[] };
+    formDefinitions?: IFormDefinitions;
 }
 
 const RegisterLayout: React.FC<IRegisterLayoutProps> = ({
@@ -21,22 +23,32 @@ const RegisterLayout: React.FC<IRegisterLayoutProps> = ({
     page,
     formDefinitions,
 }) => {
-    const [state, setState] = useState<IRegisterLayoutState>({});
+    const [formData, setFormData] = useState<IRegisterLayoutState>({});
+    const [
+        allFormDefinitions, setAllFormDefinitions,
+    ] = useState<{ [page in RegisterPage]?: IFormDefinitions }>({});
+
+    useEffect(() => {
+        if (!allFormDefinitions[page]) {
+            setAllFormDefinitions({ ...allFormDefinitions, [page]: formDefinitions });
+        }
+    }, [allFormDefinitions, formDefinitions, page]);
 
     useEffect(() => {
         Object.keys(formDefinitions ?? {}).forEach((fieldName) => {
-            if (!state[fieldName]) {
-                setState({ ...state, [fieldName]: { status: ValidationStatus.Pending } });
+            if (!formData[fieldName]) {
+                setFormData({ ...formData, [fieldName]: { status: ValidationStatus.Pending } });
             }
         });
-    }, [formDefinitions, state]);
+    }, [formDefinitions, formData]);
 
     return (
         <RegisterContext.Provider
             value={{
-                formData: state,
-                set: (fieldName) => (value) => setState({ ...state, [fieldName]: value }),
+                formData,
+                set: (fieldName) => (value) => setFormData({ ...formData, [fieldName]: value }),
                 page,
+                allFormDefinitions,
             }}
         >
             <RegisterFormHeader />

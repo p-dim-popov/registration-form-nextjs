@@ -3,6 +3,7 @@ import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import type { NextPageWithLayout } from "@src/pages/_app";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import Input from "@src/components/form/input/Input";
+import Field from "@src/features/rule-creators/ruleCreators";
 
 const AccountDetails: NextPageWithLayout = () => (
     <>
@@ -22,7 +23,13 @@ const AccountDetails: NextPageWithLayout = () => (
 );
 
 AccountDetails.getLayout = (page: ReactElement) => (
-    <RegisterLayout page={RegisterPage.AccountDetails}>
+    <RegisterLayout
+        page={RegisterPage.AccountDetails}
+        formDefinitions={{
+            email: [Field.isRequired],
+            password: [Field.isRequired],
+        }}
+    >
         {page}
     </RegisterLayout>
 );

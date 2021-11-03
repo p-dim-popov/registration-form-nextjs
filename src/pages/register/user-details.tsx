@@ -3,6 +3,7 @@ import Input from "@src/components/form/input/Input";
 import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";
+import Field from "@src/features/rule-creators/ruleCreators";
 
 const UserDetails: NextPageWithLayout = () => (
     <>
@@ -19,7 +20,15 @@ const UserDetails: NextPageWithLayout = () => (
 );
 
 UserDetails.getLayout = (page: ReactElement) => (
-    <RegisterLayout page={RegisterPage.UserDetails}>
+    <RegisterLayout
+        page={RegisterPage.UserDetails}
+        formDefinitions={{
+            firstName: [Field.isRequired],
+            lastName: [Field.isRequired],
+            dob: [Field.isRequired],
+            gender: [Field.isRequired],
+        }}
+    >
         {page}
     </RegisterLayout>
 );
