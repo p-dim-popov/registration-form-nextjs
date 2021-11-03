@@ -23,7 +23,7 @@ describe("Layout", () => {
     it("should should populate context with default data for each form definition", () => {
         const Mock: React.FC = () => {
             const context = useContext(RegisterContext);
-            return <div>{JSON.stringify(context.formData)}</div>;
+            return <div>{JSON.stringify(context.data)}</div>;
         };
 
         render(

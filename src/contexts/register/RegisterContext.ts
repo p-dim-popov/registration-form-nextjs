@@ -1,14 +1,9 @@
 import React from "react";
-import {
-    IFormData, IFormDefinitions,
-    IRegisterLayoutState,
-} from "@src/components/register/layout/RegisterLayout";
+import { IFormContext, IFormDefinitions } from "@src/contexts/form/FormContext";
 
-export interface IRegisterContext {
-    formData: IRegisterLayoutState;
-    set: (fieldName: string) => (value: IFormData) => void;
+export interface IRegisterContext extends IFormContext {
     page: RegisterPage;
-    allFormDefinitions: { [page in RegisterPage]?: IFormDefinitions }
+    definitions: { [page in RegisterPage]?: IFormDefinitions }
 }
 
 export enum RegisterPage {
@@ -18,10 +13,10 @@ export enum RegisterPage {
 }
 
 const RegisterContext = React.createContext<IRegisterContext>({
-    formData: {},
+    data: {},
     set: () => () => {},
     page: RegisterPage.AccountDetails,
-    allFormDefinitions: {},
+    definitions: {},
 });
 
 RegisterContext.displayName = "RegisterContext";

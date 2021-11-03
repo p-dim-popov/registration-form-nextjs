@@ -9,7 +9,7 @@ import Field from "@src/features/rule-creators/ruleCreators";
 
 const AccountDetails: NextPageWithLayout = () => {
     const context = useContext(RegisterContext);
-    const formDefinitions = context.allFormDefinitions[RegisterPage.AccountDetails];
+    const formDefinitions = context.definitions[RegisterPage.AccountDetails];
 
     return (
         <>
