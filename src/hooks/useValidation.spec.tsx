@@ -1,6 +1,6 @@
 import { IUseValidationOptions, useValidation, ValidationStatus } from "@src/hooks/useValidation";
 import Field from "@src/features/rule-creators/ruleCreators";
-import React from "react";
+import React, { useContext } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
@@ -106,5 +106,24 @@ describe("useValidation", () => {
         } else {
             expectSecondMessage.toMatch("TEST-2");
         }
+    });
+
+    it("should receive optional context", () => {
+        const predicateMock = jest.fn();
+        const TestContext = React.createContext("CONTEXT_DATA");
+        const Mock: React.FC = () => {
+            const context = useContext(TestContext);
+            const [onChange,, errors] = useValidation({ rules: [[predicateMock, "TEST-1"]], context });
+            return (
+                <div>
+                    <input data-testid="INPUT" onChange={(event) => onChange(event.target.value)} />
+                    <div data-testid="ERROR_DIV">{errors}</div>
+                </div>
+            );
+        };
+        render(<Mock />);
+
+        userEvent.type(screen.getByTestId("INPUT"), "T");
+        expect(predicateMock).toBeCalledWith("T", "CONTEXT_DATA");
     });
 });
