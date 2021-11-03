@@ -36,6 +36,11 @@ const createField = <T, TContext = null>(options: ICreateMessageOptions = {}) =>
         (value) => typeof value !== "undefined" && new RegExp(pattern).test(String(value)),
         createMessage(options, (field) => `${field} should match pattern ${pattern}`),
     ],
+
+    hasLengthBetween: (min: number, max: number): IUseValidationRule<string> => [
+        (value) => typeof value !== "undefined" && (value.length > min && value.length <= max),
+        createMessage(options, (field) => `${field} should be between ${min} and ${max} characters`),
+    ],
 });
 
 export const genericField = createField<string>();
