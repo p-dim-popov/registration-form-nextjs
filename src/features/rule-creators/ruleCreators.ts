@@ -9,13 +9,16 @@ const capitalizeFirst = (value: string) => `${value[0].toLocaleUpperCase()}${val
 
 export const createMessage = (options: ICreateMessageOptions, defaultCreator: (field: string) => string) => options.message || capitalizeFirst(defaultCreator(options.name || "field"));
 
-const createField = <T>(options: ICreateMessageOptions = {}) => ({
+const createField = <T, TContext = undefined>(options: ICreateMessageOptions = {}) => ({
     isRequired: [
         (value: T) => !!value, createMessage(options, (field: string) => `${field} is required!`),
     ] as IUseValidationRule,
     isEqualOrGreaterThan: (number: number): IUseValidationRule => [
         ((value: T) => +value >= number), createMessage(options, (field: string) => `${field} should be equal or greater than ${number}!`),
     ],
+    isDifferentThan: (selector: (context: TContext) => T, description: string) => [
+        ((value: T, context: TContext) => value !== selector(context)), createMessage(options, (field: string) => `${field} should be different than ${description}`),
+    ] as IUseValidationRule<TContext>,
 });
 
 export const genericField = createField<string>();

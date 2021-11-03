@@ -126,4 +126,34 @@ describe("useValidation", () => {
         userEvent.type(screen.getByTestId("INPUT"), "T");
         expect(predicateMock).toBeCalledWith("T", "CONTEXT_DATA");
     });
+
+    it.each([
+        ["TEST", false],
+        ["NOT_TEST", true],
+    ])("should work with context as expected", (val: string, isDifferent: boolean) => {
+        const TestContext = React.createContext({ value: "TEST" });
+        const Mock: React.FC = () => {
+            const context = useContext(TestContext);
+            const [onChange,, errors] = useValidation({
+                rules: [Field<string, typeof context>().isDifferentThan((c) => c.value, "ERROR_HERE")],
+                context,
+            });
+            return (
+                <div>
+                    <input data-testid="INPUT" onChange={(event) => onChange(event.target.value)} />
+                    <div data-testid="ERROR_DIV">{errors}</div>
+                </div>
+            );
+        };
+        render(<Mock />);
+
+        userEvent.type(screen.getByTestId("INPUT"), val);
+        const errorDiv = screen.getByTestId("ERROR_DIV");
+        const expectErrorDiv = expect(errorDiv.textContent);
+        if (isDifferent) {
+            expectErrorDiv.not.toMatch("ERROR_HERE");
+        } else {
+            expectErrorDiv.toMatch("ERROR_HERE");
+        }
+    });
 });
