@@ -11,24 +11,31 @@ export const createMessage = (options: ICreateMessageOptions, defaultCreator: (f
 
 const createField = <T, TContext = null>(options: ICreateMessageOptions = {}) => ({
     isRequired: [
-        (value: T) => !!value, createMessage(options, (field: string) => `${field} is required!`),
-    ] as IUseValidationRule,
-    isEqualOrGreaterThan: (number: T | ((context: TContext) => T), description?: string) => {
+        (value) => !!value, createMessage(options, (field: string) => `${field} is required!`),
+    ] as IUseValidationRule<T, TContext>,
+
+    isEqualOrGreaterThan: (number: T | ((context: TContext) => T), description?: string): IUseValidationRule<T, TContext> => {
         const isSelector = typeof number === "function";
         const selector = (<Function>(isSelector ? number : () => number));
         return [
-            ((value: T, context: TContext) => value >= selector(context)),
+            ((value, context) => value! >= selector(context)),
             createMessage(options, (field: string) => `${field} should be equal or greater than ${isSelector ? description : number}!`),
-        ] as IUseValidationRule<TContext>;
+        ];
     },
-    isDifferentThan: (otherValue: T | ((context: TContext) => T), description?: string) => {
+
+    isDifferentThan: (otherValue: T | ((context: TContext) => T), description?: string): IUseValidationRule<T, TContext> => {
         const isSelector = typeof otherValue === "function";
         const selector = (<Function>(isSelector ? otherValue : () => otherValue));
         return [
-            ((value: T, context: TContext) => value !== selector(context)),
+            ((value, context) => value !== selector(context)),
             createMessage(options, (field: string) => `${field} should be different than ${isSelector ? description : otherValue}`),
-        ] as IUseValidationRule<TContext>;
+        ];
     },
+
+    shouldMatch: (pattern: string | RegExp): IUseValidationRule<T> => [
+        (value) => typeof value !== "undefined" && new RegExp(pattern).test(String(value)),
+        createMessage(options, (field) => `${field} should match pattern ${pattern}`),
+    ],
 });
 
 export const genericField = createField<string>();

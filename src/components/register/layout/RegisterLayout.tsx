@@ -11,7 +11,7 @@ export interface IFormData {
 
 export type IRegisterLayoutState = ({ [fieldName: string]: IFormData });
 
-export type IFormDefinitions = { [fieldName: string]: IUseValidationRule[] };
+export type IFormDefinitions = { [fieldName: string]: IUseValidationRule<any>[] };
 
 export interface IRegisterLayoutProps {
     page: RegisterPage;

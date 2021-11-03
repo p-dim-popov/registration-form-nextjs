@@ -14,13 +14,13 @@ export type IUseValidation<T> = [
   status: ValidationStatus,
 ];
 
-export type IUseValidationRule<TContext = null> = [
-  test: (value: any, context?: TContext) => boolean,
+export type IUseValidationRule<T, TContext = null> = [
+  test: (value?: T, context?: TContext) => boolean,
   message: string,
 ];
 
 export interface IUseValidationOptions<T, TContext = null> {
-    rules: IUseValidationRule<TContext>[];
+    rules: IUseValidationRule<T, TContext>[];
     onValid?: (value: T) => void;
     onError?: (messages: string[], value: T) => void;
     earlyReturn?: boolean;
