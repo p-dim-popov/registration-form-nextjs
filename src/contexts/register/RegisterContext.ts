@@ -24,4 +24,6 @@ const RegisterContext = React.createContext<IRegisterContext>({
     allFormDefinitions: {},
 });
 
+RegisterContext.displayName = "RegisterContext";
+
 export default RegisterContext;
