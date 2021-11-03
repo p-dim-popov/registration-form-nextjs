@@ -62,4 +62,18 @@ describe("Input", () => {
         element = screen.queryByText(errorMessage);
         expect(element).toBeInTheDocument();
     });
+
+    it("should show error between label and input", () => {
+        const rule = Field.isEqualOrGraterThan(18);
+        render(<Input id="TEST" validation={{ rules: [rule] }} />);
+
+        const input = screen.getByLabelText("TEST");
+        userEvent.type(input, "4");
+
+        const [, errorMessage] = rule;
+        const element = screen.queryByText(errorMessage);
+        expect(element).toBeInTheDocument();
+        expect(element?.previousElementSibling).toBeInstanceOf(HTMLLabelElement);
+        expect(element?.nextElementSibling).toBeInstanceOf(HTMLInputElement);
+    });
 });

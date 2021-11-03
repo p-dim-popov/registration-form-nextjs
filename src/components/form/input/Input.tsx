@@ -1,5 +1,5 @@
 import React from "react";
-import useValidation, { IUseValidationOptions } from "@src/hooks/useValidation";
+import useValidation, { IUseValidationOptions, ValidationStatus } from "@src/hooks/useValidation";
 
 export interface IInputProps {
     id: string;
@@ -13,26 +13,25 @@ const Input: React.FC<IInputProps> = ({
     id, label = id, validation, showValidationStatus, inlineLabel,
 }) => {
     const validationMessages = validation?.rules.map(([,e]) => e);
-    const [onChange,, errorMessages] = useValidation(validation ?? { rules: [] });
+    const [onChange, status, errorMessages] = useValidation(validation ?? { rules: [] });
 
     return (
         <div>
             {!inlineLabel && <label htmlFor={id}>{label}</label>}
+            {status === ValidationStatus.Error && !showValidationStatus && (
+                <div className="bg-red-300">{errorMessages}</div>
+            )}
             <input
                 onChange={(event) => onChange(event.target.value)}
                 id={id}
                 name={id}
                 placeholder={label}
             />
-            {
-                showValidationStatus
-                    ? (
-                        <div>
-                            {validationMessages?.map((m) => (<div key={m} className="bg-gray-900">{m}</div>))}
-                        </div>
-                    )
-                    : (<div className="bg-red-300">{errorMessages}</div>)
-            }
+            {showValidationStatus && (
+                <div>
+                    {validationMessages?.map((m) => (<div key={m} className="bg-gray-900">{m}</div>))}
+                </div>
+            )}
         </div>
     );
 };
