@@ -29,7 +29,7 @@ const Input: React.FC<IInputProps> = ({
             />
             {showValidationStatus && (
                 <div>
-                    {validationMessages?.map((m) => (<div key={m} className="bg-gray-900">{m}</div>))}
+                    {validationMessages?.map((m) => (<div key={m} className="text-gray-900">{m}</div>))}
                 </div>
             )}
         </div>

@@ -51,7 +51,7 @@ describe("Input", () => {
         const expectElement = expect(element);
         if (showValidationStatus) {
             expectElement.toBeInTheDocument();
-            expect(element).toHaveClass("bg-gray-900");
+            expect(element).toHaveClass("text-gray-900");
         } else {
             expectElement.not.toBeInTheDocument();
         }
