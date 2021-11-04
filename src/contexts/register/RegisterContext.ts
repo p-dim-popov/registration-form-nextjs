@@ -3,7 +3,7 @@ import { IFormContext, IFormDefinitions } from "@src/contexts/form/FormContext";
 
 export interface IRegisterContext extends IFormContext {
     page: RegisterPage;
-    definitions: { [page in RegisterPage]?: IFormDefinitions }
+    definitions: { [page in RegisterPage]?: IFormDefinitions<string | number | boolean> }
 }
 
 export enum RegisterPage {
@@ -18,6 +18,7 @@ const RegisterContext = React.createContext<IRegisterContext>({
     page: RegisterPage.AccountDetails,
     definitions: {},
     setDefinitionFor: () => () => {},
+    getDefinitionFor: () => [],
 });
 
 RegisterContext.displayName = "RegisterContext";

@@ -1,42 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import RegisterFormHeader from "@src/components/register/form-header/RegisterFormHeader";
 import RegisterContext, {
+    IRegisterContext,
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
 import RegisterFormFooter from "@src/components/register/form-footer/RegisterFormFooter";
-import { ValidationStatus } from "@src/hooks/useValidation/useValidation";
 import FormContext, { IFormData, IFormDefinitions } from "@src/contexts/form/FormContext";
+import { IUseValidationRule } from "@src/hooks/useValidation/useValidation";
 
 export type IRegisterLayoutState = ({ [fieldName: string]: IFormData });
 
 export interface IRegisterLayoutProps {
     page: RegisterPage;
-    formDefinitions?: IFormDefinitions;
 }
 
 const RegisterLayout: React.FC<IRegisterLayoutProps> = ({
     children,
     page,
-    formDefinitions,
 }) => {
     const [formData, setFormData] = useState<IRegisterLayoutState>({});
     const [
         allPagesFormDefinitions, setAllPagesFormDefinitions,
-    ] = useState<{ [page in RegisterPage]?: IFormDefinitions }>({});
+    ] = useState<{ [page in RegisterPage]?: IFormDefinitions<any> }>({});
 
     useEffect(() => {
-        if (formDefinitions && !allPagesFormDefinitions[page]) {
-            setAllPagesFormDefinitions({ ...allPagesFormDefinitions, [page]: formDefinitions });
+        if (!allPagesFormDefinitions[page]) {
+            setAllPagesFormDefinitions((prevAllPagesFormDefinitions) => ({
+                ...prevAllPagesFormDefinitions,
+                [page]: {},
+            }));
         }
-    }, [allPagesFormDefinitions, formDefinitions, page]);
+    }, [allPagesFormDefinitions, page]);
 
-    useEffect(() => {
-        Object.keys(formDefinitions ?? {}).forEach((fieldName) => {
-            if (!formData[fieldName]) {
-                setFormData({ ...formData, [fieldName]: { status: ValidationStatus.Pending } });
-            }
-        });
-    }, [formDefinitions, formData]);
+    const setDefinitionFor = useCallback((fieldName) => (
+        rules: IUseValidationRule<any, IRegisterContext>[],
+    ) => setAllPagesFormDefinitions((prevAllPagesFormDefinitions) => ({
+        ...prevAllPagesFormDefinitions,
+        [page]: {
+            ...prevAllPagesFormDefinitions[page],
+            [fieldName]: rules,
+        },
+    })), [page]);
+
+    const getDefinitionFor = useCallback((
+        fieldName: string,
+    ) => allPagesFormDefinitions[page]?.[fieldName] as any, [allPagesFormDefinitions, page]);
 
     return (
         <RegisterContext.Provider
@@ -45,17 +53,8 @@ const RegisterLayout: React.FC<IRegisterLayoutProps> = ({
                 set: (fieldName) => (value) => setFormData({ ...formData, [fieldName]: value }),
                 page,
                 definitions: allPagesFormDefinitions,
-                setDefinitionFor: (
-                    fieldName,
-                ) => (
-                    definition,
-                ) => setAllPagesFormDefinitions({
-                    ...allPagesFormDefinitions,
-                    [page]: {
-                        ...allPagesFormDefinitions[page],
-                        [fieldName]: definition,
-                    },
-                }),
+                setDefinitionFor,
+                getDefinitionFor,
             }}
         >
             <RegisterFormHeader />

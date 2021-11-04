@@ -1,6 +1,8 @@
 import React from "react";
 import useValidation, { IUseValidationOptions, ValidationStatus } from "@src/hooks/useValidation/useValidation";
 import classNames from "classnames";
+import useFormContextDefinitions
+    from "@src/hooks/form/useFormContextDefinitions/useFormContextDefinitions";
 
 export interface IInputProps<T> {
     id: string;
@@ -17,6 +19,7 @@ function Input<T>({
     const [
         onChange, startValidating, errorMessages, status,
     ] = useValidation(validation ?? { rules: [] });
+    useFormContextDefinitions(id, validation?.rules ?? []);
 
     return (
         <div>

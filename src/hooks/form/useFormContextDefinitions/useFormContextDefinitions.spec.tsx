@@ -13,6 +13,7 @@ describe("useFormContextDefinitions", () => {
             data: {},
             set: () => () => {},
             definitions: {},
+            getDefinitionFor: () => [],
         };
         const definitions = [Rule().isRequired];
         const Mock: React.FC = () => {

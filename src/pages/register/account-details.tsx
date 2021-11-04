@@ -1,31 +1,31 @@
-import React, { ReactElement, useContext } from "react";
+import React, { ReactElement } from "react";
 import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import type { NextPageWithLayout } from "@src/pages/_app";
-import RegisterContext, {
+import {
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
 import Input from "@src/components/input/Input";
 import Rule from "@src/features/rule-creators/ruleCreators";
 
-const AccountDetails: NextPageWithLayout = () => {
-    const context = useContext(RegisterContext);
-    const formDefinitions = context.definitions[RegisterPage.AccountDetails];
+const validations = {
+    email: { rules: [Rule({ name: "email" }).isRequired, Rule().shouldMatch(/^.*?@.*?$/i)] },
+    password: { rules: [Rule().isRequired] },
+    securityQuestion1: { rules: [Rule().isRequired, Rule().hasLengthBetween(2, 30), Rule().shouldMatch(/[a-z]/i)] },
+    securityQuestion2: { rules: [Rule().isRequired, Rule().hasLengthBetween(2, 30), Rule().shouldMatch(/[a-z]/i)] },
+};
 
+const AccountDetails: NextPageWithLayout = () => {
     return (
         <>
             <Input
                 id="email"
-                validation={{
-                    rules: (formDefinitions?.email as []) || [],
-                }}
+                validation={validations.email}
                 inlineLabel
             />
 
             <Input
                 id="password"
-                validation={{
-                    rules: (formDefinitions?.password as []) || [],
-                }}
+                validation={validations.password}
                 inlineLabel
                 showValidationStatus
             />
@@ -35,17 +35,13 @@ const AccountDetails: NextPageWithLayout = () => {
                 <Input
                     id="question-1"
                     label="Your mother's maiden name"
-                    validation={{
-                        rules: (formDefinitions?.securityQuestion1 as []) || [],
-                    }}
+                    validation={validations.securityQuestion1}
                     inlineLabel
                 />
                 <Input
                     id="question-2"
                     label="Your place of birth"
-                    validation={{
-                        rules: (formDefinitions?.securityQuestion2 as []) || [],
-                    }}
+                    validation={validations.securityQuestion2}
                     inlineLabel
                 />
             </section>
@@ -58,15 +54,7 @@ const AccountDetails: NextPageWithLayout = () => {
 };
 
 AccountDetails.getLayout = (page: ReactElement) => (
-    <RegisterLayout
-        page={RegisterPage.AccountDetails}
-        formDefinitions={{
-            email: [Rule({ name: "email" }).isRequired, Rule().shouldMatch(/^.*?@.*?$/i)],
-            password: [Rule().isRequired],
-            securityQuestion1: [Rule().isRequired, Rule().hasLengthBetween(2, 30), Rule().shouldMatch(/[a-z]/i)],
-            securityQuestion2: [Rule().isRequired, Rule().hasLengthBetween(2, 30), Rule().shouldMatch(/[a-z]/i)],
-        }}
-    >
+    <RegisterLayout page={RegisterPage.AccountDetails}>
         {page}
     </RegisterLayout>
 );

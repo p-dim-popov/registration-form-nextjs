@@ -9,24 +9,16 @@ export interface IFormData {
     value?: string | number | boolean;
 }
 
-export type IFormFieldDefinition = (
-  IUseValidationRule<string, IFormContext>
-  | IUseValidationRule<number, IFormContext>
-  | IUseValidationRule<boolean, IFormContext>
-  | IUseValidationRule<string>
-  | IUseValidationRule<number>
-  | IUseValidationRule<boolean>
-  );
-
-export type IFormDefinitions = {
-    [fieldName: string]: IFormFieldDefinition[]
+export type IFormDefinitions<T> = {
+    [fieldName: string]: IUseValidationRule<T>[]
 };
 
 export interface IFormContext {
     data: IRegisterLayoutState;
     set: (fieldName: string) => (value: IFormData) => void;
-    definitions: { [slice: string]: IFormDefinitions };
-    setDefinitionFor: (fieldName: string) => (definition: IFormFieldDefinition[]) => void;
+    definitions: { [slice: string]: IFormDefinitions<any> };
+    setDefinitionFor: <T> (fieldName: string) => (definition: IUseValidationRule<T>[]) => void;
+    getDefinitionFor: <T> (fieldName: string) => IUseValidationRule<T>[],
 }
 
 const FormContext = React.createContext<IFormContext>({
@@ -34,6 +26,7 @@ const FormContext = React.createContext<IFormContext>({
     data: {},
     set: () => () => {},
     setDefinitionFor: () => () => {},
+    getDefinitionFor: () => [],
 });
 
 export default FormContext;
