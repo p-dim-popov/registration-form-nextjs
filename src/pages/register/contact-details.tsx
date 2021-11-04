@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";
-import Field from "@src/features/rule-creators/ruleCreators";
+import Rule from "@src/features/rule-creators/ruleCreators";
 
 const ContactDetails: NextPageWithLayout = () => (
     <>
@@ -21,7 +21,7 @@ ContactDetails.getLayout = (page: ReactElement) => (
     <RegisterLayout
         page={RegisterPage.ContactDetails}
         formDefinitions={{
-            hasAgreed: [Field().isRequired],
+            hasAgreed: [Rule().isRequired],
         }}
     >
         {page}

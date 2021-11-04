@@ -3,7 +3,7 @@ import useFormContextDefinitions
 import React from "react";
 import { render } from "@testing-library/react";
 import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
-import Field from "@src/features/rule-creators/ruleCreators";
+import Rule from "@src/features/rule-creators/ruleCreators";
 
 describe("useFormContextDefinitions", () => {
     it("should register in form context", () => {
@@ -14,7 +14,7 @@ describe("useFormContextDefinitions", () => {
             set: () => () => {},
             definitions: {},
         };
-        const definitions = [Field().isRequired];
+        const definitions = [Rule().isRequired];
         const Mock: React.FC = () => {
             useFormContextDefinitions("firstName", definitions);
             return null;
@@ -25,7 +25,7 @@ describe("useFormContextDefinitions", () => {
     });
 
     it("should work (do nothing) without context", () => {
-        const definitions = [Field().isRequired];
+        const definitions = [Rule().isRequired];
         const Mock: React.FC = () => {
             useFormContextDefinitions("firstName", definitions);
             return null;

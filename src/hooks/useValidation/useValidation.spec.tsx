@@ -1,5 +1,5 @@
 import { IUseValidationOptions, useValidation, ValidationStatus } from "@src/hooks/useValidation/useValidation";
-import Field from "@src/features/rule-creators/ruleCreators";
+import Rule from "@src/features/rule-creators/ruleCreators";
 import React, { useContext, useEffect } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -8,7 +8,7 @@ import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
 describe("useValidation", () => {
     it("should return tuple with onChange, status, error", () => {
         const Mock: React.FC = () => {
-            const result = useValidation<string>({ rules: [Field().isRequired] });
+            const result = useValidation<string>({ rules: [Rule().isRequired] });
 
             expect(result).toBeInstanceOf(Array);
             const [onChange, startValidating, errorMessages, status] = result;
@@ -25,7 +25,7 @@ describe("useValidation", () => {
 
     it("should have initial state pending", () => {
         const Mock: React.FC = () => {
-            const [,,, status] = useValidation<string>({ rules: [Field().isRequired] });
+            const [,,, status] = useValidation<string>({ rules: [Rule().isRequired] });
             expect(status).toEqual(ValidationStatus.Pending);
 
             return <></>;
@@ -42,9 +42,7 @@ describe("useValidation", () => {
                 onError,
             });
 
-            useEffect(() => {
-                startValidating();
-            }, []);
+            useEffect(startValidating, [startValidating]);
 
             return (
                 <>
@@ -58,7 +56,7 @@ describe("useValidation", () => {
             [ValidationStatus.Valid, 20],
             [ValidationStatus.Error, 4],
         ])("should have %s status", (expectedStatus: ValidationStatus, value: number) => {
-            render(<Mock rules={[Field().isEqualOrGreaterThan(18)]} />);
+            render(<Mock rules={[Rule().isEqualOrGreaterThan(18)]} />);
             const inputElement = screen.getByTestId("TEST_INPUT");
 
             userEvent.type(inputElement, String(value));
@@ -75,7 +73,7 @@ describe("useValidation", () => {
             const onValidMock = jest.fn();
             const onErrorMock = jest.fn();
             render(<Mock
-                rules={[Field({ name: "Age" }).isEqualOrGreaterThan(18)]}
+                rules={[Rule({ name: "Age" }).isEqualOrGreaterThan(18)]}
                 onValid={onValidMock}
                 onError={onErrorMock}
             />);
@@ -140,15 +138,28 @@ describe("useValidation", () => {
     });
 
     it.each([
-        ["TEST", false],
-        ["NOT_TEST", true],
-    ])("should work with context as expected", (val: string, isDifferent: boolean) => {
-        const contextData: { value: string } & IFormContext = {
-            data: {}, definitions: {}, set: () => () => {}, setDefinitionFor: () => () => {}, value: "TEST",
+        ["apples", "pears"],
+        ["apples", "apples"],
+    ])("should work with context (show error when different) - (%s) (%s)", (value: string, valueInContext) => {
+        interface ITestContext extends IFormContext {
+            value: string,
+        }
+        const contextData: ITestContext = {
+            data: {},
+            definitions: {},
+            set: () => () => {},
+            setDefinitionFor: () => () => {},
+            value: valueInContext,
         };
+        const TestContext = React.createContext(contextData);
+        const [test, errorMessage] = Rule<string, ITestContext>()
+            .withContext
+            .isDifferentThan({ selector: (c) => c.value, description: valueInContext });
+
         const Mock: React.FC = () => {
-            const [onChange, start, errors] = useValidation({
-                rules: [Field<string>().isDifferentThan((c) => c.value, "ERROR_HERE")],
+            const [onChange, start, errors, status] = useValidation({
+                rules: [[test, errorMessage]],
+                Context: TestContext,
             });
             useEffect(start, [start]);
 
@@ -159,22 +170,22 @@ describe("useValidation", () => {
                 </div>
             );
         };
-        render(<FormContext.Provider value={contextData}><Mock /></FormContext.Provider>);
+        render(<TestContext.Provider value={contextData}><Mock /></TestContext.Provider>);
 
-        userEvent.type(screen.getByTestId("INPUT"), val);
+        userEvent.type(screen.getByTestId("INPUT"), value);
         const errorDiv = screen.getByTestId("ERROR_DIV");
         const expectErrorDiv = expect(errorDiv.textContent);
-        if (isDifferent) {
-            expectErrorDiv.not.toMatch("ERROR_HERE");
+        if (value !== valueInContext) {
+            expectErrorDiv.not.toMatch(errorMessage);
         } else {
-            expectErrorDiv.toMatch("ERROR_HERE");
+            expectErrorDiv.toMatch(errorMessage);
         }
     });
 
     it("should have startValidating method", () => {
         const Mock: React.FC = () => {
             const [onChange, startValidating,, status] = useValidation({
-                rules: [Field().isRequired],
+                rules: [Rule().isRequired],
             });
 
             return (

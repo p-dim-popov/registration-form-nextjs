@@ -22,7 +22,7 @@ function Input<T>({
         <div>
             {!inlineLabel && <label htmlFor={id}>{label}</label>}
             {status === ValidationStatus.Error && !showValidationStatus && errorMessages
-                .map((m) => (<div className="bg-red-300 text-white">{m}</div>))}
+                .map((m) => (<div key={m} className="bg-red-300 text-white">{m}</div>))}
             <input
                 onChange={(event) => onChange(event.target.value as unknown as T)}
                 id={id}

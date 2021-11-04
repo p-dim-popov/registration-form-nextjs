@@ -5,7 +5,7 @@ import RegisterContext, {
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
 import Input from "@src/components/form/input/Input";
-import Field from "@src/features/rule-creators/ruleCreators";
+import Rule from "@src/features/rule-creators/ruleCreators";
 
 const AccountDetails: NextPageWithLayout = () => {
     const context = useContext(RegisterContext);
@@ -61,10 +61,10 @@ AccountDetails.getLayout = (page: ReactElement) => (
     <RegisterLayout
         page={RegisterPage.AccountDetails}
         formDefinitions={{
-            email: [Field({ name: "email" }).isRequired, Field().shouldMatch(/^.*?@.*?$/i)],
-            password: [Field().isRequired],
-            securityQuestion1: [Field().isRequired, Field().hasLengthBetween(2, 30), Field().shouldMatch(/[a-z]/i)],
-            securityQuestion2: [Field().isRequired, Field().hasLengthBetween(2, 30), Field().shouldMatch(/[a-z]/i)],
+            email: [Rule({ name: "email" }).isRequired, Rule().shouldMatch(/^.*?@.*?$/i)],
+            password: [Rule().isRequired],
+            securityQuestion1: [Rule().isRequired, Rule().hasLengthBetween(2, 30), Rule().shouldMatch(/[a-z]/i)],
+            securityQuestion2: [Rule().isRequired, Rule().hasLengthBetween(2, 30), Rule().shouldMatch(/[a-z]/i)],
         }}
     >
         {page}

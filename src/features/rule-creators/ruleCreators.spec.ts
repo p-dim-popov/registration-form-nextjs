@@ -1,4 +1,4 @@
-import Field, { createMessage, ICreateMessageOptions } from "@src/features/rule-creators/ruleCreators";
+import Rule, { createMessage, ICreateMessageOptions } from "@src/features/rule-creators/ruleCreators";
 
 describe("ruleCreators", () => {
     describe("createMessage", () => {
@@ -14,12 +14,12 @@ describe("ruleCreators", () => {
     });
 
     it("should create rule with correct message when used function", () => {
-        const [, errorMessage] = Field({ name: "Age" }).isEqualOrGreaterThan(18);
+        const [, errorMessage] = Rule({ name: "Age" }).isEqualOrGreaterThan(18);
         expect(errorMessage).toEqual("Age should be equal or greater than 18!");
     });
 
     it("should create rule with correct message when used default", () => {
-        const [, errorMessage] = Field().isEqualOrGreaterThan(18);
+        const [, errorMessage] = Rule().isEqualOrGreaterThan(18);
         expect(errorMessage).toEqual("Field should be equal or greater than 18!");
     });
 });

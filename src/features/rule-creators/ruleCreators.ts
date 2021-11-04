@@ -10,26 +10,58 @@ const capitalizeFirst = (value: string) => `${value[0].toLocaleUpperCase()}${val
 
 export const createMessage = (options: ICreateMessageOptions, defaultCreator: (field: string) => string) => options.message || capitalizeFirst(defaultCreator(options.name || "field"));
 
-const createField = <T, TContext extends IFormContext = any>(options: ICreateMessageOptions = {}) => ({
+type ICreateRuleOptionsWithValue<T> = T;
+
+type ICreateRuleOptionsWithContextSelector<T, TContext> = {
+    selector: (context: TContext) => T,
+    description: string,
+};
+
+type ICreateRuleOptions<T, TContext> = (
+  ICreateRuleOptionsWithValue<T> | ICreateRuleOptionsWithContextSelector<T, TContext>
+);
+
+const getSelectorWithDescription = <T, TContext, TOptions extends ICreateRuleOptions<T, TContext>>(
+    value: TOptions,
+): [(context?: TContext) => T, string] => {
+    const isSelector = typeof value === "object";
+    const data: { selector: (context?: TContext) => T, description: string } = {
+        selector: () => value as T,
+        description: String(value),
+    };
+
+    if (isSelector) {
+        const val = value as ICreateRuleOptionsWithContextSelector<T, TContext>;
+        data.selector = (<(context?: TContext) => T>val.selector);
+        data.description = val.description;
+    }
+
+    return [data.selector, data.description];
+};
+
+const createRule = <T, TContext extends IFormContext, TOptions extends ICreateRuleOptions<T, TContext>>(options: ICreateMessageOptions = {}) => ({
     isRequired: [
         (value) => !!value, createMessage(options, (field: string) => `${field} is required!`),
     ] as IUseValidationRule<T>,
 
-    isEqualOrGreaterThan: (number: T | ((context: TContext) => T), description?: string): IUseValidationRule<T> => {
-        const isSelector = typeof number === "function";
-        const selector = (<Function>(isSelector ? number : () => number));
+    isEqualOrGreaterThan: (
+        number: TOptions,
+    ): IUseValidationRule<T, TContext> => {
+        const [selector, description] = getSelectorWithDescription<T, TContext, TOptions>(number);
         return [
-            ((value, context) => value! >= selector(context)),
-            createMessage(options, (field: string) => `${field} should be equal or greater than ${isSelector ? description : number}!`),
+            ((value, context) => Number(value) >= Number(selector(context))),
+            createMessage(options, (field: string) => `${field} should be equal or greater than ${description}!`),
         ];
     },
 
-    isDifferentThan: (otherValue: T | ((context: TContext) => T), description?: string): IUseValidationRule<T> => {
-        const isSelector = typeof otherValue === "function";
-        const selector = (<Function>(isSelector ? otherValue : () => otherValue));
+    isDifferentThan: (otherValue: TOptions): IUseValidationRule<T, TContext> => {
+        const [selector, description] = getSelectorWithDescription<T, TContext, TOptions>(otherValue);
         return [
-            ((value, context) => value !== selector(context)),
-            createMessage(options, (field: string) => `${field} should be different than ${isSelector ? description : otherValue}`),
+            ((value, context) => {
+                const contextValue = selector(context);
+                return value !== contextValue;
+            }),
+            createMessage(options, (field: string) => `${field} should be different than ${description}`),
         ];
     },
 
@@ -44,6 +76,11 @@ const createField = <T, TContext extends IFormContext = any>(options: ICreateMes
     ],
 });
 
-export const genericField = createField<string>();
+const Rule = <T, TContext extends IFormContext = IFormContext> (options: ICreateMessageOptions = {}) => ({
+    ...createRule<T, TContext, ICreateRuleOptionsWithValue<T>>(options),
+    withContext: createRule<
+    T, TContext, ICreateRuleOptionsWithContextSelector<T, TContext>
+    >(options),
+});
 
-export default createField;
+export default Rule;

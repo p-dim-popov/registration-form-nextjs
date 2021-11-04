@@ -1,4 +1,4 @@
-import {
+import React, {
     useCallback, useContext, useEffect, useState,
 } from "react";
 import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
@@ -17,29 +17,31 @@ export type IUseValidation<T> = [
   status: ValidationStatus,
 ];
 
-export type IUseValidationRule<T> = [
-  test: (value?: T, context?: IFormContext) => boolean,
+export type IUseValidationRule<T, TContext extends IFormContext = IFormContext> = [
+  test: (value?: T, context?: TContext) => boolean,
   message: string,
 ];
 
-export interface IUseValidationOptions<T> {
-    rules: IUseValidationRule<T>[];
+export interface IUseValidationOptions<T, TContext extends IFormContext = IFormContext> {
+    rules: IUseValidationRule<T, TContext>[];
     onValid?: (value: T) => void;
     onError?: (messages: string[], value: T) => void;
     earlyReturn?: boolean;
+    Context?: React.Context<TContext> | React.Context<TContext & IFormContext>;
 }
 
-export const useValidation = <T> ({
+export const useValidation = <T, TContext extends IFormContext = IFormContext> ({
     rules,
     earlyReturn,
     onError,
     onValid,
-}: IUseValidationOptions<T>,
+    Context,
+}: IUseValidationOptions<T, TContext>,
 ): IUseValidation<T> => {
     const [status, setStatus] = useState<ValidationStatus>(ValidationStatus.Pending);
     const [errors, setErrors] = useState<string[]>([]);
     const [value, setValue] = useState<T>();
-    const context = useContext<IFormContext>(FormContext);
+    const context = useContext((Context ?? FormContext) as React.Context<TContext>);
 
     const startValidating = useCallback(() => setStatus(ValidationStatus.Validating), []);
 

@@ -1,11 +1,11 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import Input from "@src/components/form/input/Input";
-import Field from "@src/features/rule-creators/ruleCreators";
+import Rule from "@src/features/rule-creators/ruleCreators";
 import userEvent from "@testing-library/user-event";
 
 describe("Input", () => {
-    it("should render input Field()", () => {
+    it("should render input Rule()", () => {
         const { container } = render(<Input id="TEST" />);
 
         expect(container.querySelector("input")).toBeInTheDocument();
@@ -43,7 +43,7 @@ describe("Input", () => {
         [true],
         [false],
     ])("should show validation status - %s", (showValidationStatus) => {
-        const rule = Field().isEqualOrGreaterThan(18);
+        const rule = Rule().isEqualOrGreaterThan(18);
         render(<Input id="TEST" validation={{ rules: [rule] }} showValidationStatus={showValidationStatus} />);
 
         const [, errorMessage] = rule;
@@ -66,7 +66,7 @@ describe("Input", () => {
     });
 
     it("should show error between label and input", () => {
-        const rule = Field().isEqualOrGreaterThan(18);
+        const rule = Rule().isEqualOrGreaterThan(18);
         render(<Input id="TEST" validation={{ rules: [rule] }} />);
 
         const input = screen.getByLabelText("TEST");

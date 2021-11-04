@@ -7,7 +7,7 @@ import RegisterContext, {
     IRegisterContext,
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
-import Field from "@src/features/rule-creators/ruleCreators";
+import Rule from "@src/features/rule-creators/ruleCreators";
 import userEvent from "@testing-library/user-event";
 
 describe("Layout", () => {
@@ -33,7 +33,7 @@ describe("Layout", () => {
         render(
             <RegisterLayout
                 page={RegisterPage.AccountDetails}
-                formDefinitions={{ firstName: [Field().isRequired] }}
+                formDefinitions={{ firstName: [Rule().isRequired] }}
             >
                 <Mock />
             </RegisterLayout>,
@@ -62,7 +62,7 @@ describe("Layout", () => {
         const { container } = render(
             <RegisterLayout
                 page={RegisterPage.AccountDetails}
-                formDefinitions={{ firstName: [Field().isRequired] }}
+                formDefinitions={{ firstName: [Rule().isRequired] }}
             >
                 <Mock />
             </RegisterLayout>,
