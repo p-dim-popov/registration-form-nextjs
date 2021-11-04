@@ -4,6 +4,10 @@ import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";
 import Rule from "@src/features/rule-creators/ruleCreators";
 
+const validations = {
+    hasAgreed: { rules: [Rule().isRequired] },
+};
+
 const ContactDetails: NextPageWithLayout = () => (
     <>
         <h2>One last thing!</h2>
@@ -18,12 +22,7 @@ const ContactDetails: NextPageWithLayout = () => (
 );
 
 ContactDetails.getLayout = (page: ReactElement) => (
-    <RegisterLayout
-        page={RegisterPage.ContactDetails}
-        formDefinitions={{
-            hasAgreed: [Rule().isRequired],
-        }}
-    >
+    <RegisterLayout page={RegisterPage.ContactDetails}>
         {page}
     </RegisterLayout>
 );

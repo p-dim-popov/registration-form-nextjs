@@ -5,11 +5,18 @@ import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";
 import Rule from "@src/features/rule-creators/ruleCreators";
 
+const validations = {
+    firstName: { rules: [Rule().isRequired] },
+    lastName: { rules: [Rule().isRequired] },
+    dob: { rules: [Rule().isRequired] },
+    gender: { rules: [Rule().isRequired] },
+};
+
 const UserDetails: NextPageWithLayout = () => (
     <>
-        <Input id="firstName" label="First Name" inlineLabel />
-        <Input id="lastName" label="Last Name" inlineLabel />
-        <Input id="dob" label="Date of Birth" />
+        <Input id="firstName" label="First Name" validation={validations.firstName} inlineLabel />
+        <Input id="lastName" label="Last Name" validation={validations.lastName} inlineLabel />
+        <Input id="dob" label="Date of Birth" validation={validations.dob} />
 
         <label htmlFor="gender">
             Gender
@@ -20,15 +27,7 @@ const UserDetails: NextPageWithLayout = () => (
 );
 
 UserDetails.getLayout = (page: ReactElement) => (
-    <RegisterLayout
-        page={RegisterPage.UserDetails}
-        formDefinitions={{
-            firstName: [Rule().isRequired],
-            lastName: [Rule().isRequired],
-            dob: [Rule().isRequired],
-            gender: [Rule().isRequired],
-        }}
-    >
+    <RegisterLayout page={RegisterPage.UserDetails}>
         {page}
     </RegisterLayout>
 );
