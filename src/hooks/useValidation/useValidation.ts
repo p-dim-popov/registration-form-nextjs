@@ -43,7 +43,7 @@ export const useValidation = <T, TContext extends IFormContext = IFormContext> (
     const [value, setValue] = useState<T>();
     const context = useContext((Context ?? FormContext) as React.Context<TContext>);
 
-    const startValidating = useCallback(() => setStatus(ValidationStatus.Validating), []);
+    const forceValidation = useCallback(() => setStatus(ValidationStatus.Valid), []);
 
     useEffect(() => {
         if (status === ValidationStatus.Pending) return;
@@ -66,7 +66,7 @@ export const useValidation = <T, TContext extends IFormContext = IFormContext> (
         }
     }, [context, earlyReturn, onError, onValid, rules, status, value]);
 
-    return [setValue, startValidating, errors, status];
+    return [setValue, forceValidation, errors, status];
 };
 
 export default useValidation;

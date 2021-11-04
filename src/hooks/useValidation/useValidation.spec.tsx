@@ -182,9 +182,9 @@ describe("useValidation", () => {
         }
     });
 
-    it("should have startValidating method", () => {
+    it("should have forceValidation method", () => {
         const Mock: React.FC = () => {
-            const [onChange, startValidating,, status] = useValidation({
+            const [onChange, forceValidation,, status] = useValidation({
                 rules: [Rule().isRequired],
             });
 
@@ -192,7 +192,7 @@ describe("useValidation", () => {
                 <div>
                     <input data-testid="INPUT" onChange={(event) => onChange(event.target.value)} />
                     <div data-testid="STATUS">{status}</div>
-                    <button type="button" onClick={startValidating} data-testid="BUTTON" />
+                    <button type="button" onClick={forceValidation} data-testid="BUTTON" />
                 </div>
             );
         };
