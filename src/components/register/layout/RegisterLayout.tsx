@@ -5,7 +5,7 @@ import RegisterContext, {
 } from "@src/contexts/register/RegisterContext";
 import RegisterFormFooter from "@src/components/register/form-footer/RegisterFormFooter";
 import { ValidationStatus } from "@src/hooks/useValidation/useValidation";
-import { IFormData, IFormDefinitions } from "@src/contexts/form/FormContext";
+import FormContext, { IFormData, IFormDefinitions } from "@src/contexts/form/FormContext";
 
 export type IRegisterLayoutState = ({ [fieldName: string]: IFormData });
 
@@ -59,7 +59,13 @@ const RegisterLayout: React.FC<IRegisterLayoutProps> = ({
             }}
         >
             <RegisterFormHeader />
-            {children}
+            <RegisterContext.Consumer>
+                {(value) => (
+                    <FormContext.Provider value={value}>
+                        {children}
+                    </FormContext.Provider>
+                )}
+            </RegisterContext.Consumer>
             <RegisterFormFooter />
         </RegisterContext.Provider>
     );

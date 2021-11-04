@@ -17,7 +17,6 @@ const AccountDetails: NextPageWithLayout = () => {
                 id="email"
                 validation={{
                     rules: (formDefinitions?.email as []) || [],
-                    context,
                 }}
                 inlineLabel
             />
@@ -38,7 +37,6 @@ const AccountDetails: NextPageWithLayout = () => {
                     label="Your mother's maiden name"
                     validation={{
                         rules: (formDefinitions?.securityQuestion1 as []) || [],
-                        context,
                     }}
                     inlineLabel
                 />
@@ -47,7 +45,6 @@ const AccountDetails: NextPageWithLayout = () => {
                     label="Your place of birth"
                     validation={{
                         rules: (formDefinitions?.securityQuestion2 as []) || [],
-                        context,
                     }}
                     inlineLabel
                 />

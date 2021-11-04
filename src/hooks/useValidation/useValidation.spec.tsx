@@ -3,7 +3,7 @@ import Field from "@src/features/rule-creators/ruleCreators";
 import React, { useContext, useEffect } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { IFormContext } from "@src/contexts/form/FormContext";
+import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
 
 describe("useValidation", () => {
     it("should return tuple with onChange, status, error", () => {
@@ -122,10 +122,8 @@ describe("useValidation", () => {
         const testData = {
             data: {}, definitions: {}, set: () => () => {}, setDefinitionFor: () => () => {}, value: "TEST",
         };
-        const TestContext = React.createContext<IFormContext>(testData);
         const Mock: React.FC = () => {
-            const context = useContext(TestContext);
-            const [onChange, start, status, errors] = useValidation({ rules: [[predicateMock, "TEST-1"]], context });
+            const [onChange, start, status, errors] = useValidation({ rules: [[predicateMock, "TEST-1"]] });
             useEffect(start, [start]);
 
             return (
@@ -135,7 +133,7 @@ describe("useValidation", () => {
                 </div>
             );
         };
-        render(<Mock />);
+        render(<FormContext.Provider value={testData}><Mock /></FormContext.Provider>);
 
         userEvent.type(screen.getByTestId("INPUT"), "T");
         expect(predicateMock).toBeCalledWith("T", testData);
@@ -145,14 +143,12 @@ describe("useValidation", () => {
         ["TEST", false],
         ["NOT_TEST", true],
     ])("should work with context as expected", (val: string, isDifferent: boolean) => {
-        const TestContext = React.createContext<{ value: string } & IFormContext>({
+        const contextData: { value: string } & IFormContext = {
             data: {}, definitions: {}, set: () => () => {}, setDefinitionFor: () => () => {}, value: "TEST",
-        });
+        };
         const Mock: React.FC = () => {
-            const context = useContext(TestContext);
             const [onChange, start, errors] = useValidation({
-                rules: [Field<string, typeof context>().isDifferentThan((c) => c.value, "ERROR_HERE")],
-                context,
+                rules: [Field<string>().isDifferentThan((c) => c.value, "ERROR_HERE")],
             });
             useEffect(start, [start]);
 
@@ -163,7 +159,7 @@ describe("useValidation", () => {
                 </div>
             );
         };
-        render(<Mock />);
+        render(<FormContext.Provider value={contextData}><Mock /></FormContext.Provider>);
 
         userEvent.type(screen.getByTestId("INPUT"), val);
         const errorDiv = screen.getByTestId("ERROR_DIV");

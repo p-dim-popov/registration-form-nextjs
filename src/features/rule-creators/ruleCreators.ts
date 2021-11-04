@@ -13,9 +13,9 @@ export const createMessage = (options: ICreateMessageOptions, defaultCreator: (f
 const createField = <T, TContext extends IFormContext = any>(options: ICreateMessageOptions = {}) => ({
     isRequired: [
         (value) => !!value, createMessage(options, (field: string) => `${field} is required!`),
-    ] as IUseValidationRule<T, TContext>,
+    ] as IUseValidationRule<T>,
 
-    isEqualOrGreaterThan: (number: T | ((context: TContext) => T), description?: string): IUseValidationRule<T, TContext> => {
+    isEqualOrGreaterThan: (number: T | ((context: TContext) => T), description?: string): IUseValidationRule<T> => {
         const isSelector = typeof number === "function";
         const selector = (<Function>(isSelector ? number : () => number));
         return [
@@ -24,7 +24,7 @@ const createField = <T, TContext extends IFormContext = any>(options: ICreateMes
         ];
     },
 
-    isDifferentThan: (otherValue: T | ((context: TContext) => T), description?: string): IUseValidationRule<T, TContext> => {
+    isDifferentThan: (otherValue: T | ((context: TContext) => T), description?: string): IUseValidationRule<T> => {
         const isSelector = typeof otherValue === "function";
         const selector = (<Function>(isSelector ? otherValue : () => otherValue));
         return [
