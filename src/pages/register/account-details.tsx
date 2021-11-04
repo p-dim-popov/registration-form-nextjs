@@ -4,7 +4,7 @@ import type { NextPageWithLayout } from "@src/pages/_app";
 import RegisterContext, {
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
-import Input from "@src/components/form/input/Input";
+import Input from "@src/components/input/Input";
 import Rule from "@src/features/rule-creators/ruleCreators";
 
 const AccountDetails: NextPageWithLayout = () => {

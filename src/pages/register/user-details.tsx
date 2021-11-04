@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import Input from "@src/components/form/input/Input";
+import Input from "@src/components/input/Input";
 import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";

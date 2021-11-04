@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import Input from "@src/components/form/input/Input";
+import Input from "@src/components/input/Input";
 import Rule from "@src/features/rule-creators/ruleCreators";
 import userEvent from "@testing-library/user-event";
 
