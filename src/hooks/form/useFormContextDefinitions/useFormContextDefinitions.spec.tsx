@@ -16,11 +16,20 @@ describe("useFormContextDefinitions", () => {
         };
         const definitions = [Field().isRequired];
         const Mock: React.FC = () => {
-            useFormContextDefinitions("firstName", definitions, FormContext);
+            useFormContextDefinitions("firstName", definitions);
             return null;
         };
         render(<FormContext.Provider value={contextData}><Mock /></FormContext.Provider>);
 
         expect(setDefinitionsForFirstNameMock).toBeCalledWith(definitions);
+    });
+
+    it("should work (do nothing) without context", () => {
+        const definitions = [Field().isRequired];
+        const Mock: React.FC = () => {
+            useFormContextDefinitions("firstName", definitions);
+            return null;
+        };
+        render(<Mock />);
     });
 });
