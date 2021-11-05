@@ -7,6 +7,7 @@ import Label from "@src/components/label/Label";
 import { ICanBeControlled } from "@src/interfaces/ICanBeControlled";
 import useValidation, { ValidationStatus } from "@src/hooks/useValidation/useValidation";
 import ValidationErrors from "@src/components/validation-error/ValidationErrors";
+import useFormContextState from "@src/hooks/form/useFormContextState/useFormContextState";
 
 export interface ICheckboxProps<TContext extends IFormContext<boolean>>
     extends
@@ -22,7 +23,7 @@ function Checkbox<TContext extends IFormContext<boolean>>({
     value, onChange,
     validation, showValidationStatus,
 }: React.PropsWithChildren<ICheckboxProps<TContext>>) {
-    const [nonControlledValue, setNonControlledValue] = useState(false);
+    const [nonControlledValue, setNonControlledValue] = useFormContextState(false);
     const [
         forceValidation, errorMessages, status,
     ] = useValidation(validation ?? { rules: [] }, value ?? nonControlledValue);
