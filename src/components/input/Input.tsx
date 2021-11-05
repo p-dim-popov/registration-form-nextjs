@@ -8,6 +8,7 @@ import ValidationStatusPreview from "@src/components/validation-status-preview/V
 import { IHaveLabel } from "@src/interfaces/IHaveLabel";
 import { ICanHaveValidation } from "@src/interfaces/ICanHaveValidation";
 import { ICanHaveContext } from "@src/interfaces/ICanHaveContext";
+import Label from "@src/components/label/Label";
 
 export interface IInputProps<TContext extends IFormContext<string>>
     extends IHaveLabel, ICanHaveValidation<string>, ICanHaveContext<TContext> {
@@ -26,7 +27,7 @@ function Input<TContext extends IFormContext<string>>({
 
     return (
         <div>
-            {!inlineLabel && <label htmlFor={name}>{label}</label>}
+            <Label htmlFor={name} label={label} isHidden={!!inlineLabel} />
             <ValidationErrors
                 isHidden={showValidationStatus}
                 status={status}

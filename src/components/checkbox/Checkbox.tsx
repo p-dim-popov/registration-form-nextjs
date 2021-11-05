@@ -3,6 +3,7 @@ import { IHaveLabel } from "@src/interfaces/IHaveLabel";
 import { ICanHaveValidation } from "@src/interfaces/ICanHaveValidation";
 import { ICanHaveContext } from "@src/interfaces/ICanHaveContext";
 import { IFormContext } from "@src/contexts/form/FormContext";
+import Label from "@src/components/label/Label";
 
 export interface ICheckboxProps<TContext extends IFormContext<boolean>>
     extends IHaveLabel, ICanHaveValidation<boolean>, ICanHaveContext<TContext> {
@@ -14,7 +15,7 @@ function Checkbox<TContext extends IFormContext<boolean>>({
 }: React.PropsWithChildren<ICheckboxProps<TContext>>) {
     return (
         <div>
-            {!inlineLabel && <label htmlFor={name}>{label}</label>}
+            <Label htmlFor={name} label={label} isHidden={!!inlineLabel} />
             <input
                 id={id}
                 name={name}
