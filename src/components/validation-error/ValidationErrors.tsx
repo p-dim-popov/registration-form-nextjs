@@ -1,19 +1,19 @@
 import React from "react";
 import { ValidationStatus } from "@src/hooks/useValidation/useValidation";
-import { ICanHaveValidation } from "@src/interfaces/ICanHaveValidation";
 import ValidationError from "./ValidationError";
 
-export interface IValidationErrorsProps extends ICanHaveValidation<any> {
+export interface IValidationErrorsProps {
+    show: boolean;
     status: ValidationStatus;
     errorMessages: string[];
 }
 
 const ValidationErrors: React.FC<IValidationErrorsProps> = ({
-    status, showValidationStatus, errorMessages,
+    status, show, errorMessages,
 }) => (
     <>
         {
-            status === ValidationStatus.Error && !showValidationStatus && errorMessages
+            status === ValidationStatus.Error && show && errorMessages
                 .map((m) => (<ValidationError message={m} key={m} />))
         }
     </>
