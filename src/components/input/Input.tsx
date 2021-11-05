@@ -4,6 +4,8 @@ import classNames from "classnames";
 import useFormContextDefinitions
     from "@src/hooks/form/useFormContextDefinitions/useFormContextDefinitions";
 import { IFormContext } from "@src/contexts/form/FormContext";
+import ValidationErrors from "@src/components/validation-error/ValidationErrors";
+import ValidationStatusPreview from "@src/components/validation-status/ValidationStatusPreview";
 
 export interface IInputProps<T> {
     id: string;
@@ -25,8 +27,11 @@ function Input<T, TContext extends IFormContext<T>>({
     return (
         <div>
             {!inlineLabel && <label htmlFor={id}>{label}</label>}
-            {status === ValidationStatus.Error && !showValidationStatus && errorMessages
-                .map((m) => (<div key={m} className="bg-red-300 text-white">{m}</div>))}
+            <ValidationErrors
+                showValidationStatus={showValidationStatus}
+                status={status}
+                errorMessages={errorMessages}
+            />
             <input
                 onChange={(event) => onChange(event.target.value as unknown as T)}
                 id={id}
@@ -35,20 +40,12 @@ function Input<T, TContext extends IFormContext<T>>({
                 onBlur={startValidating}
                 className="border p-3"
             />
-            {showValidationStatus && (
-                <div>
-                    {validationMessages?.map((m) => {
-                        const showError = status === ValidationStatus.Pending
-                          || (status === ValidationStatus.Error && errorMessages.includes(m));
-                        const className = classNames({
-                            "text-gray-400": showError,
-                            "text-green-700": !showError,
-                        });
-
-                        return (<div key={m} className={className}>{m}</div>);
-                    })}
-                </div>
-            )}
+            <ValidationStatusPreview
+                validationMessages={validationMessages}
+                status={status}
+                errorMessages={errorMessages}
+                showValidationStatus={showValidationStatus}
+            />
         </div>
     );
 }
