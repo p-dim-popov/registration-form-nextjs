@@ -2,8 +2,7 @@ import { renderHook } from "@testing-library/react-hooks";
 import useFormContextState from "@src/hooks/form/useFormContextState/useFormContextState";
 import { render, screen } from "@testing-library/react";
 import FormContext, { getFormContextDefaultValue } from "@src/contexts/form/FormContext";
-import React from "react";
-import { ValidationStatus } from "@src/hooks/useValidation/useValidation";
+import React, { useEffect } from "react";
 
 describe("useFormContextState", () => {
     it("should work as useState", () => {
@@ -20,10 +19,7 @@ describe("useFormContextState", () => {
         };
 
         const state = getFormContextDefaultValue<number>();
-        state.data.age = {
-            value: 321,
-            status: ValidationStatus.Valid,
-        };
+        state.data.age = 321;
 
         render(
             <FormContext.Provider value={state}>
@@ -52,6 +48,31 @@ describe("useFormContextState", () => {
             </FormContext.Provider>,
         );
 
-        expect(state.data.age.value).toEqual(123);
+        expect(state.data.age).toEqual(123);
+    });
+
+    it("should return setter to value in context", () => {
+        const Mock: React.FC = () => {
+            const [value, set] = useFormContextState("age", 123);
+
+            useEffect(() => {
+                set(321);
+            }, [set]);
+
+            return <>{value}</>;
+        };
+
+        const state = getFormContextDefaultValue<number>();
+        state.set = (fieldName) => (value) => {
+            state.data[fieldName] = value;
+        };
+
+        render(
+            <FormContext.Provider value={state}>
+                <Mock />
+            </FormContext.Provider>,
+        );
+
+        expect(state.data.age).toEqual(321);
     });
 });
