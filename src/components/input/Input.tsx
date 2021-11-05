@@ -6,11 +6,11 @@ import { IFormContext } from "@src/contexts/form/FormContext";
 import ValidationErrors from "@src/components/validation-error/ValidationErrors";
 import ValidationStatusPreview from "@src/components/validation-status-preview/ValidationStatusPreview";
 import { IHaveLabel } from "@src/interfaces/IHaveLabel";
-import { IHaveValidation } from "@src/interfaces/IHaveValidation";
+import { ICanHaveValidation } from "@src/interfaces/ICanHaveValidation";
 import { ICanHaveContext } from "@src/interfaces/ICanHaveContext";
 
-export interface IInputProps<TContext extends IFormContext<string>> extends
-    IHaveLabel, IHaveValidation<string>, ICanHaveContext<TContext> {
+export interface IInputProps<TContext extends IFormContext<string>>
+    extends IHaveLabel, ICanHaveValidation<string>, ICanHaveContext<TContext> {
     id: string;
 }
 
