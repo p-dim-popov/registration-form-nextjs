@@ -10,9 +10,8 @@ export enum ValidationStatus {
     Validating = "Validating",
 }
 
-export type IUseValidation<T> = [
-  onChange: (value: T) => void,
-  startValidating: () => void,
+export type IUseValidation = [
+  forceValidate: () => void,
   errorMessages: string[],
   status: ValidationStatus,
 ];
@@ -36,14 +35,13 @@ export const useValidation = <T, TContext extends IFormContext<T> = IFormContext
     onError,
     onValid,
     Context,
-}: IUseValidationOptions<T, TContext>,
-): IUseValidation<T> => {
+}: IUseValidationOptions<T, TContext>, value: T,
+): IUseValidation => {
     const [status, setStatus] = useState<ValidationStatus>(ValidationStatus.Pending);
     const [errors, setErrors] = useState<string[]>([]);
-    const [value, setValue] = useState<T>();
     const context = useContext((Context ?? FormContext) as React.Context<TContext>);
 
-    const forceValidation = useCallback(() => setStatus(ValidationStatus.Valid), []);
+    const forceValidate = useCallback(() => setStatus(ValidationStatus.Valid), []);
 
     useEffect(() => {
         if (status === ValidationStatus.Pending) return;
@@ -66,7 +64,7 @@ export const useValidation = <T, TContext extends IFormContext<T> = IFormContext
         }
     }, [context, earlyReturn, onError, onValid, rules, status, value]);
 
-    return [setValue, forceValidation, errors, status];
+    return [forceValidate, errors, status];
 };
 
 export default useValidation;

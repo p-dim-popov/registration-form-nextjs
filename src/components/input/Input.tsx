@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useValidation from "@src/hooks/useValidation/useValidation";
 import useFormContextDefinitions
     from "@src/hooks/form/useFormContextDefinitions/useFormContextDefinitions";
@@ -16,9 +16,10 @@ function Input<TContext extends IFormContext<string>>({
     id, label = id, name = id, validation, showValidationStatus, inlineLabel,
 }: React.PropsWithChildren<IInputProps>) {
     const validationMessages = validation?.rules.map(([,e]) => e);
+    const [value, setValue] = useState("");
     const [
-        onChange, startValidating, errorMessages, status,
-    ] = useValidation(validation ?? { rules: [] });
+        startValidating, errorMessages, status,
+    ] = useValidation(validation ?? { rules: [] }, value);
     useFormContextDefinitions<string, TContext>(id, validation?.rules ?? []);
 
     return (
@@ -30,7 +31,7 @@ function Input<TContext extends IFormContext<string>>({
                 errorMessages={errorMessages}
             />
             <input
-                onChange={(event) => onChange(event.target.value)}
+                onChange={(event) => setValue(event.target.value)}
                 id={id}
                 name={name}
                 placeholder={label}
