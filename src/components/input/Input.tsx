@@ -9,20 +9,28 @@ import { IHaveLabel } from "@src/interfaces/IHaveLabel";
 import { ICanHaveValidation } from "@src/interfaces/ICanHaveValidation";
 import { ICanHaveContext } from "@src/interfaces/ICanHaveContext";
 import Label from "@src/components/label/Label";
+import { ICanBeControlled } from "@src/interfaces/ICanBeControlled";
 
 export interface IInputProps<TContext extends IFormContext<string>>
-    extends IHaveLabel, ICanHaveValidation<string>, ICanHaveContext<TContext> {
+    extends
+    IHaveLabel,
+    ICanHaveValidation<string>,
+    ICanHaveContext<TContext>,
+    ICanBeControlled<string> {
     id: string;
 }
 
 function Input<TContext extends IFormContext<string>>({
-    id, label = id, name = id, validation, showValidationStatus, inlineLabel, Context,
+    id, label = id, name = id, inlineLabel,
+    validation, showValidationStatus,
+    Context,
+    value, onChange,
 }: React.PropsWithChildren<IInputProps<TContext>>) {
     const validationMessages = validation?.rules.map(([,e]) => e);
-    const [value, setValue] = useState("");
+    const [nonControlledValue, setNonControlledValue] = useState("");
     const [
         allowValidation, errorMessages, status,
-    ] = useValidation(validation ?? { rules: [] }, value);
+    ] = useValidation(validation ?? { rules: [] }, value ?? nonControlledValue);
     useFormContextDefinitions<string, TContext>(id, validation?.rules ?? [], Context);
 
     return (
@@ -34,7 +42,7 @@ function Input<TContext extends IFormContext<string>>({
                 errorMessages={errorMessages}
             />
             <input
-                onChange={(event) => setValue(event.target.value)}
+                onChange={(event) => (onChange ?? setNonControlledValue)(event.target.value)}
                 id={id}
                 name={name}
                 placeholder={label}

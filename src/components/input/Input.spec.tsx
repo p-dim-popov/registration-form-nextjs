@@ -100,4 +100,20 @@ describe("Input", () => {
 
         expect(formContextMock.definitions._.TEST).toEqual(rules);
     });
+
+    it("should be optionally controllable input", () => {
+        const state = { value: "test-value" };
+        const { container } = render(<Input
+            id="test-id"
+            value={state.value}
+            onChange={(v) => {
+                state.value = v;
+            }}
+        />);
+
+        const changedValue = "test-value-2";
+        userEvent.type(container.querySelector("input")!, changedValue);
+
+        expect(state.value).toEqual(changedValue);
+    });
 });
