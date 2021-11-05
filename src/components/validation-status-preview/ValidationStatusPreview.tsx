@@ -1,9 +1,9 @@
 import React from "react";
 import classNames from "classnames";
 import { ValidationStatus } from "@src/hooks/useValidation/useValidation";
+import { ICanHaveValidation } from "@src/interfaces/ICanHaveValidation";
 
-export interface IValidationStatusProps {
-    showValidationStatus?: boolean;
+export interface IValidationStatusProps extends ICanHaveValidation<any> {
     validationMessages?: string[];
     status: ValidationStatus;
     errorMessages: string[];

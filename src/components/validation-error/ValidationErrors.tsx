@@ -1,10 +1,10 @@
 import React from "react";
 import { ValidationStatus } from "@src/hooks/useValidation/useValidation";
+import { ICanHaveValidation } from "@src/interfaces/ICanHaveValidation";
 import ValidationError from "./ValidationError";
 
-export interface IValidationErrorsProps {
+export interface IValidationErrorsProps extends ICanHaveValidation<any> {
     status: ValidationStatus;
-    showValidationStatus?: boolean;
     errorMessages: string[];
 }
 
