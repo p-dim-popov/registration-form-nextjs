@@ -12,15 +12,10 @@ describe("Input", () => {
         expect(container.querySelector("input")).toBeInTheDocument();
     });
 
-    it("should have props: id, <IUseValidationOptions>validation?, showValidationStatus?, label?", () => {
-        render(<Input id="Name" validation={{ rules: [] }} label="Full Name" />);
-    });
-
     it.each([
         [{ id: "TEST" }, "TEST"],
         [{ id: "TEST", label: "TEST_LABEL" }, "TEST_LABEL"],
     ])("should show correct label: (%s) (%s)", (props, expectedLabel) => {
-        // eslint-disable-next-line react/jsx-props-no-spreading
         render(<Input {...props} />);
 
         const input = screen.queryByLabelText(expectedLabel);
