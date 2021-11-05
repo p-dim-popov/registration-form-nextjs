@@ -28,7 +28,7 @@ function Input<TContext extends IFormContext<string>>({
         <div>
             {!inlineLabel && <label htmlFor={name}>{label}</label>}
             <ValidationErrors
-                show={!showValidationStatus}
+                isHidden={showValidationStatus}
                 status={status}
                 errorMessages={errorMessages}
             />
@@ -44,7 +44,7 @@ function Input<TContext extends IFormContext<string>>({
                 validationMessages={validationMessages}
                 status={status}
                 errorMessages={errorMessages}
-                show={!!showValidationStatus}
+                isHidden={!showValidationStatus}
             />
         </div>
     );

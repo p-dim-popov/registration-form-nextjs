@@ -1,7 +1,7 @@
 import React from "react";
+import { ICanBeHidden } from "@src/interfaces/ICanBeHidden";
 
-export interface ILabelProps {
-    isHidden?: boolean;
+export interface ILabelProps extends ICanBeHidden {
     htmlFor: string;
     label: string;
 }

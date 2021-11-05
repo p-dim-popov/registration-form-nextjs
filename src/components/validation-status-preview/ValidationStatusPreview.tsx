@@ -1,19 +1,19 @@
 import React from "react";
 import classNames from "classnames";
 import { ValidationStatus } from "@src/hooks/useValidation/useValidation";
+import { ICanBeHidden } from "@src/interfaces/ICanBeHidden";
 
-export interface IValidationStatusProps {
-    show: boolean;
+export interface IValidationStatusProps extends ICanBeHidden {
     validationMessages?: string[];
     status: ValidationStatus;
     errorMessages: string[];
 }
 
 const ValidationStatusPreview: React.FC<IValidationStatusProps> = ({
-    show, validationMessages, status, errorMessages,
+    isHidden, validationMessages, status, errorMessages,
 }) => (
     <>
-        {show && (
+        {!isHidden && (
             <div>
                 {validationMessages?.map((m) => {
                     const showError = status === ValidationStatus.Pending
