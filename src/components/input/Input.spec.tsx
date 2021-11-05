@@ -4,7 +4,6 @@ import Input from "@src/components/input/Input";
 import Rule from "@src/features/rule-creators/ruleCreators";
 import userEvent from "@testing-library/user-event";
 import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
-import { IUseValidationRule } from "@src/hooks/useValidation/useValidation";
 
 describe("Input", () => {
     it("should render input Rule()", () => {
@@ -84,11 +83,11 @@ describe("Input", () => {
 
     it("should register in context on mount", () => {
         const rules = [Rule().isEqualOrGreaterThan(18)];
-        const formContextMock: IFormContext = {
+        const formContextMock: IFormContext<string> = {
             data: {},
             definitions: { _: {} },
-            setDefinitionFor<T>(fieldName: string) {
-                return (definition: IUseValidationRule<T, IFormContext>[]) => {
+            setDefinitionFor(fieldName: string) {
+                return (definition) => {
                     formContextMock.definitions._[fieldName] = definition;
                 };
             },

@@ -17,20 +17,20 @@ export type IUseValidation<T> = [
   status: ValidationStatus,
 ];
 
-export type IUseValidationRule<T, TContext extends IFormContext = IFormContext> = [
+export type IUseValidationRule<T, TContext extends IFormContext<T> = IFormContext<T>> = [
   test: (value?: T, context?: TContext) => boolean,
   message: string,
 ];
 
-export interface IUseValidationOptions<T, TContext extends IFormContext = IFormContext> {
+export interface IUseValidationOptions<T, TContext extends IFormContext<T> = IFormContext<T>> {
     rules: IUseValidationRule<T, TContext>[];
     onValid?: (value: T) => void;
     onError?: (messages: string[], value: T) => void;
     earlyReturn?: boolean;
-    Context?: React.Context<TContext> | React.Context<TContext & IFormContext>;
+    Context?: React.Context<TContext> | React.Context<TContext & IFormContext<T>>;
 }
 
-export const useValidation = <T, TContext extends IFormContext = IFormContext> ({
+export const useValidation = <T, TContext extends IFormContext<T> = IFormContext<T>> ({
     rules,
     earlyReturn,
     onError,

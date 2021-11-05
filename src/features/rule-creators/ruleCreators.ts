@@ -39,7 +39,7 @@ const getSelectorWithDescription = <T, TContext, TOptions extends ICreateRuleOpt
     return [data.selector, data.description];
 };
 
-const createRule = <T, TContext extends IFormContext, TOptions extends ICreateRuleOptions<T, TContext>>(options: ICreateMessageOptions = {}) => ({
+const createRule = <T, TContext extends IFormContext<T>, TOptions extends ICreateRuleOptions<T, TContext>>(options: ICreateMessageOptions = {}) => ({
     isRequired: [
         (value) => !!value, createMessage(options, (field: string) => `${field} is required!`),
     ] as IUseValidationRule<T>,
@@ -76,7 +76,7 @@ const createRule = <T, TContext extends IFormContext, TOptions extends ICreateRu
     ],
 });
 
-const Rule = <T, TContext extends IFormContext = IFormContext> (options: ICreateMessageOptions = {}) => ({
+const Rule = <T, TContext extends IFormContext<T> = IFormContext<T>> (options: ICreateMessageOptions = {}) => ({
     ...createRule<T, TContext, ICreateRuleOptionsWithValue<T>>(options),
     withContext: createRule<
     T, TContext, ICreateRuleOptionsWithContextSelector<T, TContext>

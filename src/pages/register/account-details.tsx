@@ -10,8 +10,8 @@ import Rule from "@src/features/rule-creators/ruleCreators";
 const validations = {
     email: { rules: [Rule({ name: "email" }).isRequired, Rule().shouldMatch(/^.*?@.*?$/i)] },
     password: { rules: [Rule().isRequired] },
-    securityQuestion1: { rules: [Rule().isRequired, Rule().hasLengthBetween(2, 30), Rule().shouldMatch(/[a-z]/i)] },
-    securityQuestion2: { rules: [Rule().isRequired, Rule().hasLengthBetween(2, 30), Rule().shouldMatch(/[a-z]/i)] },
+    securityQuestion1: { rules: [Rule<string>().isRequired, Rule<string>().hasLengthBetween(2, 30), Rule<string>().shouldMatch(/[a-z]/i)] },
+    securityQuestion2: { rules: [Rule<string>().isRequired, Rule<string>().hasLengthBetween(2, 30), Rule<string>().shouldMatch(/[a-z]/i)] },
 };
 
 const AccountDetails: NextPageWithLayout = () => {

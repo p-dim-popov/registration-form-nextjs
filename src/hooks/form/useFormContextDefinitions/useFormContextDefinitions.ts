@@ -2,7 +2,7 @@ import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
 import React, { useContext, useEffect } from "react";
 import { IUseValidationRule } from "@src/hooks/useValidation/useValidation";
 
-const useFormContextDefinitions = <T, TContext extends IFormContext = IFormContext>(
+const useFormContextDefinitions = <T, TContext extends IFormContext<T>>(
     fieldName: string,
     rules: IUseValidationRule<T, TContext>[],
     Context?: React.Context<TContext>,
@@ -11,7 +11,7 @@ const useFormContextDefinitions = <T, TContext extends IFormContext = IFormConte
 
     useEffect(() => {
         if (!context.getDefinitionFor(fieldName)?.length) {
-            context?.setDefinitionFor<T>(fieldName)((<IUseValidationRule<T>[]>rules));
+            context?.setDefinitionFor(fieldName)((<IUseValidationRule<T>[]>rules));
         }
     }, [context, rules, fieldName]);
 };

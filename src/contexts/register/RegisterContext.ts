@@ -1,9 +1,9 @@
 import React from "react";
 import { IFormContext, IFormDefinitions } from "@src/contexts/form/FormContext";
 
-export interface IRegisterContext extends IFormContext {
+export interface IRegisterContext extends IFormContext<string | number | boolean | undefined> {
     page: RegisterPage;
-    definitions: { [page in RegisterPage]?: IFormDefinitions<string | number | boolean> }
+    definitions: { [page in RegisterPage]?: IFormDefinitions<string | number | boolean | undefined, IFormContext<string | number | boolean | undefined>> }
 }
 
 export enum RegisterPage {

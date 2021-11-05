@@ -1,27 +1,26 @@
 import React from "react";
 import { IUseValidationRule, ValidationStatus } from "@src/hooks/useValidation/useValidation";
-import {
-    IRegisterLayoutState,
-} from "@src/components/register/layout/RegisterLayout";
 
-export interface IFormData {
+export interface IFormDataValue<T> {
     status: ValidationStatus;
-    value?: string | number | boolean;
+    value?: T;
 }
 
-export type IFormDefinitions<T> = {
-    [fieldName: string]: IUseValidationRule<T>[]
+export type IFormDefinitions<T, TContext extends IFormContext<T>> = {
+    [fieldName: string]: IUseValidationRule<T, TContext>[]
 };
 
-export interface IFormContext {
-    data: IRegisterLayoutState;
-    set: (fieldName: string) => (value: IFormData) => void;
-    definitions: { [slice: string]: IFormDefinitions<any> };
-    setDefinitionFor: <T> (fieldName: string) => (definition: IUseValidationRule<T>[]) => void;
-    getDefinitionFor: <T> (fieldName: string) => IUseValidationRule<T>[],
+export type IFormData<T> = ({ [fieldName: string]: IFormDataValue<T> });
+
+export interface IFormContext<T> {
+    data: IFormData<T>;
+    set: (fieldName: string) => (value: IFormDataValue<T>) => void;
+    definitions: { [slice: string]: IFormDefinitions<T, IFormContext<T>> };
+    setDefinitionFor: (fieldName: string) => (definition: IUseValidationRule<T, IFormContext<T>>[]) => void;
+    getDefinitionFor: (fieldName: string) => IUseValidationRule<T, IFormContext<T>>[] | undefined,
 }
 
-const FormContext = React.createContext<IFormContext>({
+const FormContext = React.createContext<IFormContext<any>>({
     definitions: {},
     data: {},
     set: () => () => {},

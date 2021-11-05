@@ -8,7 +8,7 @@ import Rule from "@src/features/rule-creators/ruleCreators";
 describe("useFormContextDefinitions", () => {
     it("should register in form context", () => {
         const setDefinitionsForFirstNameMock = jest.fn();
-        const contextData: IFormContext = {
+        const contextData: IFormContext<string> = {
             setDefinitionFor: () => setDefinitionsForFirstNameMock,
             data: {},
             set: () => () => {},

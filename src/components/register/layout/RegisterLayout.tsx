@@ -5,10 +5,12 @@ import RegisterContext, {
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
 import RegisterFormFooter from "@src/components/register/form-footer/RegisterFormFooter";
-import FormContext, { IFormData, IFormDefinitions } from "@src/contexts/form/FormContext";
+import FormContext, {
+    IFormContext,
+    IFormDefinitions,
+    IFormData,
+} from "@src/contexts/form/FormContext";
 import { IUseValidationRule } from "@src/hooks/useValidation/useValidation";
-
-export type IRegisterLayoutState = ({ [fieldName: string]: IFormData });
 
 export interface IRegisterLayoutProps {
     page: RegisterPage;
@@ -18,10 +20,10 @@ const RegisterLayout: React.FC<IRegisterLayoutProps> = ({
     children,
     page,
 }) => {
-    const [formData, setFormData] = useState<IRegisterLayoutState>({});
+    const [formData, setFormData] = useState<IFormData<string | number | boolean | undefined>>({});
     const [
         allPagesFormDefinitions, setAllPagesFormDefinitions,
-    ] = useState<{ [page in RegisterPage]?: IFormDefinitions<any> }>({});
+    ] = useState<{ [page in RegisterPage]?: IFormDefinitions<string | number | boolean | undefined, IFormContext<string | number | boolean | undefined>> }>({});
 
     useEffect(() => {
         if (!allPagesFormDefinitions[page]) {
@@ -33,7 +35,7 @@ const RegisterLayout: React.FC<IRegisterLayoutProps> = ({
     }, [allPagesFormDefinitions, page]);
 
     const setDefinitionFor = useCallback((fieldName) => (
-        rules: IUseValidationRule<any, IRegisterContext>[],
+        rules: IUseValidationRule<string | number | boolean | undefined, IRegisterContext>[],
     ) => setAllPagesFormDefinitions((prevAllPagesFormDefinitions) => ({
         ...prevAllPagesFormDefinitions,
         [page]: {
@@ -44,7 +46,7 @@ const RegisterLayout: React.FC<IRegisterLayoutProps> = ({
 
     const getDefinitionFor = useCallback((
         fieldName: string,
-    ) => allPagesFormDefinitions[page]?.[fieldName] as any, [allPagesFormDefinitions, page]);
+    ) => allPagesFormDefinitions[page]?.[fieldName], [allPagesFormDefinitions, page]);
 
     return (
         <RegisterContext.Provider

@@ -11,6 +11,7 @@ describe("FormContext", () => {
                     definitions: {},
                     set: () => () => {},
                     setDefinitionFor: () => () => {},
+                    getDefinitionFor: () => [],
                 }}
             >
                 <FormContext.Consumer>
