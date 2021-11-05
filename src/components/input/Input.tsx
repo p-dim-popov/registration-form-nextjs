@@ -5,7 +5,7 @@ import useFormContextDefinitions
     from "@src/hooks/form/useFormContextDefinitions/useFormContextDefinitions";
 import { IFormContext } from "@src/contexts/form/FormContext";
 import ValidationErrors from "@src/components/validation-error/ValidationErrors";
-import ValidationStatusPreview from "@src/components/validation-status/ValidationStatusPreview";
+import ValidationStatusPreview from "@src/components/validation-status-preview/ValidationStatusPreview";
 
 export interface IInputProps<T> {
     id: string;
