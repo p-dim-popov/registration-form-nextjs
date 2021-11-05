@@ -18,4 +18,11 @@ describe("Checkbox", () => {
 
         expect(screen.getByLabelText(expectedLabel)).toBeInTheDocument();
     });
+
+    it("should have controlled optional controlled value", () => {
+        const onChangeMock = jest.fn();
+        render(<Checkbox id="test" value={false} onChange={onChangeMock} />);
+
+        expect(onChangeMock).toBeCalledWith(true);
+    });
 });
