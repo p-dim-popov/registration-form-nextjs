@@ -7,20 +7,22 @@ import ValidationErrors from "@src/components/validation-error/ValidationErrors"
 import ValidationStatusPreview from "@src/components/validation-status-preview/ValidationStatusPreview";
 import { IHaveLabel } from "@src/interfaces/IHaveLabel";
 import { IHaveValidation } from "@src/interfaces/IHaveValidation";
+import { ICanHaveContext } from "@src/interfaces/ICanHaveContext";
 
-export interface IInputProps extends IHaveLabel, IHaveValidation<string> {
+export interface IInputProps<TContext extends IFormContext<string>> extends
+    IHaveLabel, IHaveValidation<string>, ICanHaveContext<TContext> {
     id: string;
 }
 
 function Input<TContext extends IFormContext<string>>({
-    id, label = id, name = id, validation, showValidationStatus, inlineLabel,
-}: React.PropsWithChildren<IInputProps>) {
+    id, label = id, name = id, validation, showValidationStatus, inlineLabel, Context,
+}: React.PropsWithChildren<IInputProps<TContext>>) {
     const validationMessages = validation?.rules.map(([,e]) => e);
     const [value, setValue] = useState("");
     const [
-        startValidating, errorMessages, status,
+        allowValidation, errorMessages, status,
     ] = useValidation(validation ?? { rules: [] }, value);
-    useFormContextDefinitions<string, TContext>(id, validation?.rules ?? []);
+    useFormContextDefinitions<string, TContext>(id, validation?.rules ?? [], Context);
 
     return (
         <div>
@@ -35,7 +37,7 @@ function Input<TContext extends IFormContext<string>>({
                 id={id}
                 name={name}
                 placeholder={label}
-                onBlur={startValidating}
+                onBlur={allowValidation}
                 className="border p-3"
             />
             <ValidationStatusPreview
