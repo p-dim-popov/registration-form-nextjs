@@ -6,10 +6,10 @@ import { NextPageWithLayout } from "@src/pages/_app";
 import Rule from "@src/features/rule-creators/ruleCreators";
 
 const validations = {
-    firstName: { rules: [Rule().isRequired] },
-    lastName: { rules: [Rule().isRequired] },
-    dob: { rules: [Rule().isRequired] },
-    gender: { rules: [Rule().isRequired] },
+    firstName: { rules: [Rule<string>().isRequired] },
+    lastName: { rules: [Rule<string>().isRequired] },
+    dob: { rules: [Rule<string>().isRequired] },
+    gender: { rules: [Rule<string>().isRequired] },
 };
 
 const UserDetails: NextPageWithLayout = () => (

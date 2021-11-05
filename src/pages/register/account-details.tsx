@@ -8,8 +8,8 @@ import Input from "@src/components/input/Input";
 import Rule from "@src/features/rule-creators/ruleCreators";
 
 const validations = {
-    email: { rules: [Rule({ name: "email" }).isRequired, Rule().shouldMatch(/^.*?@.*?$/i)] },
-    password: { rules: [Rule().isRequired] },
+    email: { rules: [Rule<string>({ name: "email" }).isRequired, Rule<string>().shouldMatch(/^.*?@.*?$/i)] },
+    password: { rules: [Rule<string>().isRequired] },
     securityQuestion1: { rules: [Rule<string>().isRequired, Rule<string>().hasLengthBetween(2, 30), Rule<string>().shouldMatch(/[a-z]/i)] },
     securityQuestion2: { rules: [Rule<string>().isRequired, Rule<string>().hasLengthBetween(2, 30), Rule<string>().shouldMatch(/[a-z]/i)] },
 };

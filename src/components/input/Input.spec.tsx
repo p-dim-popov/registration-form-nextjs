@@ -43,7 +43,7 @@ describe("Input", () => {
         [true],
         [false],
     ])("should show validation status - %s", (showValidationStatus) => {
-        const rule = Rule().isEqualOrGreaterThan(18);
+        const rule = Rule<string>().isEqualOrGreaterThan("18");
         render(<Input id="TEST" validation={{ rules: [rule] }} showValidationStatus={showValidationStatus} />);
 
         const [, errorMessage] = rule;
@@ -66,7 +66,7 @@ describe("Input", () => {
     });
 
     it("should show error between label and input", () => {
-        const rule = Rule().isEqualOrGreaterThan(18);
+        const rule = Rule<string>().isEqualOrGreaterThan("18");
         render(<Input id="TEST" validation={{ rules: [rule] }} />);
 
         const input = screen.getByLabelText("TEST");
@@ -82,7 +82,7 @@ describe("Input", () => {
     });
 
     it("should register in context on mount", () => {
-        const rules = [Rule().isEqualOrGreaterThan(18)];
+        const rules = [Rule<string>().isEqualOrGreaterThan("18")];
         const formContextMock: IFormContext<string> = {
             data: {},
             definitions: { _: {} },
