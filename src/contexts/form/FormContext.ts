@@ -20,12 +20,14 @@ export interface IFormContext<T> {
     getDefinitionFor: (fieldName: string) => IUseValidationRule<T, IFormContext<T>>[] | undefined,
 }
 
-const FormContext = React.createContext<IFormContext<any>>({
+export const getFormContextDefaultValue = <T>(): IFormContext<T> => ({
     definitions: {},
     data: {},
     set: () => () => {},
     setDefinitionFor: () => () => {},
     getDefinitionFor: () => [],
 });
+
+const FormContext = React.createContext<IFormContext<any>>(getFormContextDefaultValue());
 
 export default FormContext;
