@@ -3,7 +3,10 @@ import { render, screen } from "@testing-library/react";
 import Input from "@src/components/input/Input";
 import Rule from "@src/features/rule-creators/ruleCreators";
 import userEvent from "@testing-library/user-event";
-import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
+import FormContext, {
+    getFormContextDefaultValue,
+    IFormContext,
+} from "@src/contexts/form/FormContext";
 
 describe("Input", () => {
     it("should render input Rule()", () => {
@@ -115,5 +118,24 @@ describe("Input", () => {
         userEvent.type(container.querySelector("input")!, changedValue);
 
         expect(state.value).toEqual(changedValue);
+    });
+
+    it("should persist data to the context if available", () => {
+        const state = getFormContextDefaultValue();
+        state.set = (fieldName) => (value) => {
+            state.data[fieldName] = value;
+        };
+
+        const { container } = render(
+            <FormContext.Provider value={state}>
+                <Input id="test-id" />
+            </FormContext.Provider>,
+        );
+
+        const inputElement = container.querySelector("input");
+        const dataInInput = "data in input";
+        userEvent.type(inputElement!, dataInInput);
+
+        expect(state.data["test-id"]).toEqual(dataInInput);
     });
 });

@@ -10,6 +10,7 @@ import { ICanHaveValidation } from "@src/interfaces/ICanHaveValidation";
 import { ICanHaveContext } from "@src/interfaces/ICanHaveContext";
 import Label from "@src/components/label/Label";
 import { ICanBeControlled } from "@src/interfaces/ICanBeControlled";
+import useFormContextState from "@src/hooks/form/useFormContextState/useFormContextState";
 
 export interface IInputProps<TContext extends IFormContext<string>>
     extends
@@ -27,7 +28,7 @@ function Input<TContext extends IFormContext<string>>({
     value, onChange,
 }: React.PropsWithChildren<IInputProps<TContext>>) {
     const validationMessages = validation?.rules.map(([,e]) => e);
-    const [nonControlledValue, setNonControlledValue] = useState("");
+    const [nonControlledValue, setNonControlledValue] = useFormContextState(name, "", Context);
     const [
         allowValidation, errorMessages, status,
     ] = useValidation(validation ?? { rules: [] }, value ?? nonControlledValue);
