@@ -9,7 +9,12 @@ const useFormContextState = <T, TContext extends IFormContext<T>>(
     const context = useContext((Context ?? FormContext) as React.Context<TContext | undefined>);
     const contextValue = context?.data?.[fieldName];
 
-    const setValueInContext = useCallback((val: T) => context?.set(fieldName)(val), [context, fieldName]);
+    const [value, setValue] = useState<T>(initialValue);
+
+    const setValueInStateAndContext = useCallback((val: T) => {
+        context?.set(fieldName)(val);
+        setValue(val);
+    }, [context, fieldName]);
 
     useEffect(() => {
         const isInitialized = (context && typeof contextValue !== "undefined") || !context;
@@ -18,9 +23,7 @@ const useFormContextState = <T, TContext extends IFormContext<T>>(
         }
     }, [context, contextValue, fieldName, initialValue]);
 
-    const [value, setValue] = useState<T>(initialValue);
-
-    return [contextValue ?? value, setValueInContext ?? setValue];
+    return [contextValue ?? value, setValueInStateAndContext];
 };
 
 export default useFormContextState;

@@ -49,6 +49,7 @@ function Input<TContext extends IFormContext<string>>({
                 placeholder={label}
                 onBlur={allowValidation}
                 className="border p-3"
+                value={value ?? nonControlledValue}
             />
             <ValidationStatusPreview
                 validationMessages={validationMessages}

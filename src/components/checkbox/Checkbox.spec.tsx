@@ -23,7 +23,9 @@ describe("Checkbox", () => {
 
     it("should have controlled optional controlled value", () => {
         const onChangeMock = jest.fn();
-        render(<Checkbox id="test" value={false} onChange={onChangeMock} />);
+        const { container } = render(<Checkbox id="test" value={false} onChange={onChangeMock} />);
+
+        userEvent.click(container.querySelector("input[type=checkbox]")!);
 
         expect(onChangeMock).toBeCalledWith(true);
     });
@@ -31,13 +33,14 @@ describe("Checkbox", () => {
     it.each([
         [true],
         [false],
-    ])("should have validation", (shouldDbClick: boolean) => {
+    ])("should have validation (test required, initial not clicked, double click => %s)", (shouldDbClick: boolean) => {
         const [test, error] = Rule<boolean>().isRequired;
         const { container } = render(<Checkbox id="test" validation={{ rules: [[test, error]] }} />);
 
-        userEvent.click(container.querySelector("input")!);
+        const element = container.querySelector("input");
+        userEvent.click(element!);
         if (shouldDbClick) {
-            userEvent.click(container.querySelector("input")!);
+            userEvent.click(element!);
         }
 
         const expectErrorElement = expect(screen.queryByText(error));

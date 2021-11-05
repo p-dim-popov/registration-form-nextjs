@@ -63,7 +63,7 @@ describe("Input", () => {
         expect(element).toBeInTheDocument();
     });
 
-    it("should show error between label and input", () => {
+    it("should have ordered elements error - label - input - summary", () => {
         const rule = Rule<string>().isEqualOrGreaterThan("18");
         render(<Input id="TEST" validation={{ rules: [rule] }} />);
 
@@ -73,10 +73,9 @@ describe("Input", () => {
         userEvent.tab();
 
         const [, errorMessage] = rule;
-        const element = screen.queryByText(errorMessage);
-        expect(element).toBeInTheDocument();
-        expect(element?.previousElementSibling).toBeInstanceOf(HTMLLabelElement);
-        expect(element?.nextElementSibling).toBeInstanceOf(HTMLInputElement);
+        expect(input).toBeInTheDocument();
+        expect(input?.previousElementSibling?.previousElementSibling?.innerHTML).toMatch(errorMessage);
+        expect(input?.previousElementSibling).toBeInstanceOf(HTMLLabelElement);
     });
 
     it("should register in context on mount", () => {
@@ -105,19 +104,20 @@ describe("Input", () => {
     });
 
     it("should be optionally controllable input", () => {
-        const state = { value: "test-value" };
+        const onChangeMock = jest.fn();
+        const initialValue = "initialValue";
         const { container } = render(<Input
             id="test-id"
-            value={state.value}
-            onChange={(v) => {
-                state.value = v;
-            }}
+            value={initialValue}
+            onChange={onChangeMock}
         />);
 
-        const changedValue = "test-value-2";
-        userEvent.type(container.querySelector("input")!, changedValue);
-
-        expect(state.value).toEqual(changedValue);
+        const addedValue = "+other";
+        userEvent.type(container.querySelector("input")!, addedValue);
+        expect(onChangeMock).toBeCalledTimes(addedValue.length);
+        for (let i = 0; i < addedValue.length; i++) {
+            expect(onChangeMock).toHaveBeenNthCalledWith(i + 1, `${initialValue}${addedValue[i]}`);
+        }
     });
 
     it("should persist data to the context if available", () => {
@@ -137,5 +137,19 @@ describe("Input", () => {
         userEvent.type(inputElement!, dataInInput);
 
         expect(state.data["test-id"]).toEqual(dataInInput);
+    });
+
+    it("should have render previous value if available", () => {
+        const state = getFormContextDefaultValue();
+        state.data.age = 123;
+
+        const { container } = render(
+            <FormContext.Provider value={state}>
+                <Input id="age" />
+            </FormContext.Provider>,
+        );
+
+        const inputElement = container.querySelector("input");
+        expect(inputElement?.value).toBe(`${state.data.age}`);
     });
 });
