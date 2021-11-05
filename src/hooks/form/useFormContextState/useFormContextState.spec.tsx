@@ -33,4 +33,25 @@ describe("useFormContextState", () => {
 
         expect(screen.queryByText("321")).toBeInTheDocument();
     });
+
+    it("should initialize itself inside the context", () => {
+        const Mock: React.FC = () => {
+            const [value] = useFormContextState("age", 123);
+
+            return <>{value}</>;
+        };
+
+        const state = getFormContextDefaultValue<number>();
+        state.set = (fieldName) => (value) => {
+            state.data[fieldName] = value;
+        };
+
+        render(
+            <FormContext.Provider value={state}>
+                <Mock />
+            </FormContext.Provider>,
+        );
+
+        expect(state.data.age.value).toEqual(123);
+    });
 });

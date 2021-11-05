@@ -23,7 +23,7 @@ function Checkbox<TContext extends IFormContext<boolean>>({
     value, onChange,
     validation, showValidationStatus,
 }: React.PropsWithChildren<ICheckboxProps<TContext>>) {
-    const [nonControlledValue, setNonControlledValue] = useFormContextState(false);
+    const [nonControlledValue, setNonControlledValue] = useFormContextState(name, false);
     const [
         forceValidation, errorMessages, status,
     ] = useValidation(validation ?? { rules: [] }, value ?? nonControlledValue);
