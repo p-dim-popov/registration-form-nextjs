@@ -29,7 +29,6 @@ function Checkbox<TContext extends IFormContext<boolean>>({
 
     return (
         <div>
-            <Label htmlFor={name} label={label} isHidden={!!inlineLabel} />
             <ValidationErrors
                 status={status}
                 errorMessages={errorMessages}
@@ -48,6 +47,7 @@ function Checkbox<TContext extends IFormContext<boolean>>({
                     (onChange ?? setNonControlledValue)(event.target.checked);
                 }}
             />
+            <Label htmlFor={name} label={label} isHidden={!!inlineLabel} />
         </div>
     );
 }

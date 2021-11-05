@@ -47,4 +47,17 @@ describe("Checkbox", () => {
             expectErrorElement.not.toBeInTheDocument();
         }
     });
+
+    it("should have correct order of elements - error, checkbox, label", () => {
+        const [test, error] = Rule<boolean>().isRequired;
+        const id = "test-id";
+        const { container } = render(<Checkbox id={id} validation={{ rules: [[test, error]] }} />);
+
+        const inputElement = container.querySelector("input");
+        userEvent.click(inputElement!);
+        userEvent.click(inputElement!);
+
+        expect(inputElement?.previousElementSibling?.innerHTML).toMatch(error);
+        expect(inputElement?.nextElementSibling?.innerHTML).toMatch(id);
+    });
 });

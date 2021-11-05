@@ -35,12 +35,12 @@ function Input<TContext extends IFormContext<string>>({
 
     return (
         <div>
-            <Label htmlFor={name} label={label} isHidden={!!inlineLabel} />
             <ValidationErrors
                 isHidden={showValidationStatus}
                 status={status}
                 errorMessages={errorMessages}
             />
+            <Label htmlFor={name} label={label} isHidden={!!inlineLabel} />
             <input
                 onChange={(event) => (onChange ?? setNonControlledValue)(event.target.value)}
                 id={id}
