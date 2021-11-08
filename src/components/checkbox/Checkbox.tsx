@@ -23,10 +23,10 @@ function Checkbox<TContext extends IFormContext<boolean>>({
     value, onChange,
     validation, showValidationStatus,
 }: React.PropsWithChildren<ICheckboxProps<TContext>>) {
-    const [nonControlledValue, setNonControlledValue] = useFormContextState(name, { initialValue: false });
+    const [state, setState] = useFormContextState(name, { initialValue: false, value, onChange });
     const [
         forceValidation, errorMessages, status,
-    ] = useValidation(validation ?? { rules: [] }, value ?? nonControlledValue);
+    ] = useValidation(validation ?? { rules: [] }, state);
 
     return (
         <div>
@@ -40,12 +40,12 @@ function Checkbox<TContext extends IFormContext<boolean>>({
                 name={name}
                 type="checkbox"
                 className="form-checkbox h-5 w-5 text-gray-600"
-                checked={value ?? nonControlledValue}
+                checked={state}
                 onChange={(event) => {
                     if (status === ValidationStatus.Pending) {
                         forceValidation();
                     }
-                    (onChange ?? setNonControlledValue)(event.target.checked);
+                    setState(event.target.checked);
                 }}
             />
             <Label htmlFor={name} label={label} isHidden={!!inlineLabel} />

@@ -28,10 +28,10 @@ function Input<TContext extends IFormContext<string>>({
     value, onChange,
 }: React.PropsWithChildren<IInputProps<TContext>>) {
     const validationMessages = validation?.rules.map(([,e]) => e);
-    const [nonControlledValue, setNonControlledValue] = useFormContextState(name, { initialValue: "" }, Context);
+    const [state, setState] = useFormContextState(name, { initialValue: "", value, onChange }, Context);
     const [
         allowValidation, errorMessages, status,
-    ] = useValidation(validation ?? { rules: [] }, value ?? nonControlledValue);
+    ] = useValidation(validation ?? { rules: [] }, state);
     useFormContextDefinitions<string, TContext>(id, validation?.rules ?? [], Context);
 
     return (
@@ -43,13 +43,13 @@ function Input<TContext extends IFormContext<string>>({
             />
             <Label htmlFor={name} label={label} isHidden={!!inlineLabel} />
             <input
-                onChange={(event) => (onChange ?? setNonControlledValue)(event.target.value)}
+                onChange={(event) => setState(event.target.value)}
                 id={id}
                 name={name}
                 placeholder={label}
                 onBlur={allowValidation}
                 className="border p-3"
-                value={value ?? nonControlledValue}
+                value={state}
             />
             <ValidationStatusPreview
                 validationMessages={validationMessages}
