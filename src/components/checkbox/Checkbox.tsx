@@ -23,8 +23,8 @@ function Checkbox<TContext extends IFormContext<boolean>>({
     value, onChange,
     validation, showValidationStatus,
 }: React.PropsWithChildren<ICheckboxProps<TContext>>) {
-    const [state, setState] = useFormContextState(name, { initialValue: false, value, onChange });
-    const [shouldValidate, setShouldValidate] = useState(false);
+    const [state, setState, isInitializedInContext] = useFormContextState(name, { initialValue: false, value, onChange });
+    const [shouldValidate, setShouldValidate] = useState(isInitializedInContext);
     const errorMessages = useValidation(validation ?? { rules: [] }, state, shouldValidate);
 
     return (

@@ -30,7 +30,7 @@ describe("useFormContextState", () => {
         expect(screen.queryByText("321")).toBeInTheDocument();
     });
 
-    it("should initialize itself inside the context", () => {
+    it("should not initialize itself inside the context", () => {
         const Mock: React.FC = () => {
             const [value] = useFormContextState("age", { initialValue: 123 });
 
@@ -48,7 +48,7 @@ describe("useFormContextState", () => {
             </FormContext.Provider>,
         );
 
-        expect(state.data.age).toEqual(123);
+        expect(state.data.age).toBeUndefined();
     });
 
     it("should return setter to value in context", () => {
