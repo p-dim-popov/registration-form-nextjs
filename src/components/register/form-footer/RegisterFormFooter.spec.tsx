@@ -1,6 +1,23 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import RegisterFormFooter from "@src/components/register/form-footer/RegisterFormFooter";
+import userEvent from "@testing-library/user-event";
+import {
+    getNextRegisterPage,
+    getRegisterPageContextDefaultValue,
+    RegisterContextProvider,
+} from "@src/contexts/register/RegisterContext";
+
+const routePushMock = jest.fn();
+jest.mock("next/router", () => ({
+    useRouter: () => ({
+        push: routePushMock,
+    }),
+}));
+
+afterEach(() => {
+    jest.resetAllMocks();
+});
 
 describe("RegisterFormFooter", () => {
     it("should have continue button and contact us link separated by line", () => {
@@ -14,5 +31,22 @@ describe("RegisterFormFooter", () => {
         expect(separator).toBeInTheDocument();
         expect(button!.nextElementSibling).toBeInTheDocument();
         expect(container.querySelector("a")).toBeInTheDocument();
+    });
+
+    describe("continue button", () => {
+        it("should navigate to next register page", () => {
+            const data = getRegisterPageContextDefaultValue();
+            const initialPage = data.page;
+            const { container } = render(
+                <RegisterContextProvider value={data}>
+                    <RegisterFormFooter />
+                </RegisterContextProvider>,
+            );
+            const button = container.querySelector("button");
+
+            userEvent.click(button!);
+
+            expect(routePushMock).toBeCalledWith(getNextRegisterPage(initialPage));
+        });
     });
 });

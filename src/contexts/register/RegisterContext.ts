@@ -12,7 +12,15 @@ export enum RegisterPage {
     UserDetails = "/register/user-details",
 }
 
-const RegisterContext = React.createContext<IRegisterContext>({
+export const RegisterPagesOrder = [
+    RegisterPage.AccountDetails,
+    RegisterPage.UserDetails,
+    RegisterPage.ContactDetails,
+];
+
+export const getNextRegisterPage = (page: RegisterPage): RegisterPage | undefined => RegisterPagesOrder[RegisterPagesOrder.indexOf(page) + 1];
+
+export const getRegisterPageContextDefaultValue = () => ({
     data: {},
     set: () => () => {},
     page: RegisterPage.AccountDetails,
@@ -21,6 +29,11 @@ const RegisterContext = React.createContext<IRegisterContext>({
     getDefinitionFor: () => [],
 });
 
+const RegisterContext = React.createContext<IRegisterContext>(getRegisterPageContextDefaultValue());
+
 RegisterContext.displayName = "RegisterContext";
+
+export const RegisterContextProvider = RegisterContext.Provider;
+export const RegisterContextConsumer = RegisterContext.Consumer;
 
 export default RegisterContext;
