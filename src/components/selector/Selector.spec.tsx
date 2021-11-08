@@ -1,7 +1,9 @@
 import React from "react";
-import { render } from "@testing-library/react";
-import Selector from "@src/components/selector/Selector";
+import { render, screen } from "@testing-library/react";
+import Selector, { ISelectorProps } from "@src/components/selector/Selector";
 import userEvent from "@testing-library/user-event";
+import FormContext, { getFormContextDefaultValue } from "@src/contexts/form/FormContext";
+import Rule from "@src/features/rule-creators/ruleCreators";
 
 describe("Select", () => {
     it("should render options", () => {
@@ -78,5 +80,23 @@ describe("Select", () => {
         const { container } = render(<Selector {...data} definitions={[]} />);
 
         expect(container.querySelector(`#${data.id}`)).toBeInTheDocument();
+    });
+
+    it("should have validation", () => {
+        const props = {
+            id: "test-id",
+            definitions: [{ value: "option-1" }],
+            validation: { rules: [Rule().isRequired] },
+        } as ISelectorProps;
+        const fcData = getFormContextDefaultValue();
+        fcData.data[props.id] = "";
+        render(
+            <FormContext.Provider value={fcData}>
+                <Selector {...props} />
+            </FormContext.Provider>,
+        );
+
+        const error = screen.queryByText(props.validation!.rules[0][1]);
+        expect(error).toBeInTheDocument();
     });
 });
