@@ -12,7 +12,7 @@ const Selector: React.FC<ISelectorProps> = ({
     id, name = id, label = id,
     value, onChange,
 }) => (
-    <>
+    <div id={id}>
         {label}
         {definitions.map((definition) => {
             return (
@@ -28,7 +28,7 @@ const Selector: React.FC<ISelectorProps> = ({
                 </label>
             );
         })}
-    </>
+    </div>
 );
 
 export default Selector;

@@ -70,4 +70,13 @@ describe("Select", () => {
 
         expect(container.querySelector("input[value=option-2]")).toBeChecked();
     });
+
+    it("should have id", () => {
+        const data = {
+            id: "test-selector",
+        };
+        const { container } = render(<Selector {...data} definitions={[]} />);
+
+        expect(container.querySelector(`#${data.id}`)).toBeInTheDocument();
+    });
 });
