@@ -28,6 +28,7 @@ const AccountDetails: NextPageWithLayout = () => (
             validation={validations.password}
             inlineLabel
             showValidationStatus
+            isPassword
         />
 
         <section>

@@ -152,4 +152,21 @@ describe("Input", () => {
         const inputElement = container.querySelector("input");
         expect(inputElement?.value).toBe(`${state.data.age}`);
     });
+
+    describe("password", () => {
+        it("should have password option", () => {
+            const { container } = render(<Input id="password" isPassword />);
+            expect(container.querySelector("input")).toHaveAttribute("type", "password");
+        });
+
+        it("should be able to show password", () => {
+            const { container } = render(<Input id="password" isPassword />);
+            const inputField = container.querySelector("input");
+            expect(inputField).toHaveAttribute("type", "password");
+
+            userEvent.click(inputField!.nextElementSibling!);
+
+            expect(inputField).toHaveAttribute("type", "text");
+        });
+    });
 });

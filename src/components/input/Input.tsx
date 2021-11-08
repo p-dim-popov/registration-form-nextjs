@@ -10,6 +10,8 @@ import { ICanHaveContext } from "@src/interfaces/ICanHaveContext";
 import Label from "@src/components/label/Label";
 import { ICanBeControlled } from "@src/interfaces/ICanBeControlled";
 import useFormContextState from "@src/hooks/form/useFormContextState/useFormContextState";
+import EyeOpened from "@src/components/EyeOpened";
+import EyeShut from "@src/components/EyeShut";
 
 export interface IInputProps<TContext extends IFormContext<string>>
     extends
@@ -18,6 +20,7 @@ export interface IInputProps<TContext extends IFormContext<string>>
     ICanHaveContext<TContext>,
     ICanBeControlled<string> {
     id: string;
+    isPassword?: boolean;
 }
 
 function Input<TContext extends IFormContext<string>>({
@@ -25,12 +28,14 @@ function Input<TContext extends IFormContext<string>>({
     validation, showValidationStatus,
     Context,
     value, onChange,
+    isPassword,
 }: React.PropsWithChildren<IInputProps<TContext>>) {
     const validationMessages = validation?.rules.map(([,e]) => e) ?? [];
     const [state, setState, isInitializedInContext] = useFormContextState(name, { initialValue: "", value, onChange }, Context);
     const [shouldValidate, setShouldValidate] = useState(isInitializedInContext);
     const errorMessages = useValidation(validation ?? { rules: [] }, state, shouldValidate);
     useFormContextDefinitions<string, TContext>(id, validation?.rules ?? [], Context);
+    const [showPassword, setShowPassword] = useState(!isPassword);
 
     return (
         <div>
@@ -47,7 +52,16 @@ function Input<TContext extends IFormContext<string>>({
                 onBlur={() => setShouldValidate((isValidating) => isValidating || true)}
                 className="border p-3"
                 value={state}
+                type={showPassword ? "text" : "password"}
             />
+            {!!isPassword && (
+                <button
+                    type="button"
+                    onClick={() => setShowPassword((prevShowPassword) => !prevShowPassword)}
+                >
+                    {showPassword ? <EyeOpened /> : <EyeShut />}
+                </button>
+            )}
             <ValidationStatusPreview
                 validationMessages={validationMessages}
                 errorMessages={errorMessages}
