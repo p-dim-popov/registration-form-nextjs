@@ -26,7 +26,7 @@ function Input<TContext extends IFormContext<string>>({
     Context,
     value, onChange,
 }: React.PropsWithChildren<IInputProps<TContext>>) {
-    const validationMessages = validation?.rules.map(([,e]) => e);
+    const validationMessages = validation?.rules.map(([,e]) => e) ?? [];
     const [state, setState] = useFormContextState(name, { initialValue: "", value, onChange }, Context);
     const [shouldValidate, setShouldValidate] = useState(false);
     const errorMessages = useValidation(validation ?? { rules: [] }, state, shouldValidate);

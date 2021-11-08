@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { ICanBeHidden } from "@src/interfaces/ICanBeHidden";
 
 export interface IValidationStatusProps extends ICanBeHidden {
-    validationMessages?: string[];
+    validationMessages: string[];
     errorMessages: string[];
     isValidationStarted?: boolean;
 }
