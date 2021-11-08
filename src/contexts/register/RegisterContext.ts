@@ -20,7 +20,7 @@ export const RegisterPagesOrder = [
 
 export const getNextRegisterPage = (page: RegisterPage): RegisterPage | undefined => RegisterPagesOrder[RegisterPagesOrder.indexOf(page) + 1];
 
-export const getRegisterPageContextDefaultValue = () => ({
+export const getRegisterPageContextDefaultValue = (): IRegisterContext => ({
     data: {},
     set: () => () => {},
     page: RegisterPage.AccountDetails,

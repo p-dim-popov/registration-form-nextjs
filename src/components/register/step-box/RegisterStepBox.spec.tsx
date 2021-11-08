@@ -2,10 +2,12 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import RegisterStepBox from "@src/components/register/step-box/RegisterStepBox";
 import RegisterContext, {
+    getRegisterPageContextDefaultValue,
     IRegisterContext,
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
 import userEvent from "@testing-library/user-event";
+import Rule from "@src/features/rule-creators/ruleCreators";
 
 const routePushMock = jest.fn();
 jest.mock("next/router", () => ({
@@ -38,9 +40,11 @@ describe("RegisterStepBox", () => {
         [RegisterPage.UserDetails],
         [RegisterPage.ContactDetails],
     ])("should have state from provider - %s", (page: RegisterPage) => {
+        const data = getRegisterPageContextDefaultValue();
+        data.page = page;
         const { container } = render(
             <RegisterContext.Provider
-                value={{ page } as IRegisterContext}
+                value={data}
             >
                 <RegisterStepBox title="TEST" forPage={RegisterPage.UserDetails}>1</RegisterStepBox>
             </RegisterContext.Provider>,
@@ -64,9 +68,11 @@ describe("RegisterStepBox", () => {
     });
 
     it("should navigate through click", () => {
+        const data = getRegisterPageContextDefaultValue();
+        data.page = RegisterPage.ContactDetails;
         const { container } = render(
             <RegisterContext.Provider
-                value={{ page: RegisterPage.ContactDetails } as IRegisterContext}
+                value={data}
             >
                 <RegisterStepBox title="TEST" forPage={RegisterPage.UserDetails}>1</RegisterStepBox>
             </RegisterContext.Provider>,
@@ -76,5 +82,25 @@ describe("RegisterStepBox", () => {
         userEvent.click(button!);
 
         expect(routePushMock).toBeCalledWith(RegisterPage.UserDetails);
+    });
+
+    it("should validate past not active steps", () => {
+        const data = getRegisterPageContextDefaultValue();
+        data.page = RegisterPage.AccountDetails;
+        data.definitions[RegisterPage.UserDetails] = {
+            age: [Rule<string | number | boolean | undefined>().isRequired],
+        };
+        data.data.age = "123";
+
+        render(
+            <RegisterContext.Provider value={data}>
+                <RegisterStepBox title="TEST" forPage={RegisterPage.UserDetails}>TEST-STEP</RegisterStepBox>
+            </RegisterContext.Provider>,
+        );
+
+        const circleElement = screen.getByText("TEST-STEP");
+
+        expect(circleElement).toBeInTheDocument();
+        expect(circleElement).toHaveClass(..."bg-blue-200".split(" "));
     });
 });
