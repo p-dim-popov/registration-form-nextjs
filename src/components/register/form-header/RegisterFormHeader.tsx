@@ -1,13 +1,13 @@
 import React from "react";
 import Stepper from "@src/components/stepper/Stepper";
-import StepBox from "@src/components/step-box/StepBox";
+import RegisterStepBox from "@src/components/register/step-box/RegisterStepBox";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 
 const RegisterFormHeader: React.FC = () => (
     <Stepper>
-        <StepBox forPage={RegisterPage.AccountDetails} title="Account Details">1</StepBox>
-        <StepBox forPage={RegisterPage.UserDetails} title="User Details">2</StepBox>
-        <StepBox forPage={RegisterPage.ContactDetails} title="Contact Details">3</StepBox>
+        <RegisterStepBox forPage={RegisterPage.AccountDetails} title="Account Details">1</RegisterStepBox>
+        <RegisterStepBox forPage={RegisterPage.UserDetails} title="User Details">2</RegisterStepBox>
+        <RegisterStepBox forPage={RegisterPage.ContactDetails} title="Contact Details">3</RegisterStepBox>
     </Stepper>
 );
 

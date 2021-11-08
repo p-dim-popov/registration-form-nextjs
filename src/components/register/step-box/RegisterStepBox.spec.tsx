@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import StepBox from "@src/components/step-box/StepBox";
+import RegisterStepBox from "@src/components/register/step-box/RegisterStepBox";
 import RegisterContext, {
     IRegisterContext,
     RegisterPage,
@@ -18,16 +18,16 @@ afterEach(() => {
     jest.resetAllMocks();
 });
 
-describe("StepBox", () => {
+describe("RegisterStepBox", () => {
     it("should render div with role button", () => {
-        const { container } = render(<StepBox forPage={RegisterPage.UserDetails}>2</StepBox>);
+        const { container } = render(<RegisterStepBox forPage={RegisterPage.UserDetails}>2</RegisterStepBox>);
         const box = container.querySelector("div");
         expect(box).toBeInTheDocument();
         expect(box).toHaveClass("cursor-pointer");
     });
 
     it("should have title and box content", () => {
-        render(<StepBox forPage={RegisterPage.UserDetails} title="Account Details">1</StepBox>);
+        render(<RegisterStepBox forPage={RegisterPage.UserDetails} title="Account Details">1</RegisterStepBox>);
 
         expect(screen.queryByText("Account Details")).toBeInTheDocument();
         expect(screen.queryByText("1")).toBeInTheDocument();
@@ -42,7 +42,7 @@ describe("StepBox", () => {
             <RegisterContext.Provider
                 value={{ page } as IRegisterContext}
             >
-                <StepBox title="TEST" forPage={RegisterPage.UserDetails}>1</StepBox>
+                <RegisterStepBox title="TEST" forPage={RegisterPage.UserDetails}>1</RegisterStepBox>
             </RegisterContext.Provider>,
         );
 
@@ -68,7 +68,7 @@ describe("StepBox", () => {
             <RegisterContext.Provider
                 value={{ page: RegisterPage.ContactDetails } as IRegisterContext}
             >
-                <StepBox title="TEST" forPage={RegisterPage.UserDetails}>1</StepBox>
+                <RegisterStepBox title="TEST" forPage={RegisterPage.UserDetails}>1</RegisterStepBox>
             </RegisterContext.Provider>,
         );
 

@@ -14,7 +14,7 @@ export interface IStepBoxProps {
     forPage: RegisterPage;
 }
 
-const StepBox: React.FC<IStepBoxProps> = ({ children, title, forPage }) => {
+const RegisterStepBox: React.FC<IStepBoxProps> = ({ children, title, forPage }) => {
     const context = useContext(RegisterContext);
     const router = useRouter();
 
@@ -42,4 +42,4 @@ const StepBox: React.FC<IStepBoxProps> = ({ children, title, forPage }) => {
     );
 };
 
-export default StepBox;
+export default RegisterStepBox;
