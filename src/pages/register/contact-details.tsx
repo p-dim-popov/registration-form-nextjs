@@ -3,9 +3,10 @@ import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";
 import Rule from "@src/features/rule-creators/ruleCreators";
+import Checkbox from "@src/components/checkbox/Checkbox";
 
 const validations = {
-    hasAgreed: { rules: [Rule().isRequired] },
+    hasAgreed: { rules: [Rule<boolean>().isRequired] },
 };
 
 const ContactDetails: NextPageWithLayout = () => (
@@ -14,10 +15,7 @@ const ContactDetails: NextPageWithLayout = () => (
         <section>
             You need to be resident of the Republic of Ireland to register.
         </section>
-        <label htmlFor="hasAgreed">
-            <input id="hasAgreed" type="checkbox" />
-            I confirm that:
-        </label>
+        <Checkbox id="hasAgreed" validation={validations.hasAgreed} label="I confirm that:" />
     </>
 );
 
