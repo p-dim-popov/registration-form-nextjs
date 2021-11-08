@@ -4,6 +4,7 @@ import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";
 import Rule from "@src/features/rule-creators/ruleCreators";
+import Selector from "@src/components/selector/Selector";
 
 const validations = {
     firstName: { rules: [Rule<string>().isRequired] },
@@ -18,11 +19,12 @@ const UserDetails: NextPageWithLayout = () => (
         <Input id="lastName" label="Last Name" validation={validations.lastName} inlineLabel />
         <Input id="dob" label="Date of Birth" validation={validations.dob} />
 
-        <label htmlFor="gender">
-            Gender
-            <input name="gender" type="radio" value="male" />
-            <input name="gender" type="radio" value="female" />
-        </label>
+        <Selector
+            id="gender"
+            definitions={[{ value: "male", label: "Male" }, { value: "female", label: "Female" }]}
+            label="Gender"
+            validation={validations.gender}
+        />
     </>
 );
 

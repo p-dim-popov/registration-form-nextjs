@@ -12,13 +12,13 @@ import ValidationErrors from "@src/components/validation-error/ValidationErrors"
 export interface ISelectorProps
     extends
     IHaveLabel,
-    ICanBeControlled<string | number>,
-    ICanHaveValidation<string | number> {
+    ICanBeControlled<string>,
+    ICanHaveValidation<string> {
     id: string;
     definitions: { value: string, label?: string }[];
 }
 
-function Selector<TContext extends IFormContext<string | number>>({
+function Selector<TContext extends IFormContext<string>>({
     definitions,
     id, name = id, label = id,
     value, onChange,
@@ -29,7 +29,7 @@ function Selector<TContext extends IFormContext<string | number>>({
     });
     const [shouldValidate, setShouldValidate] = useState(isInitializedInContext);
     const errorMessages = useValidation(validation ?? { rules: [] }, state, shouldValidate);
-    useFormContextDefinitions<string | number, TContext>(id, validation?.rules ?? []);
+    useFormContextDefinitions<string, TContext>(id, validation?.rules ?? []);
 
     return (
         <div id={id}>
@@ -38,21 +38,25 @@ function Selector<TContext extends IFormContext<string | number>>({
                 errorMessages={errorMessages}
             />
             {label}
-            {definitions.map((definition) => (
-                <label htmlFor={name} key={definition.value}>
-                    <input
-                        type="radio"
-                        value={definition.value}
-                        name={name}
-                        checked={state === definition.value}
-                        onChange={() => {
-                            setShouldValidate((isValidating) => isValidating || true);
-                            setState(definition.value);
-                        }}
-                    />
-                    {definition.label ?? definition.value}
-                </label>
-            ))}
+            {definitions.map((definition) => {
+                const onClickHandler = () => {
+                    setShouldValidate((isValidating) => isValidating || true);
+                    setState(definition.value);
+                };
+
+                return (
+                    <label htmlFor={name} key={definition.value} onClick={onClickHandler}>
+                        <input
+                            type="radio"
+                            value={definition.value}
+                            name={name}
+                            checked={state === definition.value}
+                            onChange={onClickHandler}
+                        />
+                        {definition.label ?? definition.value}
+                    </label>
+                );
+            })}
         </div>
     );
 }
