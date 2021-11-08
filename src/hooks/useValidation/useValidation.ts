@@ -10,11 +10,7 @@ export enum ValidationStatus {
     Validating = "Validating",
 }
 
-export type IUseValidation = [
-  forceValidate: () => void,
-  errorMessages: string[],
-  status: ValidationStatus,
-];
+export type IUseValidation = string[];
 
 export type IUseValidationRule<T, TContext extends IFormContext<T> = IFormContext<T>> = [
   test: (value?: T, context?: TContext) => boolean,
@@ -30,21 +26,17 @@ export interface IUseValidationOptions<T, TContext extends IFormContext<T> = IFo
 }
 
 export const useValidation = <T, TContext extends IFormContext<T> = IFormContext<T>> ({
-    rules,
-    earlyReturn,
-    onError,
-    onValid,
+    rules, earlyReturn,
+    onError, onValid,
     Context,
-}: IUseValidationOptions<T, TContext>, value: T,
+}: IUseValidationOptions<T, TContext>,
+    value: T, shouldValidate: boolean = true,
 ): IUseValidation => {
-    const [status, setStatus] = useState<ValidationStatus>(ValidationStatus.Pending);
     const [errors, setErrors] = useState<string[]>([]);
-    const context = useContext((Context ?? FormContext) as React.Context<TContext>);
-
-    const forceValidate = useCallback(() => setStatus(ValidationStatus.Valid), []);
+    const context = useContext((Context ?? FormContext) as React.Context<TContext | undefined>);
 
     useEffect(() => {
-        if (status === ValidationStatus.Pending) return;
+        if (!shouldValidate) return;
 
         const errorMessages = earlyReturn
             ? [rules.find(([test]) => !test(value, context))?.[1] ?? ""]
@@ -52,19 +44,21 @@ export const useValidation = <T, TContext extends IFormContext<T> = IFormContext
             : rules.filter(([test]) => !test(value, context))
                 .map(([, message]) => message);
 
-        if (errorMessages.length && status !== ValidationStatus.Error) {
-            setErrors(errorMessages);
+        if (errorMessages.length) {
+            setErrors((prevErrors) => (
+                !errorMessages.every(prevErrors.includes.bind(prevErrors))
+              || !prevErrors.every(errorMessages.includes.bind(errorMessages))
+                    ? errorMessages
+                    : prevErrors
+            ));
             onError?.(errorMessages, value!);
-
-            setStatus(ValidationStatus.Error);
-        } else if (!errorMessages.length && status !== ValidationStatus.Valid) {
+        } else if (!errorMessages.length) {
+            setErrors((prevErrors) => (!prevErrors.length ? prevErrors : []));
             onValid?.(value!);
-
-            setStatus(ValidationStatus.Valid);
         }
-    }, [context, earlyReturn, onError, onValid, rules, status, value]);
+    }, [context, earlyReturn, onError, onValid, rules, shouldValidate, value]);
 
-    return [forceValidate, errors, status];
+    return errors;
 };
 
 export default useValidation;

@@ -24,14 +24,12 @@ function Checkbox<TContext extends IFormContext<boolean>>({
     validation, showValidationStatus,
 }: React.PropsWithChildren<ICheckboxProps<TContext>>) {
     const [state, setState] = useFormContextState(name, { initialValue: false, value, onChange });
-    const [
-        forceValidation, errorMessages, status,
-    ] = useValidation(validation ?? { rules: [] }, state);
+    const [shouldValidate, setShouldValidate] = useState(false);
+    const errorMessages = useValidation(validation ?? { rules: [] }, state, shouldValidate);
 
     return (
         <div>
             <ValidationErrors
-                status={status}
                 errorMessages={errorMessages}
                 isHidden={showValidationStatus}
             />
@@ -42,8 +40,8 @@ function Checkbox<TContext extends IFormContext<boolean>>({
                 className="form-checkbox h-5 w-5 text-gray-600"
                 checked={state}
                 onChange={(event) => {
-                    if (status === ValidationStatus.Pending) {
-                        forceValidation();
+                    if (!shouldValidate) {
+                        setShouldValidate(true);
                     }
                     setState(event.target.checked);
                 }}

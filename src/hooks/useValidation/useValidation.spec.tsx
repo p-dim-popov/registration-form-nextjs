@@ -1,6 +1,6 @@
-import { IUseValidationOptions, useValidation, ValidationStatus } from "@src/hooks/useValidation/useValidation";
+import { IUseValidationOptions, useValidation } from "@src/hooks/useValidation/useValidation";
 import Rule from "@src/features/rule-creators/ruleCreators";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
@@ -8,26 +8,10 @@ import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
 describe("useValidation", () => {
     it("should return tuple with onChange, status, error", () => {
         const Mock: React.FC = () => {
-            const [value, setValue] = useState("");
+            const [value] = useState("");
             const result = useValidation({ rules: [Rule<string>().isRequired] }, value);
 
             expect(result).toBeInstanceOf(Array);
-            const [startValidating, errorMessages, status] = result;
-            expect(startValidating).toBeInstanceOf(Function);
-            expect(errorMessages).toBeInstanceOf(Array);
-            expect(typeof status).toEqual("string");
-
-            return <></>;
-        };
-
-        render(<Mock />);
-    });
-
-    it("should have initial state pending", () => {
-        const Mock: React.FC = () => {
-            const [value] = useState("");
-            const [,, status] = useValidation<string>({ rules: [Rule<string>().isRequired] }, value);
-            expect(status).toEqual(ValidationStatus.Pending);
 
             return <></>;
         };
@@ -38,40 +22,42 @@ describe("useValidation", () => {
     describe("status changes", () => {
         const Mock: React.FC<IUseValidationOptions<number>> = ({ onValid, onError, rules }) => {
             const [value, setValue] = useState(0);
-            const [startValidating, errors, status] = useValidation<number>({
-                rules,
-                onValid,
-                onError,
+            const errors = useValidation<number>({
+                rules, onValid, onError,
             }, value);
-
-            useEffect(startValidating, [startValidating]);
 
             return (
                 <>
-                    <div data-testid="TEST_STATUS">{status}</div>
+                    <div data-testid="TEST_STATUS">{errors}</div>
                     <input type="text" data-testid="TEST_INPUT" onChange={(event) => setValue(+event.target.value)} />
                 </>
             );
         };
 
         it.each([
-            [ValidationStatus.Valid, 20],
-            [ValidationStatus.Error, 4],
-        ])("should have %s status", (expectedStatus: ValidationStatus, value: number) => {
-            render(<Mock rules={[Rule<number>().isEqualOrGreaterThan(18)]} />);
+            [20, 18],
+            [4, 18],
+        ])("should show error when !(%s >= %s)", (value: number, comparable: number) => {
+            const rule = Rule<number>().isEqualOrGreaterThan(comparable);
+            render(<Mock rules={[rule]} />);
             const inputElement = screen.getByTestId("TEST_INPUT");
 
             userEvent.type(inputElement, String(value));
 
             const statusElement = screen.getByTestId("TEST_STATUS");
-            const status = statusElement.textContent;
-            expect(status).toEqual(expectedStatus);
+            const expectError = expect(statusElement.textContent);
+            const [test, errorMessage] = rule;
+            if (test(value)) {
+                expectError.not.toEqual(errorMessage);
+            } else {
+                expectError.toEqual(errorMessage);
+            }
         });
 
         it.each([
-            [ValidationStatus.Valid, 20],
-            [ValidationStatus.Error, 4],
-        ])("should call function for %s status", (expectedStatus: ValidationStatus, value: number) => {
+            [20],
+            [4],
+        ])("should call function for based on valid or invalid, test >= 18, value %s", (value: number) => {
             const onValidMock = jest.fn();
             const onErrorMock = jest.fn();
             render(<Mock
@@ -83,7 +69,7 @@ describe("useValidation", () => {
 
             userEvent.type(inputElement, String(value));
 
-            expect(expectedStatus === ValidationStatus.Valid ? onValidMock : onErrorMock).toBeCalled();
+            expect(value >= 18 ? onValidMock : onErrorMock).toBeCalled();
         });
     });
 
@@ -93,9 +79,7 @@ describe("useValidation", () => {
     ])("should have early return - %s", (earlyReturn) => {
         const Mock: React.FC = () => {
             const [value, setValue] = useState("");
-            const [start, errors] = useValidation({ rules: [[() => false, "TEST-1"], [() => false, "TEST-2"]], earlyReturn }, value);
-
-            useEffect(start, [start]);
+            const errors = useValidation({ rules: [[() => false, "TEST-1"], [() => false, "TEST-2"]], earlyReturn }, value);
 
             return (
                 <div>
@@ -125,8 +109,7 @@ describe("useValidation", () => {
         };
         const Mock: React.FC = () => {
             const [value, setValue] = useState("");
-            const [start,, errors] = useValidation({ rules: [[predicateMock, "TEST-1"]] }, value);
-            useEffect(start, [start]);
+            const errors = useValidation({ rules: [[predicateMock, "TEST-1"]] }, value);
 
             return (
                 <div>
@@ -163,11 +146,10 @@ describe("useValidation", () => {
 
         const Mock: React.FC = () => {
             const [inputValue, setInputValue] = useState("");
-            const [start, errors, status] = useValidation({
+            const errors = useValidation({
                 rules: [[test, errorMessage]],
                 Context: TestContext,
             }, inputValue);
-            useEffect(start, [start]);
 
             return (
                 <div>
@@ -188,32 +170,34 @@ describe("useValidation", () => {
         }
     });
 
-    it("should have forceValidation method", () => {
+    it("should not validate if not started", () => {
+        const rule = Rule<string>().isRequired;
         const Mock: React.FC = () => {
             const [value, setValue] = useState("");
-            const [forceValidation,, status] = useValidation({
-                rules: [Rule<string>().isRequired],
-            }, value);
+            const [validate, setValidate] = useState(false);
+            const errors = useValidation({
+                rules: [rule],
+            }, value, validate);
 
             return (
                 <div>
                     <input data-testid="INPUT" onChange={(event) => setValue(event.target.value)} />
-                    <div data-testid="STATUS">{status}</div>
-                    <button type="button" onClick={forceValidation} data-testid="BUTTON" />
+                    <div data-testid="STATUS">{errors}</div>
+                    <button type="button" onClick={() => setValidate(true)} data-testid="BUTTON" />
                 </div>
             );
         };
         render(<Mock />);
 
-        userEvent.type(screen.getByTestId("INPUT"), "TEST");
+        userEvent.type(screen.getByTestId("INPUT"), "T{backspace}");
 
         const statusDiv = screen.getByTestId("STATUS");
-        expect(statusDiv.textContent).toEqual(ValidationStatus.Pending);
+        expect(statusDiv.textContent).toEqual("");
 
         const startValidatingButton = screen.getByTestId("BUTTON");
         userEvent.click(startValidatingButton);
 
-        userEvent.type(screen.getByTestId("INPUT"), "TEST");
-        expect(statusDiv.textContent).toEqual(ValidationStatus.Valid);
+        userEvent.type(screen.getByTestId("INPUT"), "T{backspace}");
+        expect(statusDiv.textContent).toEqual(rule[1]);
     });
 });
