@@ -4,17 +4,20 @@ import React, {
 } from "react";
 
 const useFormContextState = <T, TContext extends IFormContext<T>>(
-    fieldName: string, initialValue: T, Context?: React.Context<TContext>,
+    fieldName: string,
+    { initialValue, value, onChange }: { initialValue: T, value?: T, onChange?: (val: T) => void },
+    Context?: React.Context<TContext>,
 ): [T, (value: T) => void] => {
     const context = useContext((Context ?? FormContext) as React.Context<TContext | undefined>);
     const contextValue = context?.data?.[fieldName];
 
-    const [value, setValue] = useState<T>(initialValue);
+    const [innerStateValue, setInnerStateValue] = useState<T>(initialValue);
 
-    const setValueInStateAndContext = useCallback((val: T) => {
+    const onChangeHandler = useCallback((val: T) => {
         context?.set(fieldName)(val);
-        setValue(val);
-    }, [context, fieldName]);
+        setInnerStateValue(val);
+        onChange?.(val);
+    }, [context, fieldName, onChange]);
 
     useEffect(() => {
         const isInitialized = (context && typeof contextValue !== "undefined") || !context;
@@ -23,7 +26,7 @@ const useFormContextState = <T, TContext extends IFormContext<T>>(
         }
     }, [context, contextValue, fieldName, initialValue]);
 
-    return [contextValue ?? value, setValueInStateAndContext];
+    return [value ?? contextValue ?? innerStateValue, onChangeHandler];
 };
 
 export default useFormContextState;

@@ -6,14 +6,14 @@ import React, { useEffect } from "react";
 
 describe("useFormContextState", () => {
     it("should work as useState", () => {
-        const { result } = renderHook(() => useFormContextState("age", 123));
+        const { result } = renderHook(() => useFormContextState("age", { initialValue: 123 }));
 
         expect(result.current[0]).toEqual(123);
     });
 
     it("should get value from context if available", () => {
         const Mock: React.FC = () => {
-            const [value] = useFormContextState("age", 123);
+            const [value] = useFormContextState("age", { initialValue: 123 });
 
             return <>{value}</>;
         };
@@ -32,7 +32,7 @@ describe("useFormContextState", () => {
 
     it("should initialize itself inside the context", () => {
         const Mock: React.FC = () => {
-            const [value] = useFormContextState("age", 123);
+            const [value] = useFormContextState("age", { initialValue: 123 });
 
             return <>{value}</>;
         };
@@ -53,7 +53,7 @@ describe("useFormContextState", () => {
 
     it("should return setter to value in context", () => {
         const Mock: React.FC = () => {
-            const [value, set] = useFormContextState("age", 123);
+            const [value, set] = useFormContextState("age", { initialValue: 123 });
 
             useEffect(() => {
                 set(321);
@@ -74,5 +74,22 @@ describe("useFormContextState", () => {
         );
 
         expect(state.data.age).toEqual(321);
+    });
+
+    it("should receive value and setter/onChange", () => {
+        const onChangeMock = jest.fn();
+        const Mock: React.FC = () => {
+            const [value, set] = useFormContextState("age", { initialValue: 123, onChange: onChangeMock });
+
+            useEffect(() => {
+                set(321);
+            }, [set]);
+
+            return <>{value}</>;
+        };
+
+        render(<Mock />);
+
+        expect(onChangeMock).toHaveBeenCalled();
     });
 });
