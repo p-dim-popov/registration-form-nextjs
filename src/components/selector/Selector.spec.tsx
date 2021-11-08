@@ -49,4 +49,25 @@ describe("Select", () => {
 
         expect(data.onChange).toHaveBeenCalledWith(option1?.value);
     });
+
+    it("should be controlled", () => {
+        const data = {
+            id: "test-selector",
+            label: "Test Selector",
+            value: "option-2",
+            onChange: jest.fn(),
+        };
+
+        const { container } = render(
+            <Selector
+                {...data}
+                definitions={[
+                    { value: "option-1", label: "Option 1" },
+                    { value: "option-2", label: "Option 2" },
+                ]}
+            />,
+        );
+
+        expect(container.querySelector("input[value=option-2]")).toBeChecked();
+    });
 });
