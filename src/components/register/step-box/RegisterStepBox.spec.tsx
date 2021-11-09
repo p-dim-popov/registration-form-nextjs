@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react";
 import RegisterStepBox from "@src/components/register/step-box/RegisterStepBox";
 import RegisterContext, {
     getRegisterPageContextDefaultValue,
-    IRegisterContext,
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
 import userEvent from "@testing-library/user-event";
@@ -84,13 +83,24 @@ describe("RegisterStepBox", () => {
         expect(routePushMock).toBeCalledWith(RegisterPage.UserDetails);
     });
 
-    it("should validate past not active steps", () => {
+    it.each([
+        [Rule<string>().isRequired, "123"],
+        [Rule<string>().isRequired, undefined],
+        [undefined, undefined],
+    ])("should validate visited not active steps: %s %s", (rule, value) => {
         const data = getRegisterPageContextDefaultValue();
         data.page = RegisterPage.AccountDetails;
-        data.definitions[RegisterPage.UserDetails] = {
-            age: [Rule<string | number | boolean | undefined>().isRequired],
-        };
-        data.data.age = "123";
+        if (rule) {
+            data.definitions[RegisterPage.UserDetails] = {
+                // I know I pass undefined value
+                // @ts-ignore
+                age: [rule],
+            };
+        }
+
+        if (value) {
+            data.data.age = value;
+        }
 
         render(
             <RegisterContext.Provider value={data}>
@@ -101,6 +111,14 @@ describe("RegisterStepBox", () => {
         const circleElement = screen.getByText("TEST-STEP");
 
         expect(circleElement).toBeInTheDocument();
-        expect(circleElement).toHaveClass(..."bg-blue-200".split(" "));
+
+        const expectCircleElement = expect(circleElement);
+        if (rule && value) {
+            expectCircleElement.toHaveClass(..."bg-green-200".split(" "));
+        } else if (rule && !value) {
+            expectCircleElement.toHaveClass(..."bg-red-200".split(" "));
+        } else if (!rule && !value) {
+            expectCircleElement.toHaveClass(..."bg-gray-300 text-gray-400".split(" "));
+        }
     });
 });

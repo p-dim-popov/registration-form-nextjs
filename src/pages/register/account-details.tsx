@@ -1,16 +1,14 @@
 import React, { ReactElement } from "react";
 import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import type { NextPageWithLayout } from "@src/pages/_app";
-import {
-    RegisterPage,
-} from "@src/contexts/register/RegisterContext";
+import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import Input from "@src/components/input/Input";
 import Rule from "@src/features/rule-creators/ruleCreators";
 import Checkbox from "@src/components/checkbox/Checkbox";
 
 const validations = {
     email: { rules: [Rule<string>({ name: "email" }).isRequired, Rule<string>().shouldMatch(/^.*?@.*?$/i)] },
-    password: { rules: [Rule<string>().isRequired] },
+    password: { rules: [Rule<string>().isRequired, Rule<string>().withContext.isDifferentThan({ selector: (context) => context?.data?.firstName, description: "first name"})] },
     securityQuestion1: { rules: [Rule<string>().isRequired, Rule<string>().hasLengthBetween(2, 30), Rule<string>().shouldMatch(/[a-z]/i)] },
     securityQuestion2: { rules: [Rule<string>().isRequired, Rule<string>().hasLengthBetween(2, 30), Rule<string>().shouldMatch(/[a-z]/i)] },
 };

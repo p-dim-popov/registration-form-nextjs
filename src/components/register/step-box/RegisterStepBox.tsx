@@ -20,9 +20,10 @@ const RegisterStepBox: React.FC<IStepBoxProps> = ({ children, title, forPage }) 
     const pageFormDefinitions = Object.entries(context.definitions[forPage] ?? {});
 
     const isActive = context.page === forPage;
-    const isVisitedAndValid = !isActive && !!pageFormDefinitions.length && pageFormDefinitions
+    const isVisited = !!pageFormDefinitions.length;
+    const isValid = pageFormDefinitions
         .every(([fieldName, rules]) => rules
-            .every(([test]) => test(context.data[fieldName])));
+            .every(([test]) => test(context.data[fieldName], context)));
 
     return (
         <div
@@ -37,8 +38,9 @@ const RegisterStepBox: React.FC<IStepBoxProps> = ({ children, title, forPage }) 
                 className={classNames({
                     "rounded-full h-14 w-14 py-3 px-5 text-2xl font-bold": true,
                     "bg-gray-700 text-white": isActive,
-                    "bg-gray-300 text-gray-400": !isVisitedAndValid && !isActive,
-                    "bg-blue-200": isVisitedAndValid && !isActive,
+                    "bg-gray-300 text-gray-400": !isActive && !isVisited,
+                    "bg-green-200": !isActive && isVisited && isValid,
+                    "bg-red-200": !isActive && isVisited && !isValid,
                 })}
             >
                 {children}
