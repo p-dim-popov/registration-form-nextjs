@@ -18,4 +18,11 @@ describe("DateInput", () => {
                 expect(inputElement).toHaveClass("w-11");
             });
     });
+
+    it("should last field styled for only 4 digits", () => {
+        const { container } = render(<DateInput />);
+
+        const lastInput = Array.from(container.querySelectorAll("input")).pop();
+        expect(lastInput).toHaveClass("w-16");
+    });
 });
