@@ -16,7 +16,19 @@ const RegisterFormFooter: React.FC = () => {
                     if (nextPage) {
                         router.push(nextPage);
                     } else {
-                        // TODO: do sth, submit form?
+                        const definitions = Object.values(context.definitions)
+                            .reduce((acc, cur) => ({
+                                ...acc, ...cur,
+                            }), {});
+
+                        const errors = Object.entries(definitions)
+                            .flatMap(([fieldName, rules]) => rules
+                                .map(([test, message]) => (
+                                    test(context.data[fieldName], context)
+                                        ? null
+                                        : message)))
+                            .filter((x) => !!x);
+                        alert(JSON.stringify({ errors, data: context.data, definitions }, null, 4));
                     }
                 }}
             >
