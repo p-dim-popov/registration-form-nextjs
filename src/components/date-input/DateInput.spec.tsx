@@ -1,6 +1,7 @@
-import React from "react";
-import { render } from "@testing-library/react";
-import DateInput from "@src/components/date-input/DateInput";
+import React, { useState } from "react";
+import { render, screen } from "@testing-library/react";
+import DateInput, { set, DateGroupType, get } from "@src/components/date-input/DateInput";
+import userEvent from "@testing-library/user-event";
 
 describe("DateInput", () => {
     it("should have 3 input fields", () => {
@@ -15,7 +16,7 @@ describe("DateInput", () => {
         Array.from(container.querySelectorAll("input"))
             .slice(0, 2)
             .forEach((inputElement) => {
-                expect(inputElement).toHaveClass("w-11");
+                expect(inputElement).toHaveClass("w-14");
             });
     });
 
@@ -23,6 +24,47 @@ describe("DateInput", () => {
         const { container } = render(<DateInput />);
 
         const lastInput = Array.from(container.querySelectorAll("input")).pop();
-        expect(lastInput).toHaveClass("w-16");
+        expect(lastInput).toHaveClass("w-20");
+    });
+
+    const Mock: React.FC = () => {
+        const [value, setValue] = useState("12-34-5678");
+        return (
+            <>
+                <DateInput value={value} onChange={setValue} />
+                <div data-testid="test-id">{value}</div>
+            </>
+        );
+    };
+
+    it("should have value in format dd-M-yyyy", () => {
+        render(<Mock />);
+
+        const monthsInput = screen.queryByPlaceholderText("MM");
+        userEvent.clear(monthsInput!);
+        userEvent.type(monthsInput!, "2");
+
+        const state = screen.getByTestId("test-id");
+        expect(state.textContent).toEqual("12-2-5678");
+    });
+
+    it.each([
+        ["1-10-1900", DateGroupType.Days, "3", "3-10-1900"],
+        ["1-10-1900", DateGroupType.Months, "3", "1-3-1900"],
+        ["1-10-1900", DateGroupType.Year, "3", "1-10-3"],
+        ["1-10-1900", DateGroupType.Year, "123", "1-10-123"],
+        ["1-10-1900", DateGroupType.Year, "1123", "1-10-1123"],
+    ])("should have set function which returns date set correctly: %s %s %s, expected: %s", (
+        fullDate: string, changedGroup: DateGroupType, value: string, expectedResult: string,
+    ) => {
+        expect(set(changedGroup)(fullDate)(value)).toEqual(expectedResult);
+    });
+
+    it.each([
+        ["12-34-5678", DateGroupType.Days, "12"],
+        ["12-34-5678", DateGroupType.Months, "34"],
+        ["12-34-5678", DateGroupType.Year, "5678"],
+    ])("should have get function which returns wanted group: %s %s", (fullDate: string, dateGroup: DateGroupType, expectedValue: string) => {
+        expect(get(dateGroup)(fullDate)).toEqual(expectedValue);
     });
 });
