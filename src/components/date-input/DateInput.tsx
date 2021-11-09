@@ -77,8 +77,8 @@ function DateInput<TContext extends IFormContext<string>>({
 
     return (
         <div onBlur={() => setShouldValidate(true)} className="flex flex-col">
-            <ValidationErrors errorMessages={errorMessages} />
             <Label htmlFor={name} label={label} />
+            <ValidationErrors errorMessages={errorMessages} />
             <div className="flex flex-row">
                 <input
                     className="w-14 border p-3 mx-1"
