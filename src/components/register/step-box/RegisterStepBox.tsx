@@ -3,12 +3,6 @@ import RegisterContext, { RegisterPage } from "@src/contexts/register/RegisterCo
 import { useRouter } from "next/router";
 import classNames from "classnames";
 
-export enum StepBoxStatus {
-    Active = "Active",
-    Done = "Done",
-    NotActive = "NotActive",
-}
-
 export interface IStepBoxProps {
     title?: string;
     forPage: RegisterPage;
