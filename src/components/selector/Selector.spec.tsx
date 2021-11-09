@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event";
 import FormContext, { getFormContextDefaultValue } from "@src/contexts/form/FormContext";
 import Rule from "@src/features/rule-creators/ruleCreators";
 
-describe("Select", () => {
+describe("Selector", () => {
     it("should render options", () => {
         const data = {
             id: "test-selector",
@@ -25,7 +25,7 @@ describe("Select", () => {
         container.querySelectorAll("input").forEach((element) => {
             expect(element).toHaveAttribute("name", data.id);
         });
-        expect(container.querySelectorAll("label")).toHaveLength(2);
+        expect(container.querySelectorAll("label")).toHaveLength(3);
     });
 
     it("should react to changes", () => {

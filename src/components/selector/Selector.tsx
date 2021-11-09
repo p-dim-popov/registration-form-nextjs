@@ -9,6 +9,8 @@ import useFormContextDefinitions
 import { IFormContext } from "@src/contexts/form/FormContext";
 import ValidationErrors from "@src/components/validation-error/ValidationErrors";
 import { ICanShowValidationStatus } from "@src/interfaces/ICanShowValidationStatus";
+import Label from "@src/components/label/Label";
+import classNames from "classnames";
 
 export interface ISelectorProps
     extends
@@ -34,31 +36,42 @@ function Selector<TContext extends IFormContext<string>>({
     useFormContextDefinitions<string, TContext>(id, validation?.rules ?? []);
 
     return (
-        <div id={id}>
+        <div id={id} className="flex flex-col">
+            <Label htmlFor={name} label={label} />
             <ValidationErrors
                 isHidden={showValidationStatus}
                 errorMessages={errorMessages}
             />
-            {label}
-            {definitions.map((definition) => {
-                const onClickHandler = () => {
-                    setShouldValidate((isValidating) => isValidating || true);
-                    setState(definition.value);
-                };
+            <div className="flex flex-row">
+                {definitions.map((definition, index) => {
+                    const onClickHandler = () => {
+                        setShouldValidate((isValidating) => isValidating || true);
+                        setState(definition.value);
+                    };
 
-                return (
-                    <label htmlFor={name} key={definition.value} onClick={onClickHandler}>
-                        <input
-                            type="radio"
-                            value={definition.value}
-                            name={name}
-                            checked={state === definition.value}
-                            onChange={onClickHandler}
-                        />
-                        {definition.label ?? definition.value}
-                    </label>
-                );
-            })}
+                    return (
+                        <label
+                            htmlFor={name}
+                            key={definition.value}
+                            onClick={onClickHandler}
+                            className={classNames({
+                                "py-2": true,
+                                "px-3": !!index,
+                            })}
+                        >
+                            <input
+                                type="radio"
+                                value={definition.value}
+                                name={name}
+                                checked={state === definition.value}
+                                onChange={onClickHandler}
+                                className="transform scale-150"
+                            />
+                            <span className="pl-3">{definition.label ?? definition.value}</span>
+                        </label>
+                    );
+                })}
+            </div>
         </div>
     );
 }
