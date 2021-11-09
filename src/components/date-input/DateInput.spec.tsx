@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { render, screen } from "@testing-library/react";
-import DateInput, { set, DateGroupType, get } from "@src/components/date-input/DateInput";
+import DateInput, { DateGroupType, DateInputTools } from "@src/components/date-input/DateInput";
 import userEvent from "@testing-library/user-event";
-import Rule from "@src/features/rule-creators/ruleCreators";
 import { isValid } from "date-fns";
 
 describe("DateInput", () => {
@@ -59,7 +58,7 @@ describe("DateInput", () => {
     ])("should have set function which returns date set correctly: %s %s %s, expected: %s", (
         fullDate: string, changedGroup: DateGroupType, value: string, expectedResult: string,
     ) => {
-        expect(set(changedGroup)(fullDate)(value)).toEqual(expectedResult);
+        expect(DateInputTools.alter(changedGroup)(fullDate)(value)).toEqual(expectedResult);
     });
 
     it.each([
@@ -67,7 +66,7 @@ describe("DateInput", () => {
         ["12-34-5678", DateGroupType.Months, "34"],
         ["12-34-5678", DateGroupType.Year, "5678"],
     ])("should have get function which returns wanted group: %s %s", (fullDate: string, dateGroup: DateGroupType, expectedValue: string) => {
-        expect(get(dateGroup)(fullDate)).toEqual(expectedValue);
+        expect(DateInputTools.select(dateGroup)(fullDate)).toEqual(expectedValue);
     });
 
     it("should have validation", () => {

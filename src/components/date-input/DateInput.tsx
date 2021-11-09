@@ -28,39 +28,41 @@ export interface IDateInputProps<TContext extends IFormContext<string>>
     id: string;
 }
 
-export const set = (group: DateGroupType) => (prevState: string = "") => (value: string) => {
-    let [day = "", month = "", year = ""] = prevState.split("-");
-    switch (group) {
-        case DateGroupType.Days:
-            day = value.substring(value.length - 2);
-            break;
-        case DateGroupType.Months:
-            month = value.substring(value.length - 2);
-            break;
-        case DateGroupType.Year:
-            year = value.substring(value.length - 4);
-            break;
-        default: break;
-    }
+export const DateInputTools = ({
+    alter: (group: DateGroupType) => (prevState: string = "") => (value: string) => {
+        let [day = "", month = "", year = ""] = prevState.split("-");
+        switch (group) {
+            case DateGroupType.Days:
+                day = value.substring(value.length - 2);
+                break;
+            case DateGroupType.Months:
+                month = value.substring(value.length - 2);
+                break;
+            case DateGroupType.Year:
+                year = value.substring(value.length - 4);
+                break;
+            default: break;
+        }
 
-    return [day, month, year].join("-");
-};
+        return [day, month, year].join("-");
+    },
 
-export const get = (group: DateGroupType) => (state: string = ""): string => {
-    const [day = "", month = "", year = ""] = state.split("-");
-    const value = {
-        [DateGroupType.Days]: day,
-        [DateGroupType.Months]: month,
-        [DateGroupType.Year]: year,
-    }[group];
+    select: (group: DateGroupType) => (state: string = ""): string => {
+        const [day = "", month = "", year = ""] = state.split("-");
+        const value = {
+            [DateGroupType.Days]: day,
+            [DateGroupType.Months]: month,
+            [DateGroupType.Year]: year,
+        }[group];
 
-    switch (value) {
-        case "00":
-        case "0000":
-            return "";
-        default: return value;
-    }
-};
+        switch (value) {
+            case "00":
+            case "0000":
+                return "";
+            default: return value;
+        }
+    },
+});
 
 function DateInput<TContext extends IFormContext<string>>({
     id, name = id, label = id,
@@ -82,25 +84,25 @@ function DateInput<TContext extends IFormContext<string>>({
                     className="w-14 border p-3 mx-1"
                     placeholder="DD"
                     onChange={(event) => setState(
-                        set(DateGroupType.Days)(state)(event.target.value),
+                        DateInputTools.alter(DateGroupType.Days)(state)(event.target.value),
                     )}
-                    value={get(DateGroupType.Days)(state)}
+                    value={DateInputTools.select(DateGroupType.Days)(state)}
                 />
                 <input
                     className="w-14 border p-3 mx-1"
                     placeholder="MM"
                     onChange={(event) => setState(
-                        set(DateGroupType.Months)(state)(event.target.value),
+                        DateInputTools.alter(DateGroupType.Months)(state)(event.target.value),
                     )}
-                    value={get(DateGroupType.Months)(state)}
+                    value={DateInputTools.select(DateGroupType.Months)(state)}
                 />
                 <input
                     className="w-20 border p-3 mx-1"
                     placeholder="YYYY"
                     onChange={(event) => setState(
-                        set(DateGroupType.Year)(state)(event.target.value),
+                        DateInputTools.alter(DateGroupType.Year)(state)(event.target.value),
                     )}
-                    value={get(DateGroupType.Year)(state)}
+                    value={DateInputTools.select(DateGroupType.Year)(state)}
                 />
             </div>
         </div>
