@@ -8,7 +8,6 @@ import { ICanBeControlled } from "@src/interfaces/ICanBeControlled";
 import useValidation from "@src/hooks/useValidation/useValidation";
 import ValidationErrors from "@src/components/validation-error/ValidationErrors";
 import useFormContextState from "@src/hooks/form/useFormContextState/useFormContextState";
-import { ICanShowValidationStatus } from "@src/interfaces/ICanShowValidationStatus";
 import { ICanHaveInlineLabel } from "@src/interfaces/ICanHaveInlineLabel";
 
 export interface ICheckboxProps<TContext extends IFormContext<boolean>>
@@ -16,7 +15,6 @@ export interface ICheckboxProps<TContext extends IFormContext<boolean>>
     IHaveLabel,
     ICanHaveInlineLabel,
     ICanHaveValidation<boolean>,
-    ICanShowValidationStatus,
     ICanHaveContext<TContext>,
     ICanBeControlled<boolean> {
     id: string;
@@ -25,7 +23,7 @@ export interface ICheckboxProps<TContext extends IFormContext<boolean>>
 function Checkbox<TContext extends IFormContext<boolean>>({
     id, label = id, name = id, inlineLabel,
     value, onChange,
-    validation, showValidationStatus,
+    validation,
 }: React.PropsWithChildren<ICheckboxProps<TContext>>) {
     const [state, setState, isInitializedInContext] = useFormContextState(name, { initialValue: false, value, onChange });
     const [shouldValidate, setShouldValidate] = useState(isInitializedInContext);
@@ -33,10 +31,7 @@ function Checkbox<TContext extends IFormContext<boolean>>({
 
     return (
         <div>
-            <ValidationErrors
-                errorMessages={errorMessages}
-                isHidden={showValidationStatus}
-            />
+            <ValidationErrors errorMessages={errorMessages} />
             <input
                 id={id}
                 name={name}
