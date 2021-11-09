@@ -6,9 +6,24 @@ import Input from "@src/components/input/Input";
 import Rule from "@src/features/rule-creators/ruleCreators";
 import Checkbox from "@src/components/checkbox/Checkbox";
 
+const EMAIL_REGEX = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+
 const validations = {
-    email: { rules: [Rule<string>({ name: "email" }).isRequired, Rule<string>().shouldMatch(/^.*?@.*?$/i)] },
-    password: { rules: [Rule<string>().isRequired, Rule<string>().withContext.isDifferentThan({ selector: (context) => context?.data?.firstName, description: "first name"})] },
+    email: {
+        rules: [
+            Rule<string>({ name: "email" }).isRequired,
+            Rule<string>({ message: "Email does not conform standards (RFC-822)" }).shouldMatch(EMAIL_REGEX),
+            Rule({ name: "email" }).hasMaxLength(50),
+        ],
+    },
+    password: {
+        rules: [
+            Rule<string>({ name: "password" }).isRequired,
+            Rule<string>({ name: "password" }).withContext.shouldNotInclude({ selector: (context) => context?.data?.firstName, description: "first name" }),
+            Rule<string>({ name: "password" }).withContext.shouldNotInclude({ selector: (context) => context?.data?.lastName, description: "last name" }),
+            Rule<string>({ name: "password" }).withContext.shouldNotInclude({ selector: (context) => context?.data?.email, description: "email" }),
+        ],
+    },
     securityQuestion1: { rules: [Rule<string>().isRequired, Rule<string>().hasLengthBetween(2, 30), Rule<string>().shouldMatch(/[a-z]/i)] },
     securityQuestion2: { rules: [Rule<string>().isRequired, Rule<string>().hasLengthBetween(2, 30), Rule<string>().shouldMatch(/[a-z]/i)] },
 };

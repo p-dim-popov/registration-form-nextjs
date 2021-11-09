@@ -65,6 +65,17 @@ const createRule = <T, TContext extends IFormContext<T>, TOptions extends ICreat
         ];
     },
 
+    shouldNotInclude: (otherValue: TOptions): IUseValidationRule<T, TContext> => {
+        const [selector, description] = getSelectorWithDescription(otherValue);
+        return [
+            (value, context) => {
+                const contextValue = selector(context);
+                return String(value).includes(String(contextValue));
+            },
+            createMessage(options, (field) => `${field} should not contain ${description}`),
+        ];
+    },
+
     shouldMatch: (pattern: string | RegExp): IUseValidationRule<T> => [
         (value) => typeof value !== "undefined" && new RegExp(pattern).test(String(value)),
         createMessage(options, (field) => `${field} should match pattern ${pattern}`),
@@ -73,6 +84,11 @@ const createRule = <T, TContext extends IFormContext<T>, TOptions extends ICreat
     hasLengthBetween: (min: number, max: number): IUseValidationRule<string> => [
         (value) => typeof value !== "undefined" && (value.length > min && value.length <= max),
         createMessage(options, (field) => `${field} should be between ${min} and ${max} characters`),
+    ],
+
+    hasMaxLength: (max: number): IUseValidationRule<string> => [
+        ((value) => typeof value !== "undefined" && value.length <= max),
+        createMessage(options, (field) => `${field} should be less than ${max} characters`),
     ],
 });
 
