@@ -18,7 +18,7 @@ const UserDetails: NextPageWithLayout = () => (
     <>
         <Input id="firstName" label="First Name" validation={validations.firstName} inlineLabel />
         <Input id="lastName" label="Last Name" validation={validations.lastName} inlineLabel />
-        <DateInput />
+        <DateInput id="dateOfBirth" label="Date of Birth" validation={validations.dob} />
 
         <Selector
             id="gender"

@@ -1,6 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { IFormContext } from "@src/contexts/form/FormContext";
 import { ICanBeControlled } from "@src/interfaces/ICanBeControlled";
+import { ICanHaveValidation } from "@src/interfaces/ICanHaveValidation";
+import { ICanHaveContext } from "@src/interfaces/ICanHaveContext";
+import { ICanShowValidationStatus } from "@src/interfaces/ICanShowValidationStatus";
+import ValidationErrors from "@src/components/validation-error/ValidationErrors";
+import Label from "@src/components/label/Label";
+import useFormContextState from "@src/hooks/form/useFormContextState/useFormContextState";
+import useValidation from "@src/hooks/useValidation/useValidation";
+import useFormContextDefinitions
+    from "@src/hooks/form/useFormContextDefinitions/useFormContextDefinitions";
+import { IHaveLabel } from "@src/interfaces/IHaveLabel";
 
 export enum DateGroupType {
     Days = "days",
@@ -8,10 +18,14 @@ export enum DateGroupType {
     Year = "year",
 }
 
-export interface IDateInputProps
+export interface IDateInputProps<TContext extends IFormContext<string>>
     extends
-    ICanBeControlled<string> {
-
+    ICanBeControlled<string>,
+    ICanHaveValidation<string>,
+    ICanHaveContext<TContext>,
+    IHaveLabel,
+    ICanHaveContext<TContext> {
+    id: string;
 }
 
 export const set = (group: DateGroupType) => (prevState: string = "") => (value: string) => {
@@ -49,33 +63,43 @@ export const get = (group: DateGroupType) => (state: string = ""): string => {
 };
 
 function DateInput<TContext extends IFormContext<string>>({
+    id, name = id, label = id,
     value, onChange,
-}: React.PropsWithChildren<IDateInputProps>) {
+    validation,
+    Context,
+}: React.PropsWithChildren<IDateInputProps<TContext>>) {
+    const [state, setState, isInitializedInContext] = useFormContextState(name, { initialValue: "", value, onChange }, Context);
+    const [shouldValidate, setShouldValidate] = useState(isInitializedInContext);
+    const errorMessages = useValidation(validation ?? { rules: [] }, state, shouldValidate);
+    useFormContextDefinitions<string, TContext>(id, validation?.rules ?? [], Context);
+
     return (
-        <div>
+        <div onBlur={() => setShouldValidate(true)}>
+            <ValidationErrors errorMessages={errorMessages} />
+            <Label htmlFor={name} label={label} />
             <input
                 className="w-14 border p-3 mx-1"
                 placeholder="DD"
-                onChange={(event) => onChange?.(
-                    set(DateGroupType.Days)(value)(event.target.value),
+                onChange={(event) => setState(
+                    set(DateGroupType.Days)(state)(event.target.value),
                 )}
-                value={get(DateGroupType.Days)(value)}
+                value={get(DateGroupType.Days)(state)}
             />
             <input
                 className="w-14 border p-3 mx-1"
                 placeholder="MM"
-                onChange={(event) => onChange?.(
-                    set(DateGroupType.Months)(value)(event.target.value),
+                onChange={(event) => setState(
+                    set(DateGroupType.Months)(state)(event.target.value),
                 )}
-                value={get(DateGroupType.Months)(value)}
+                value={get(DateGroupType.Months)(state)}
             />
             <input
                 className="w-20 border p-3 mx-1"
                 placeholder="YYYY"
-                onChange={(event) => onChange?.(
-                    set(DateGroupType.Year)(value)(event.target.value),
+                onChange={(event) => setState(
+                    set(DateGroupType.Year)(state)(event.target.value),
                 )}
-                value={get(DateGroupType.Year)(value)}
+                value={get(DateGroupType.Year)(state)}
             />
         </div>
     );

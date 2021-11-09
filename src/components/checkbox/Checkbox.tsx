@@ -5,14 +5,18 @@ import { ICanHaveContext } from "@src/interfaces/ICanHaveContext";
 import { IFormContext } from "@src/contexts/form/FormContext";
 import Label from "@src/components/label/Label";
 import { ICanBeControlled } from "@src/interfaces/ICanBeControlled";
-import useValidation, { ValidationStatus } from "@src/hooks/useValidation/useValidation";
+import useValidation from "@src/hooks/useValidation/useValidation";
 import ValidationErrors from "@src/components/validation-error/ValidationErrors";
 import useFormContextState from "@src/hooks/form/useFormContextState/useFormContextState";
+import { ICanShowValidationStatus } from "@src/interfaces/ICanShowValidationStatus";
+import { ICanHaveInlineLabel } from "@src/interfaces/ICanHaveInlineLabel";
 
 export interface ICheckboxProps<TContext extends IFormContext<boolean>>
     extends
     IHaveLabel,
+    ICanHaveInlineLabel,
     ICanHaveValidation<boolean>,
+    ICanShowValidationStatus,
     ICanHaveContext<TContext>,
     ICanBeControlled<boolean> {
     id: string;

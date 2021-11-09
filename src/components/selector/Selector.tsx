@@ -8,12 +8,14 @@ import useFormContextDefinitions
     from "@src/hooks/form/useFormContextDefinitions/useFormContextDefinitions";
 import { IFormContext } from "@src/contexts/form/FormContext";
 import ValidationErrors from "@src/components/validation-error/ValidationErrors";
+import { ICanShowValidationStatus } from "@src/interfaces/ICanShowValidationStatus";
 
 export interface ISelectorProps
     extends
     IHaveLabel,
     ICanBeControlled<string>,
-    ICanHaveValidation<string> {
+    ICanHaveValidation<string>,
+    ICanShowValidationStatus {
     id: string;
     definitions: { value: string, label?: string }[];
 }

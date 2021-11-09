@@ -12,11 +12,15 @@ import { ICanBeControlled } from "@src/interfaces/ICanBeControlled";
 import useFormContextState from "@src/hooks/form/useFormContextState/useFormContextState";
 import EyeOpened from "@src/components/EyeOpened";
 import EyeShut from "@src/components/EyeShut";
+import { ICanShowValidationStatus } from "@src/interfaces/ICanShowValidationStatus";
+import { ICanHaveInlineLabel } from "@src/interfaces/ICanHaveInlineLabel";
 
 export interface IInputProps<TContext extends IFormContext<string>>
     extends
     IHaveLabel,
+    ICanHaveInlineLabel,
     ICanHaveValidation<string>,
+    ICanShowValidationStatus,
     ICanHaveContext<TContext>,
     ICanBeControlled<string> {
     id: string;

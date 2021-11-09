@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { render, screen } from "@testing-library/react";
 import DateInput, { set, DateGroupType, get } from "@src/components/date-input/DateInput";
 import userEvent from "@testing-library/user-event";
+import Rule from "@src/features/rule-creators/ruleCreators";
+import { isValid } from "date-fns";
 
 describe("DateInput", () => {
     it("should have 3 input fields", () => {
-        const { container } = render(<DateInput />);
+        const { container } = render(<DateInput id="test-id" />);
 
         expect(container.querySelectorAll("input")).toHaveLength(3);
     });
 
     it("should have first two inputs width for 2 digits only", () => {
-        const { container } = render(<DateInput />);
+        const { container } = render(<DateInput id="test-id" />);
 
         Array.from(container.querySelectorAll("input"))
             .slice(0, 2)
@@ -21,23 +23,23 @@ describe("DateInput", () => {
     });
 
     it("should last field styled for only 4 digits", () => {
-        const { container } = render(<DateInput />);
+        const { container } = render(<DateInput id="test-id" />);
 
         const lastInput = Array.from(container.querySelectorAll("input")).pop();
         expect(lastInput).toHaveClass("w-20");
     });
 
-    const Mock: React.FC = () => {
-        const [value, setValue] = useState("12-34-5678");
-        return (
-            <>
-                <DateInput value={value} onChange={setValue} />
-                <div data-testid="test-id">{value}</div>
-            </>
-        );
-    };
-
     it("should have value in format dd-M-yyyy", () => {
+        const Mock: React.FC = () => {
+            const [value, setValue] = useState("12-34-5678");
+            return (
+                <>
+                    <DateInput id="test-id" value={value} onChange={setValue} />
+                    <div data-testid="test-id">{value}</div>
+                </>
+            );
+        };
+
         render(<Mock />);
 
         const monthsInput = screen.queryByPlaceholderText("MM");
@@ -66,5 +68,15 @@ describe("DateInput", () => {
         ["12-34-5678", DateGroupType.Year, "5678"],
     ])("should have get function which returns wanted group: %s %s", (fullDate: string, dateGroup: DateGroupType, expectedValue: string) => {
         expect(get(dateGroup)(fullDate)).toEqual(expectedValue);
+    });
+
+    it("should have validation", () => {
+        const rules = [[isValid, "Error"] as [() => boolean, string]];
+        render(<DateInput id="date-input-id" validation={{ rules }} />);
+
+        userEvent.type(screen.queryByPlaceholderText("MM")!, "20");
+        userEvent.tab();
+
+        expect(screen.queryByText(/error/i)).toBeInTheDocument();
     });
 });
