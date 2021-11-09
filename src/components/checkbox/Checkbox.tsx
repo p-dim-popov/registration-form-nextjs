@@ -45,7 +45,7 @@ function Checkbox<TContext extends IFormContext<boolean>>({
                     setState(event.target.checked);
                 }}
             />
-            <Label htmlFor={name} label={label} isHidden={!!inlineLabel} />
+            <Label htmlFor={name} label={label} isHidden={!!inlineLabel} className="font-normal" />
         </div>
     );
 }
