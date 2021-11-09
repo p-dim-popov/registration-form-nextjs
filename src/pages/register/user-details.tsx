@@ -5,6 +5,7 @@ import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";
 import Rule from "@src/features/rule-creators/ruleCreators";
 import Selector from "@src/components/selector/Selector";
+import DateInput from "@src/components/date-input/DateInput";
 
 const validations = {
     firstName: { rules: [Rule<string>().isRequired] },
@@ -17,7 +18,7 @@ const UserDetails: NextPageWithLayout = () => (
     <>
         <Input id="firstName" label="First Name" validation={validations.firstName} inlineLabel />
         <Input id="lastName" label="Last Name" validation={validations.lastName} inlineLabel />
-        <Input id="dob" label="Date of Birth" validation={validations.dob} />
+        <DateInput />
 
         <Selector
             id="gender"
