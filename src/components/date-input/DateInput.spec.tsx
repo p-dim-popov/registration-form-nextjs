@@ -78,4 +78,16 @@ describe("DateInput", () => {
 
         expect(screen.queryByText(/error/i)).toBeInTheDocument();
     });
+
+    it("should not set -- when all fields are cleared", () => {
+        const rules = [[isValid, "Error"] as [() => boolean, string]];
+        const onChangeMock = jest.fn();
+        render(<DateInput id="date-input-id" onChange={onChangeMock} validation={{ rules }} />);
+
+        userEvent.type(screen.queryByPlaceholderText("MM")!, "20");
+        userEvent.tab();
+        userEvent.clear(screen.queryByPlaceholderText("MM")!);
+
+        expect(onChangeMock).toHaveBeenLastCalledWith("");
+    });
 });

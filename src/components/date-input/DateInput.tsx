@@ -44,7 +44,8 @@ export const DateInputTools = ({
             default: break;
         }
 
-        return [day, month, year].join("-");
+        const result = [day, month, year].join("-");
+        return result === "--" ? "" : result;
     },
 
     select: (group: DateGroupType) => (state: string = ""): string => {
