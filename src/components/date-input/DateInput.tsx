@@ -74,33 +74,35 @@ function DateInput<TContext extends IFormContext<string>>({
     useFormContextDefinitions<string, TContext>(id, validation?.rules ?? [], Context);
 
     return (
-        <div onBlur={() => setShouldValidate(true)}>
+        <div onBlur={() => setShouldValidate(true)} className="flex flex-col">
             <ValidationErrors errorMessages={errorMessages} />
             <Label htmlFor={name} label={label} />
-            <input
-                className="w-14 border p-3 mx-1"
-                placeholder="DD"
-                onChange={(event) => setState(
-                    set(DateGroupType.Days)(state)(event.target.value),
-                )}
-                value={get(DateGroupType.Days)(state)}
-            />
-            <input
-                className="w-14 border p-3 mx-1"
-                placeholder="MM"
-                onChange={(event) => setState(
-                    set(DateGroupType.Months)(state)(event.target.value),
-                )}
-                value={get(DateGroupType.Months)(state)}
-            />
-            <input
-                className="w-20 border p-3 mx-1"
-                placeholder="YYYY"
-                onChange={(event) => setState(
-                    set(DateGroupType.Year)(state)(event.target.value),
-                )}
-                value={get(DateGroupType.Year)(state)}
-            />
+            <div className="flex flex-row">
+                <input
+                    className="w-14 border p-3 mx-1"
+                    placeholder="DD"
+                    onChange={(event) => setState(
+                        set(DateGroupType.Days)(state)(event.target.value),
+                    )}
+                    value={get(DateGroupType.Days)(state)}
+                />
+                <input
+                    className="w-14 border p-3 mx-1"
+                    placeholder="MM"
+                    onChange={(event) => setState(
+                        set(DateGroupType.Months)(state)(event.target.value),
+                    )}
+                    value={get(DateGroupType.Months)(state)}
+                />
+                <input
+                    className="w-20 border p-3 mx-1"
+                    placeholder="YYYY"
+                    onChange={(event) => setState(
+                        set(DateGroupType.Year)(state)(event.target.value),
+                    )}
+                    value={get(DateGroupType.Year)(state)}
+                />
+            </div>
         </div>
     );
 }
