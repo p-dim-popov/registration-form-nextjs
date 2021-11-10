@@ -6,7 +6,7 @@ import FormContext, {
     getFormContextDefaultValue,
     IFormContext,
 } from "@src/contexts/form/FormContext";
-import describeField, { isEqualOrGreaterThan } from "@src/features/rule-creators/FieldDescriptor";
+import describeField, { isEqualOrGreaterThan } from "@src/features/field-descriptor/FieldDescriptor";
 
 describe("Input", () => {
     it("should render input", () => {

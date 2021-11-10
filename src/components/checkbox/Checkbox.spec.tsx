@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import Checkbox from "@src/components/checkbox/Checkbox";
 import userEvent from "@testing-library/user-event";
-import describeField, { isRequired } from "@src/features/rule-creators/FieldDescriptor";
+import describeField, { isRequired } from "@src/features/field-descriptor/FieldDescriptor";
 
 describe("Checkbox", () => {
     it("should render input with id", () => {

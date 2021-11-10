@@ -9,7 +9,7 @@ import describeField, {
     hasMaxLength,
     isRequired,
     shouldMatch, shouldNotInclude,
-} from "@src/features/rule-creators/FieldDescriptor";
+} from "@src/features/field-descriptor/FieldDescriptor";
 
 const EMAIL_REGEX = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 

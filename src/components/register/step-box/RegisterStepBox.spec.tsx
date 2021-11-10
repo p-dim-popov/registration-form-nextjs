@@ -6,7 +6,7 @@ import RegisterContext, {
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
 import userEvent from "@testing-library/user-event";
-import describeField, { isRequired } from "@src/features/rule-creators/FieldDescriptor";
+import describeField, { isRequired } from "@src/features/field-descriptor/FieldDescriptor";
 import { IUseValidationRule } from "@src/hooks/useValidation/useValidation";
 
 const routePushMock = jest.fn();

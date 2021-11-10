@@ -1,4 +1,4 @@
-import describeField, { isEqualOrGreaterThan } from "@src/features/rule-creators/FieldDescriptor";
+import describeField, { isEqualOrGreaterThan } from "@src/features/field-descriptor/FieldDescriptor";
 
 describe("describeField", () => {
     it("should create rule with correct message", () => {

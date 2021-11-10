@@ -3,7 +3,7 @@ import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";
 import Checkbox from "@src/components/checkbox/Checkbox";
-import describeField, { isRequired } from "@src/features/rule-creators/FieldDescriptor";
+import describeField, { isRequired } from "@src/features/field-descriptor/FieldDescriptor";
 
 const validations = {
     hasAgreed: { rules: describeField({ rules: [[isRequired]] }) },

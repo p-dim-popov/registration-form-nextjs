@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import Selector, { ISelectorProps } from "@src/components/selector/Selector";
 import userEvent from "@testing-library/user-event";
 import FormContext, { getFormContextDefaultValue } from "@src/contexts/form/FormContext";
-import describeField, { isRequired } from "@src/features/rule-creators/FieldDescriptor";
+import describeField, { isRequired } from "@src/features/field-descriptor/FieldDescriptor";
 
 describe("Selector", () => {
     it("should render options", () => {

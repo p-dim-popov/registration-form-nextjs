@@ -6,7 +6,7 @@ import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
 import describeField, {
     isDifferentThan,
     isEqualOrGreaterThan, isRequired,
-} from "@src/features/rule-creators/FieldDescriptor";
+} from "@src/features/field-descriptor/FieldDescriptor";
 
 describe("useValidation", () => {
     it("should return tuple with onChange, status, error", () => {

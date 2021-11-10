@@ -3,7 +3,7 @@ import useFormContextDefinitions
 import React from "react";
 import { render } from "@testing-library/react";
 import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
-import describeField, { isRequired } from "@src/features/rule-creators/FieldDescriptor";
+import describeField, { isRequired } from "@src/features/field-descriptor/FieldDescriptor";
 
 describe("useFormContextDefinitions", () => {
     it("should register in form context", () => {

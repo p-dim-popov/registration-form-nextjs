@@ -8,7 +8,7 @@ import DateInput from "@src/components/date-input/DateInput";
 import describeField, {
     isRequired,
     isValidBirthDate,
-} from "@src/features/rule-creators/FieldDescriptor";
+} from "@src/features/field-descriptor/FieldDescriptor";
 
 const validations = {
     firstName: { rules: describeField({ name: "first name", rules: [[isRequired]] }) },
