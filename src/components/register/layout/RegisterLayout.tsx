@@ -49,26 +49,32 @@ const RegisterLayout: React.FC<IRegisterLayoutProps> = ({
     ) => allPagesFormDefinitions[page]?.[fieldName], [allPagesFormDefinitions, page]);
 
     return (
-        <RegisterContext.Provider
-            value={{
-                data: formData,
-                set: (fieldName) => (value) => setFormData({ ...formData, [fieldName]: value }),
-                page,
-                definitions: allPagesFormDefinitions,
-                setDefinitionFor,
-                getDefinitionFor,
-            }}
-        >
-            <RegisterFormHeader />
-            <RegisterContext.Consumer>
-                {(value) => (
-                    <FormContext.Provider value={value}>
-                        {children}
-                    </FormContext.Provider>
-                )}
-            </RegisterContext.Consumer>
-            <RegisterFormFooter />
-        </RegisterContext.Provider>
+        <div className="lg:bg-gradient-to-b from-blue-100 to-blue-50 bg-blue-100 flex items-center justify-center bg-white">
+            <RegisterContext.Provider
+                value={{
+                    data: formData,
+                    set: (fieldName) => (value) => setFormData({ ...formData, [fieldName]: value }),
+                    page,
+                    definitions: allPagesFormDefinitions,
+                    setDefinitionFor,
+                    getDefinitionFor,
+                }}
+            >
+                <div className="lg:rounded-3xl lg:m-15 bg-white lg:max-w-2xl lg:mt-5 p-20">
+                    <RegisterFormHeader />
+                    <section className="flex flex-col items-center">
+                        <RegisterContext.Consumer>
+                            {(value) => (
+                                <FormContext.Provider value={value}>
+                                    {children}
+                                </FormContext.Provider>
+                            )}
+                        </RegisterContext.Consumer>
+                    </section>
+                    <RegisterFormFooter />
+                </div>
+            </RegisterContext.Provider>
+        </div>
     );
 };
 

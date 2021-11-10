@@ -7,7 +7,7 @@ const RegisterFormFooter: React.FC = () => {
     const router = useRouter();
 
     return (
-        <div className="flex flex-col items-center">
+        <section className="flex flex-col items-center mt-20">
             <button
                 type="button"
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-44 rounded-full"
@@ -40,7 +40,7 @@ const RegisterFormFooter: React.FC = () => {
                 {" "}
                 <a target="_blank" href="/contact-us">Contact us</a>
             </div>
-        </div>
+        </section>
     );
 };
 
