@@ -10,7 +10,7 @@ import DateInput from "@src/components/date-input/DateInput";
 const validations = {
     firstName: { rules: [Rule<string>().isRequired] },
     lastName: { rules: [Rule<string>().isRequired] },
-    dob: { rules: [Rule<string>().isRequired] },
+    dob: { rules: [Rule<string>().isRequired, Rule<string>({ name: "birth date" }).isValidBirthDate()] },
     gender: { rules: [Rule<string>().isRequired] },
 };
 

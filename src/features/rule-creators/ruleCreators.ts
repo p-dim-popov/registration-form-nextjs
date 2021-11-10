@@ -1,5 +1,6 @@
 import { IUseValidationRule } from "@src/hooks/useValidation/useValidation";
 import { IFormContext } from "@src/contexts/form/FormContext";
+import { isBefore, parse } from "date-fns";
 
 export interface ICreateMessageOptions {
     name?: string;
@@ -90,6 +91,14 @@ const createRule = <T, TContext extends IFormContext<T>, TOptions extends ICreat
         ((value) => typeof value !== "undefined" && value.length <= max),
         createMessage(options, (field) => `${field} should be less than ${max} characters`),
     ],
+
+    isValidBirthDate: (format: string = "d-M-yyyy") => [
+        (value) => {
+            const parsedDate = parse(String(value), format, new Date());
+            return isBefore(parsedDate, new Date());
+        },
+        createMessage(options, (field) => `${field} is not valid`),
+    ] as IUseValidationRule<T>,
 });
 
 const Rule = <T, TContext extends IFormContext<T> = IFormContext<T>> (options: ICreateMessageOptions = {}) => ({
