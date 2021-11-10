@@ -6,7 +6,7 @@ import RegisterContext, {
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
 import userEvent from "@testing-library/user-event";
-import FieldDefinition, { isRequired } from "@src/features/rule-creators/FieldDefinition";
+import describeField, { isRequired } from "@src/features/rule-creators/FieldDescriptor";
 import { IUseValidationRule } from "@src/hooks/useValidation/useValidation";
 
 const routePushMock = jest.fn();
@@ -85,8 +85,8 @@ describe("RegisterStepBox", () => {
     });
 
     it.each([
-        [FieldDefinition({ rules: [[isRequired]] }), "123"],
-        [FieldDefinition({ rules: [[isRequired]] }), undefined],
+        [describeField({ rules: [[isRequired]] }), "123"],
+        [describeField({ rules: [[isRequired]] }), undefined],
         [undefined, undefined],
     ])("should validate visited not active steps: %s %s", (rule?, value?: string) => {
         const data = getRegisterPageContextDefaultValue();

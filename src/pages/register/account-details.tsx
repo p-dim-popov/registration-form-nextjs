@@ -4,18 +4,18 @@ import type { NextPageWithLayout } from "@src/pages/_app";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import Input from "@src/components/input/Input";
 import Checkbox from "@src/components/checkbox/Checkbox";
-import FieldDefinition, {
+import describeField, {
     hasLengthBetween,
     hasMaxLength,
     isRequired,
     shouldMatch, shouldNotInclude,
-} from "@src/features/rule-creators/FieldDefinition";
+} from "@src/features/rule-creators/FieldDescriptor";
 
 const EMAIL_REGEX = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
 const validations = {
     email: {
-        rules: FieldDefinition({
+        rules: describeField({
             name: "email",
             rules: [
                 [isRequired],
@@ -25,7 +25,7 @@ const validations = {
         }),
     },
     password: {
-        rules: FieldDefinition({
+        rules: describeField({
             name: "password",
             rules: [
                 [isRequired],
@@ -36,7 +36,7 @@ const validations = {
         }),
     },
     securityQuestion1: {
-        rules: FieldDefinition({
+        rules: describeField({
             name: "answer",
             rules: [
                 [isRequired], [hasLengthBetween(2, 30)], [shouldMatch(/[a-z]/i)],
@@ -44,7 +44,7 @@ const validations = {
         }),
     },
     securityQuestion2: {
-        rules: FieldDefinition({
+        rules: describeField({
             name: "answer",
             rules: [
                 [isRequired], [hasLengthBetween(2, 30)], [shouldMatch(/[a-z]/i)],

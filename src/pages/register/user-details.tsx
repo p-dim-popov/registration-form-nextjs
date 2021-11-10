@@ -5,16 +5,16 @@ import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";
 import Selector from "@src/components/selector/Selector";
 import DateInput from "@src/components/date-input/DateInput";
-import FieldDefinition, {
+import describeField, {
     isRequired,
     isValidBirthDate,
-} from "@src/features/rule-creators/FieldDefinition";
+} from "@src/features/rule-creators/FieldDescriptor";
 
 const validations = {
-    firstName: { rules: FieldDefinition({ name: "first name", rules: [[isRequired]] }) },
-    lastName: { rules: FieldDefinition({ name: "last name", rules: [[isRequired]] }) },
-    dob: { rules: FieldDefinition({ name: "birth date", rules: [[isRequired], [isValidBirthDate()]] }) },
-    gender: { rules: FieldDefinition({ name: "gender", rules: [[isRequired]] }) },
+    firstName: { rules: describeField({ name: "first name", rules: [[isRequired]] }) },
+    lastName: { rules: describeField({ name: "last name", rules: [[isRequired]] }) },
+    dob: { rules: describeField({ name: "birth date", rules: [[isRequired], [isValidBirthDate()]] }) },
+    gender: { rules: describeField({ name: "gender", rules: [[isRequired]] }) },
 };
 
 const UserDetails: NextPageWithLayout = () => (

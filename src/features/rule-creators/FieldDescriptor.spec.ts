@@ -1,8 +1,8 @@
-import FieldDefinition, { isEqualOrGreaterThan } from "@src/features/rule-creators/FieldDefinition";
+import describeField, { isEqualOrGreaterThan } from "@src/features/rule-creators/FieldDescriptor";
 
-describe("FieldDefinition", () => {
+describe("describeField", () => {
     it("should create rule with correct message", () => {
-        const [{ message: errorMessage }] = FieldDefinition({
+        const [{ message: errorMessage }] = describeField({
             name: "age",
             rules: [[isEqualOrGreaterThan(18)]],
         });
@@ -10,7 +10,7 @@ describe("FieldDefinition", () => {
     });
 
     it("should create rule with correct message when used default", () => {
-        const [{ message: errorMessage }] = FieldDefinition({
+        const [{ message: errorMessage }] = describeField({
             rules: [[isEqualOrGreaterThan(18)]],
         });
         expect(errorMessage).toEqual("Field should be equal or greater than 18");

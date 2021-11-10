@@ -100,8 +100,8 @@ export interface IFieldDefinitionOptions<T, TContext extends IFormContext<T>> {
 
 export const capitalizeFirst = (value: string) => `${value[0].toLocaleUpperCase()}${value.substr(1)}`;
 
-const FieldDefinition = <T, TContext extends IFormContext<T> = IFormContext<T>> ({
+const describeField = <T, TContext extends IFormContext<T> = IFormContext<T>> ({
     name = "field", rules,
 }: IFieldDefinitionOptions<T, TContext>): IUseValidationRule<T, TContext>[] => rules.map(([r, message]) => r(message || capitalizeFirst(r().message.replace(/field/gmi, name))));
 
-export default FieldDefinition;
+export default describeField;

@@ -3,17 +3,17 @@ import React, { useState } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
-import FieldDefinition, {
+import describeField, {
     isDifferentThan,
     isEqualOrGreaterThan, isRequired,
-} from "@src/features/rule-creators/FieldDefinition";
+} from "@src/features/rule-creators/FieldDescriptor";
 
 describe("useValidation", () => {
     it("should return tuple with onChange, status, error", () => {
         const Mock: React.FC = () => {
             const [value] = useState("");
             const result = useValidation({
-                rules: FieldDefinition({ rules: [[isRequired]] }),
+                rules: describeField({ rules: [[isRequired]] }),
             }, value);
 
             expect(result).toBeInstanceOf(Array);
@@ -43,7 +43,7 @@ describe("useValidation", () => {
             [20, 18],
             [4, 18],
         ])("should show error when !(%s >= %s)", (value: number, comparable: number) => {
-            const [rule] = FieldDefinition({ rules: [[isEqualOrGreaterThan(comparable)]] });
+            const [rule] = describeField({ rules: [[isEqualOrGreaterThan(comparable)]] });
             render(<Mock rules={[rule]} />);
             const inputElement = screen.getByTestId("TEST_INPUT");
 
@@ -66,7 +66,7 @@ describe("useValidation", () => {
             const onValidMock = jest.fn();
             const onErrorMock = jest.fn();
             render(<Mock
-                rules={FieldDefinition({ name: "Age", rules: [[isEqualOrGreaterThan(18)]] })}
+                rules={describeField({ name: "Age", rules: [[isEqualOrGreaterThan(18)]] })}
                 onValid={onValidMock}
                 onError={onErrorMock}
             />);
@@ -148,7 +148,7 @@ describe("useValidation", () => {
             value: valueInContext,
         };
         const TestContext = React.createContext(contextData);
-        const [rule] = FieldDefinition<string, ITestContext>({
+        const [rule] = describeField<string, ITestContext>({
             rules: [[isDifferentThan({ selector: (c) => c.value, description: valueInContext })]],
         });
 
@@ -179,7 +179,7 @@ describe("useValidation", () => {
     });
 
     it("should not validate if not started", () => {
-        const [rule] = FieldDefinition({ rules: [[isRequired]] });
+        const [rule] = describeField({ rules: [[isRequired]] });
         const Mock: React.FC = () => {
             const [value, setValue] = useState("");
             const [validate, setValidate] = useState(false);

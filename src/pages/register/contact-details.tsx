@@ -3,10 +3,10 @@ import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";
 import Checkbox from "@src/components/checkbox/Checkbox";
-import FieldDefinition, { isRequired } from "@src/features/rule-creators/FieldDefinition";
+import describeField, { isRequired } from "@src/features/rule-creators/FieldDescriptor";
 
 const validations = {
-    hasAgreed: { rules: FieldDefinition({ rules: [[isRequired]] }) },
+    hasAgreed: { rules: describeField({ rules: [[isRequired]] }) },
 };
 
 const ContactDetails: NextPageWithLayout = () => (

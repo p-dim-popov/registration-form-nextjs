@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import Selector, { ISelectorProps } from "@src/components/selector/Selector";
 import userEvent from "@testing-library/user-event";
 import FormContext, { getFormContextDefaultValue } from "@src/contexts/form/FormContext";
-import FieldDefinition, { isRequired } from "@src/features/rule-creators/FieldDefinition";
+import describeField, { isRequired } from "@src/features/rule-creators/FieldDescriptor";
 
 describe("Selector", () => {
     it("should render options", () => {
@@ -86,7 +86,7 @@ describe("Selector", () => {
         const props = {
             id: "test-id",
             definitions: [{ value: "option-1" }],
-            validation: { rules: FieldDefinition({ rules: [[isRequired]] }) },
+            validation: { rules: describeField({ rules: [[isRequired]] }) },
         } as ISelectorProps;
         const fcData = getFormContextDefaultValue();
         fcData.data[props.id] = "";
