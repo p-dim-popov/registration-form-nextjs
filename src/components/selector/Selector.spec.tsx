@@ -96,7 +96,7 @@ describe("Selector", () => {
             </FormContext.Provider>,
         );
 
-        const error = screen.queryByText(props.validation!.rules[0][1]);
+        const error = screen.queryByText(props.validation!.rules[0].message);
         expect(error).toBeInTheDocument();
     });
 });

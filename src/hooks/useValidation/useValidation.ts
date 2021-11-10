@@ -1,5 +1,5 @@
 import React, {
-    useCallback, useContext, useEffect, useState,
+    useContext, useEffect, useState,
 } from "react";
 import FormContext, { IFormContext } from "@src/contexts/form/FormContext";
 
@@ -12,10 +12,10 @@ export enum ValidationStatus {
 
 export type IUseValidation = string[];
 
-export type IUseValidationRule<T, TContext extends IFormContext<T> = IFormContext<T>> = [
-  test: (value?: T, context?: TContext) => boolean,
-  message: string,
-];
+export type IUseValidationRule<T, TContext extends IFormContext<T> = IFormContext<T>> = {
+    test: (value?: T, context?: TContext) => boolean,
+    message: string,
+};
 
 export interface IUseValidationOptions<T, TContext extends IFormContext<T> = IFormContext<T>> {
     rules: IUseValidationRule<T, TContext>[];
@@ -39,10 +39,10 @@ export const useValidation = <T, TContext extends IFormContext<T> = IFormContext
         if (!shouldValidate) return;
 
         const errorMessages = earlyReturn
-            ? [rules.find(([test]) => !test(value, context))?.[1] ?? ""]
+            ? [rules.find(({ test }) => !test(value, context))?.message ?? ""]
                 .filter((x) => !!x)
-            : rules.filter(([test]) => !test(value, context))
-                .map(([, message]) => message);
+            : rules.filter(({ test }) => !test(value, context))
+                .map(({ message }) => message);
 
         if (errorMessages.length) {
             setErrors((prevErrors) => (

@@ -70,7 +70,7 @@ describe("DateInput", () => {
     });
 
     it("should have validation", () => {
-        const rules = [[isValid, "Error"] as [() => boolean, string]];
+        const rules = [{ test: isValid, message: "Error" }];
         render(<DateInput id="date-input-id" validation={{ rules }} />);
 
         userEvent.type(screen.queryByPlaceholderText("MM")!, "20");
@@ -80,7 +80,7 @@ describe("DateInput", () => {
     });
 
     it("should not set -- when all fields are cleared", () => {
-        const rules = [[isValid, "Error"] as [() => boolean, string]];
+        const rules = [{ test: isValid, message: "Error" }];
         const onChangeMock = jest.fn();
         render(<DateInput id="date-input-id" onChange={onChangeMock} validation={{ rules }} />);
 

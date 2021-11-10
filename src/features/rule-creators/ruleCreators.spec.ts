@@ -14,12 +14,12 @@ describe("ruleCreators", () => {
     });
 
     it("should create rule with correct message when used function", () => {
-        const [, errorMessage] = Rule({ name: "Age" }).isEqualOrGreaterThan(18);
+        const { message: errorMessage } = Rule({ name: "Age" }).isEqualOrGreaterThan(18);
         expect(errorMessage).toEqual("Age should be equal or greater than 18!");
     });
 
     it("should create rule with correct message when used default", () => {
-        const [, errorMessage] = Rule().isEqualOrGreaterThan(18);
+        const { message: errorMessage } = Rule().isEqualOrGreaterThan(18);
         expect(errorMessage).toEqual("Field should be equal or greater than 18!");
     });
 });

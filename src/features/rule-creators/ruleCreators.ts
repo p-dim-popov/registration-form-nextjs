@@ -7,7 +7,7 @@ export interface ICreateMessageOptions {
     message?: string;
 }
 
-const capitalizeFirst = (value: string) => `${value[0].toLocaleUpperCase()}${value.substr(1)}`;
+export const capitalizeFirst = (value: string) => `${value[0].toLocaleUpperCase()}${value.substr(1)}`;
 
 export const createMessage = (options: ICreateMessageOptions, defaultCreator: (field: string) => string) => options.message || capitalizeFirst(defaultCreator(options.name || "field"));
 
@@ -41,64 +41,64 @@ const getSelectorWithDescription = <T, TContext, TOptions extends ICreateRuleOpt
 };
 
 const createRule = <T, TContext extends IFormContext<T>, TOptions extends ICreateRuleOptions<T, TContext>>(options: ICreateMessageOptions = {}) => ({
-    isRequired: [
-        (value) => !!value, createMessage(options, (field: string) => `${field} is required!`),
-    ] as IUseValidationRule<T>,
+    isRequired: ({
+        test: (value) => !!value, message: createMessage(options, (field: string) => `${field} is required!`),
+    }) as IUseValidationRule<T>,
 
     isEqualOrGreaterThan: (
         number: TOptions,
     ): IUseValidationRule<T, TContext> => {
         const [selector, description] = getSelectorWithDescription<T, TContext, TOptions>(number);
-        return [
-            ((value, context) => Number(value) >= Number(selector(context))),
-            createMessage(options, (field: string) => `${field} should be equal or greater than ${description}!`),
-        ];
+        return {
+            test: ((value, context) => Number(value) >= Number(selector(context))),
+            message: createMessage(options, (field: string) => `${field} should be equal or greater than ${description}!`),
+        };
     },
 
     isDifferentThan: (otherValue: TOptions): IUseValidationRule<T, TContext> => {
         const [selector, description] = getSelectorWithDescription<T, TContext, TOptions>(otherValue);
-        return [
-            ((value, context) => {
+        return {
+            test: ((value, context) => {
                 const contextValue = selector(context);
                 return value !== contextValue;
             }),
-            createMessage(options, (field: string) => `${field} should be different than ${description}`),
-        ];
+            message: createMessage(options, (field: string) => `${field} should be different than ${description}`),
+        };
     },
 
     shouldNotInclude: (otherValue: TOptions): IUseValidationRule<T, TContext> => {
         const [selector, description] = getSelectorWithDescription(otherValue);
-        return [
-            (value, context) => {
+        return {
+            test: (value, context) => {
                 const contextValue = selector(context);
                 return String(value).includes(String(contextValue));
             },
-            createMessage(options, (field) => `${field} should not contain ${description}`),
-        ];
+            message: createMessage(options, (field) => `${field} should not contain ${description}`),
+        };
     },
 
-    shouldMatch: (pattern: string | RegExp): IUseValidationRule<T> => [
-        (value) => typeof value !== "undefined" && new RegExp(pattern).test(String(value)),
-        createMessage(options, (field) => `${field} should match pattern ${pattern}`),
-    ],
+    shouldMatch: (pattern: string | RegExp): IUseValidationRule<T> => ({
+        test: (value) => typeof value !== "undefined" && new RegExp(pattern).test(String(value)),
+        message: createMessage(options, (field) => `${field} should match pattern ${pattern}`),
+    }),
 
-    hasLengthBetween: (min: number, max: number): IUseValidationRule<string> => [
-        (value) => typeof value !== "undefined" && (value.length > min && value.length <= max),
-        createMessage(options, (field) => `${field} should be between ${min} and ${max} characters`),
-    ],
+    hasLengthBetween: (min: number, max: number): IUseValidationRule<string> => ({
+        test: (value) => typeof value !== "undefined" && (value.length > min && value.length <= max),
+        message: createMessage(options, (field) => `${field} should be between ${min} and ${max} characters`),
+    }),
 
-    hasMaxLength: (max: number): IUseValidationRule<string> => [
-        ((value) => typeof value !== "undefined" && value.length <= max),
-        createMessage(options, (field) => `${field} should be less than ${max} characters`),
-    ],
+    hasMaxLength: (max: number): IUseValidationRule<string> => ({
+        test: ((value) => typeof value !== "undefined" && value.length <= max),
+        message: createMessage(options, (field) => `${field} should be less than ${max} characters`),
+    }),
 
-    isValidBirthDate: (format: string = "d-M-yyyy") => [
-        (value) => {
+    isValidBirthDate: (format: string = "d-M-yyyy") => ({
+        test: (value) => {
             const parsedDate = parse(String(value), format, new Date());
             return isBefore(parsedDate, new Date());
         },
-        createMessage(options, (field) => `${field} is not valid`),
-    ] as IUseValidationRule<T>,
+        message: createMessage(options, (field) => `${field} is not valid`),
+    }) as IUseValidationRule<T>,
 });
 
 const Rule = <T, TContext extends IFormContext<T> = IFormContext<T>> (options: ICreateMessageOptions = {}) => ({

@@ -46,7 +46,7 @@ describe("useValidation", () => {
 
             const statusElement = screen.getByTestId("TEST_STATUS");
             const expectError = expect(statusElement.textContent);
-            const [test, errorMessage] = rule;
+            const { test, message: errorMessage } = rule;
             if (test(value)) {
                 expectError.not.toEqual(errorMessage);
             } else {
@@ -79,7 +79,10 @@ describe("useValidation", () => {
     ])("should have early return - %s", (earlyReturn) => {
         const Mock: React.FC = () => {
             const [value, setValue] = useState("");
-            const errors = useValidation({ rules: [[() => false, "TEST-1"], [() => false, "TEST-2"]], earlyReturn }, value);
+            const errors = useValidation({
+                rules: [{ test: () => false, message: "TEST-1" }, { test: () => false, message: "TEST-2" }],
+                earlyReturn,
+            }, value);
 
             return (
                 <div>
@@ -109,7 +112,7 @@ describe("useValidation", () => {
         };
         const Mock: React.FC = () => {
             const [value, setValue] = useState("");
-            const errors = useValidation({ rules: [[predicateMock, "TEST-1"]] }, value);
+            const errors = useValidation({ rules: [{ test: predicateMock, message: "TEST-1" }] }, value);
 
             return (
                 <div>
@@ -140,14 +143,14 @@ describe("useValidation", () => {
             value: valueInContext,
         };
         const TestContext = React.createContext(contextData);
-        const [test, errorMessage] = Rule<string, ITestContext>()
+        const rule = Rule<string, ITestContext>()
             .withContext
             .isDifferentThan({ selector: (c) => c.value, description: valueInContext });
 
         const Mock: React.FC = () => {
             const [inputValue, setInputValue] = useState("");
             const errors = useValidation({
-                rules: [[test, errorMessage]],
+                rules: [rule],
                 Context: TestContext,
             }, inputValue);
 
@@ -164,9 +167,9 @@ describe("useValidation", () => {
         const errorDiv = screen.getByTestId("ERROR_DIV");
         const expectErrorDiv = expect(errorDiv.textContent);
         if (value !== valueInContext) {
-            expectErrorDiv.not.toMatch(errorMessage);
+            expectErrorDiv.not.toMatch(rule.message);
         } else {
-            expectErrorDiv.toMatch(errorMessage);
+            expectErrorDiv.toMatch(rule.message);
         }
     });
 
@@ -198,6 +201,6 @@ describe("useValidation", () => {
         userEvent.click(startValidatingButton);
 
         userEvent.type(screen.getByTestId("INPUT"), "T{backspace}");
-        expect(statusDiv.textContent).toEqual(rule[1]);
+        expect(statusDiv.textContent).toEqual(rule.message);
     });
 });

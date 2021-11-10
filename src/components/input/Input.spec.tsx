@@ -44,7 +44,7 @@ describe("Input", () => {
         const rule = Rule<string>().isEqualOrGreaterThan("18");
         render(<Input id="TEST" validation={{ rules: [rule] }} showValidationStatus={showValidationStatus} />);
 
-        const [, errorMessage] = rule;
+        const { message: errorMessage } = rule;
         let element = screen.queryByText(errorMessage);
         const expectElement = expect(element);
         if (showValidationStatus) {
@@ -72,7 +72,7 @@ describe("Input", () => {
         userEvent.type(input, "4");
         userEvent.tab();
 
-        const [, errorMessage] = rule;
+        const { message: errorMessage } = rule;
         expect(input).toBeInTheDocument();
         expect(input?.previousElementSibling?.previousElementSibling?.innerHTML).toMatch(errorMessage);
         expect(input?.previousElementSibling).toBeInstanceOf(HTMLLabelElement);

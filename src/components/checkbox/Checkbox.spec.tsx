@@ -34,8 +34,8 @@ describe("Checkbox", () => {
         [true],
         [false],
     ])("should have validation (test required, initial not clicked, double click => %s)", (shouldDbClick: boolean) => {
-        const [test, error] = Rule<boolean>().isRequired;
-        const { container } = render(<Checkbox id="test" validation={{ rules: [[test, error]] }} />);
+        const rule = Rule<boolean>().isRequired;
+        const { container } = render(<Checkbox id="test" validation={{ rules: [rule] }} />);
 
         const element = container.querySelector("input");
         userEvent.click(element!);
@@ -43,7 +43,7 @@ describe("Checkbox", () => {
             userEvent.click(element!);
         }
 
-        const expectErrorElement = expect(screen.queryByText(error));
+        const expectErrorElement = expect(screen.queryByText(rule.message));
         if (shouldDbClick) {
             expectErrorElement.toBeInTheDocument();
         } else {
@@ -52,15 +52,15 @@ describe("Checkbox", () => {
     });
 
     it("should have correct order of elements - error, checkbox, label", () => {
-        const [test, error] = Rule<boolean>().isRequired;
+        const rule = Rule<boolean>().isRequired;
         const id = "test-id";
-        const { container } = render(<Checkbox id={id} validation={{ rules: [[test, error]] }} />);
+        const { container } = render(<Checkbox id={id} validation={{ rules: [rule] }} />);
 
         const inputElement = container.querySelector("input");
         userEvent.click(inputElement!);
         userEvent.click(inputElement!);
 
-        expect(inputElement?.previousElementSibling?.innerHTML).toMatch(error);
+        expect(inputElement?.previousElementSibling?.innerHTML).toMatch(rule.message);
         expect(inputElement?.nextElementSibling?.innerHTML).toMatch(id);
     });
 });

@@ -17,7 +17,7 @@ const RegisterStepBox: React.FC<IStepBoxProps> = ({ children, title, forPage }) 
     const isVisited = !!pageFormDefinitions.length;
     const isValid = pageFormDefinitions
         .every(([fieldName, rules]) => rules
-            .every(([test]) => test(context.data[fieldName], context)));
+            .every(({ test }) => test(context.data[fieldName], context)));
 
     return (
         <div
