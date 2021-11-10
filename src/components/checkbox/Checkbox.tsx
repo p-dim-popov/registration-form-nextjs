@@ -9,6 +9,8 @@ import useValidation from "@src/hooks/useValidation/useValidation";
 import ValidationErrors from "@src/components/validation-error/ValidationErrors";
 import useFormContextState from "@src/hooks/form/useFormContextState/useFormContextState";
 import { ICanHaveInlineLabel } from "@src/interfaces/ICanHaveInlineLabel";
+import useFormContextDefinitions
+  from "@src/hooks/form/useFormContextDefinitions/useFormContextDefinitions";
 
 export interface ICheckboxProps<TContext extends IFormContext<boolean>>
     extends
@@ -28,6 +30,7 @@ function Checkbox<TContext extends IFormContext<boolean>>({
     const [state, setState, isInitializedInContext] = useFormContextState(name, { initialValue: false, value, onChange });
     const [shouldValidate, setShouldValidate] = useState(isInitializedInContext);
     const errorMessages = useValidation(validation ?? { rules: [] }, state, shouldValidate);
+    useFormContextDefinitions(name, validation?.rules ?? []);
 
     return (
         <div>

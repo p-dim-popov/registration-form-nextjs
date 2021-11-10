@@ -25,6 +25,9 @@ export const getFormContextDefaultValue = <T>(): IFormContext<T> => ({
 
 const FormContext = React.createContext<IFormContext<any>>(getFormContextDefaultValue());
 
+export const FormContextProvider = FormContext.Provider;
+export const FormContextConsumer = FormContext.Consumer;
+
 FormContext.displayName = "FormContext";
 
 export default FormContext;

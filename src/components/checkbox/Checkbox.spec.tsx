@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import Checkbox from "@src/components/checkbox/Checkbox";
 import userEvent from "@testing-library/user-event";
 import describeField, { isRequired } from "@src/features/field-descriptor/FieldDescriptor";
+import { FormContextProvider, getFormContextDefaultValue } from "@src/contexts/form/FormContext";
 
 describe("Checkbox", () => {
     it("should render input with id", () => {
@@ -62,5 +63,24 @@ describe("Checkbox", () => {
 
         expect(inputElement?.previousElementSibling?.innerHTML).toMatch(rule.message);
         expect(inputElement?.nextElementSibling?.innerHTML).toMatch(id);
+    });
+
+    it("should use form context definitions", () => {
+        const props = {
+            id: "test-id",
+            validation: {
+                rules: describeField({ rules: [[isRequired]] }),
+            },
+        };
+        const contextData = getFormContextDefaultValue();
+        const curryMock = jest.fn();
+        contextData.setDefinitionFor = (fieldName:string) => (defs) => curryMock(fieldName, defs);
+        render(
+            <FormContextProvider value={contextData}>
+                <Checkbox {...props} />
+            </FormContextProvider>,
+        );
+
+        expect(curryMock).toBeCalledWith(props.id, props.validation.rules);
     });
 });
