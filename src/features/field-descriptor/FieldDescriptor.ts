@@ -36,7 +36,7 @@ export interface IFieldRule<T, TContext extends IFormContext<T> = IFormContext<T
 }
 
 export const isRequired: IFieldRule<any> = (message?: string): IUseValidationRule<any> => ({
-    test: (value) => typeof value !== "undefined",
+    test: (value) => !!value,
     message: message ?? "Field is required",
 });
 

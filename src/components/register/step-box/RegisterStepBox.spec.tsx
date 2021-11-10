@@ -88,14 +88,14 @@ describe("RegisterStepBox", () => {
         [describeField({ rules: [[isRequired]] }), "123"],
         [describeField({ rules: [[isRequired]] }), undefined],
         [undefined, undefined],
-    ])("should validate visited not active steps: %s %s", (rule?, value?: string) => {
+    ])("should validate visited not active steps: %s %s", (rules?, value?: string) => {
         const data = getRegisterPageContextDefaultValue();
         data.page = RegisterPage.AccountDetails;
-        if (rule) {
+        if (rules) {
             data.definitions[RegisterPage.UserDetails] = {
                 // I know I pass undefined value
                 // @ts-ignore
-                age: [rule],
+                age: rules,
             };
         }
 
@@ -114,11 +114,11 @@ describe("RegisterStepBox", () => {
         expect(circleElement).toBeInTheDocument();
 
         const expectCircleElement = expect(circleElement);
-        if (rule && value) {
+        if (rules && value) {
             expectCircleElement.toHaveClass(..."bg-green-200".split(" "));
-        } else if (rule && !value) {
+        } else if (rules && !value) {
             expectCircleElement.toHaveClass(..."bg-red-200".split(" "));
-        } else if (!rule && !value) {
+        } else if (!rules && !value) {
             expectCircleElement.toHaveClass(..."bg-gray-300 text-gray-400".split(" "));
         }
     });
