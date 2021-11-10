@@ -10,7 +10,7 @@ const useFormContextDefinitions = <T, TContext extends IFormContext<T>>(
     const context = useContext((Context ?? FormContext) as React.Context<TContext>);
 
     useEffect(() => {
-        if (!context.getDefinitionFor(fieldName)?.length) {
+        if (!context.getDefinitionFor(fieldName)?.length && rules.length) {
             context?.setDefinitionFor(fieldName)((<IUseValidationRule<T>[]>rules));
         }
     }, [context, rules, fieldName]);

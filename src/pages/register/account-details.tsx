@@ -28,10 +28,11 @@ const validations = {
         rules: describeField({
             name: "password",
             rules: [
-                [isRequired],
-                [shouldNotInclude({ selector: (context) => context?.data?.firstName, description: "first name" })],
-                [shouldNotInclude({ selector: (context) => context?.data?.lastName, description: "last name" })],
-                [shouldNotInclude({ selector: (context) => context?.data?.email, description: "email" })],
+                [hasLengthBetween(8, 12)],
+                [shouldMatch(/^(?=.*([a-z])).*$/gmi), "At least one letter"],
+                [shouldMatch(/^(?=.*([0-9])).*$/gmi), "At least one number"],
+                [shouldMatch(/[a-z0-9]/i), "No special characters"],
+                [shouldMatch({ selector: (context) => new RegExp(`^(?!.*${context?.data?.firstName})(?!.*${context?.data?.lastName})(?!.*${context?.data?.email?.split("@").shift()}).*$`, "gmi"), description: "" }), "Can not include your first, last name or email"],
             ],
         }),
     },
@@ -39,7 +40,7 @@ const validations = {
         rules: describeField({
             name: "answer",
             rules: [
-                [isRequired], [hasLengthBetween(2, 30)], [shouldMatch(/[a-z]/i)],
+                [isRequired], [hasLengthBetween(2, 30)], [shouldMatch(/[a-z]/i), "Answer should contain only letters"],
             ],
         }),
     },
@@ -47,7 +48,7 @@ const validations = {
         rules: describeField({
             name: "answer",
             rules: [
-                [isRequired], [hasLengthBetween(2, 30)], [shouldMatch(/[a-z]/i)],
+                [isRequired], [hasLengthBetween(2, 30)], [shouldMatch(/[a-z]/i), "Answer should contain only letters"],
             ],
         }),
     },

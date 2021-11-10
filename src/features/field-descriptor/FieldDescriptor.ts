@@ -16,7 +16,7 @@ type ICreateRuleOptions<T, TContext> = (
 const getSelectorWithDescription = <T, TContext, TOptions extends ICreateRuleOptions<T, TContext>>(
     value: TOptions,
 ): [(context?: TContext) => T, string] => {
-    const isSelector = typeof value === "object";
+    const isSelector = typeof value === "object" && typeof (value as ICreateRuleOptionsWithContextSelector<T, TContext>).selector !== "undefined";
     const data: { selector: (context?: TContext) => T, description: string } = {
         selector: () => value as T,
         description: String(value),
@@ -70,10 +70,13 @@ export const shouldNotInclude = <T, TContext extends IFormContext<T>> (otherValu
     };
 };
 
-export const shouldMatch = <T, TContext extends IFormContext<T>> (pattern: string | RegExp): IFieldRule<T, TContext> => (message?: string) => ({
-    test: (value) => typeof value !== "undefined" && new RegExp(pattern).test(String(value)),
-    message: message ?? `Field should match pattern ${pattern}`,
-});
+export const shouldMatch = <T, TContext extends IFormContext<T>> (pattern: ICreateRuleOptions<string | RegExp, TContext>): IFieldRule<T, TContext> => (message?: string) => {
+    const [selector, description] = getSelectorWithDescription(pattern);
+    return ({
+        test: (value, context) => typeof value !== "undefined" && new RegExp(selector(context) as (string | RegExp)).test(String(value)),
+        message: message ?? `Field should match pattern ${description}`,
+    });
+};
 
 export const hasLengthBetween = (min: number, max: number): IFieldRule<string> => (message?: string) => ({
     test: (value) => typeof value !== "undefined" && (value.length > min && value.length <= max),
