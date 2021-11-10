@@ -1,15 +1,15 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import Input from "@src/components/input/Input";
-import Rule from "@src/features/rule-creators/ruleCreators";
 import userEvent from "@testing-library/user-event";
 import FormContext, {
     getFormContextDefaultValue,
     IFormContext,
 } from "@src/contexts/form/FormContext";
+import FieldDefinition, { isEqualOrGreaterThan } from "@src/features/rule-creators/FieldDefinition";
 
 describe("Input", () => {
-    it("should render input Rule()", () => {
+    it("should render input", () => {
         const { container } = render(<Input id="TEST" />);
 
         expect(container.querySelector("input")).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe("Input", () => {
         [true],
         [false],
     ])("should show validation status - %s", (showValidationStatus) => {
-        const rule = Rule<string>().isEqualOrGreaterThan("18");
+        const [rule] = FieldDefinition<string>({ rules: [[isEqualOrGreaterThan("18")]] });
         render(<Input id="TEST" validation={{ rules: [rule] }} showValidationStatus={showValidationStatus} />);
 
         const { message: errorMessage } = rule;
@@ -64,7 +64,7 @@ describe("Input", () => {
     });
 
     it("should have ordered elements error - label - input - summary", () => {
-        const rule = Rule<string>().isEqualOrGreaterThan("18");
+        const [rule] = FieldDefinition<string>({ rules: [[isEqualOrGreaterThan("18")]] });
         render(<Input id="TEST" validation={{ rules: [rule] }} />);
 
         const input = screen.getByLabelText("TEST");
@@ -79,7 +79,7 @@ describe("Input", () => {
     });
 
     it("should register in context on mount", () => {
-        const rules = [Rule<string>().isEqualOrGreaterThan("18")];
+        const rules = FieldDefinition<string>({ rules: [[isEqualOrGreaterThan("18")]] });
         const formContextMock: IFormContext<string> = {
             data: {},
             definitions: { _: {} },

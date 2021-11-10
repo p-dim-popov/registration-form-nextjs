@@ -6,7 +6,8 @@ import RegisterContext, {
     RegisterPage,
 } from "@src/contexts/register/RegisterContext";
 import userEvent from "@testing-library/user-event";
-import Rule from "@src/features/rule-creators/ruleCreators";
+import FieldDefinition, { isRequired } from "@src/features/rule-creators/FieldDefinition";
+import { IUseValidationRule } from "@src/hooks/useValidation/useValidation";
 
 const routePushMock = jest.fn();
 jest.mock("next/router", () => ({
@@ -84,10 +85,10 @@ describe("RegisterStepBox", () => {
     });
 
     it.each([
-        [Rule<string>().isRequired, "123"],
-        [Rule<string>().isRequired, undefined],
+        [FieldDefinition({ rules: [[isRequired]] }), "123"],
+        [FieldDefinition({ rules: [[isRequired]] }), undefined],
         [undefined, undefined],
-    ])("should validate visited not active steps: %s %s", (rule, value) => {
+    ])("should validate visited not active steps: %s %s", (rule?, value?: string) => {
         const data = getRegisterPageContextDefaultValue();
         data.page = RegisterPage.AccountDetails;
         if (rule) {

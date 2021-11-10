@@ -2,11 +2,11 @@ import React, { ReactElement } from "react";
 import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";
-import Rule from "@src/features/rule-creators/ruleCreators";
 import Checkbox from "@src/components/checkbox/Checkbox";
+import FieldDefinition, { isRequired } from "@src/features/rule-creators/FieldDefinition";
 
 const validations = {
-    hasAgreed: { rules: [Rule<boolean>().isRequired] },
+    hasAgreed: { rules: FieldDefinition({ rules: [[isRequired]] }) },
 };
 
 const ContactDetails: NextPageWithLayout = () => (

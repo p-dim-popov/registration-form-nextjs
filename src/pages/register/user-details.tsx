@@ -3,15 +3,18 @@ import Input from "@src/components/input/Input";
 import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import { NextPageWithLayout } from "@src/pages/_app";
-import Rule from "@src/features/rule-creators/ruleCreators";
 import Selector from "@src/components/selector/Selector";
 import DateInput from "@src/components/date-input/DateInput";
+import FieldDefinition, {
+    isRequired,
+    isValidBirthDate,
+} from "@src/features/rule-creators/FieldDefinition";
 
 const validations = {
-    firstName: { rules: [Rule<string>().isRequired] },
-    lastName: { rules: [Rule<string>().isRequired] },
-    dob: { rules: [Rule<string>().isRequired, Rule<string>({ name: "birth date" }).isValidBirthDate()] },
-    gender: { rules: [Rule<string>().isRequired] },
+    firstName: { rules: FieldDefinition({ name: "first name", rules: [[isRequired]] }) },
+    lastName: { rules: FieldDefinition({ name: "last name", rules: [[isRequired]] }) },
+    dob: { rules: FieldDefinition({ name: "birth date", rules: [[isRequired], [isValidBirthDate()]] }) },
+    gender: { rules: FieldDefinition({ name: "gender", rules: [[isRequired]] }) },
 };
 
 const UserDetails: NextPageWithLayout = () => (

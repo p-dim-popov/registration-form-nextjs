@@ -3,29 +3,54 @@ import RegisterLayout from "@src/components/register/layout/RegisterLayout";
 import type { NextPageWithLayout } from "@src/pages/_app";
 import { RegisterPage } from "@src/contexts/register/RegisterContext";
 import Input from "@src/components/input/Input";
-import Rule from "@src/features/rule-creators/ruleCreators";
 import Checkbox from "@src/components/checkbox/Checkbox";
+import FieldDefinition, {
+    hasLengthBetween,
+    hasMaxLength,
+    isRequired,
+    shouldMatch, shouldNotInclude,
+} from "@src/features/rule-creators/FieldDefinition";
 
 const EMAIL_REGEX = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
 const validations = {
     email: {
-        rules: [
-            Rule<string>({ name: "email" }).isRequired,
-            Rule<string>({ message: "Email does not conform standards (RFC-822)" }).shouldMatch(EMAIL_REGEX),
-            Rule({ name: "email" }).hasMaxLength(50),
-        ],
+        rules: FieldDefinition({
+            name: "email",
+            rules: [
+                [isRequired],
+                [shouldMatch(EMAIL_REGEX), "Email does not conform standards (RFC-822)"],
+                [hasMaxLength(50)],
+            ],
+        }),
     },
     password: {
-        rules: [
-            Rule<string>({ name: "password" }).isRequired,
-            Rule<string>({ name: "password" }).withContext.shouldNotInclude({ selector: (context) => context?.data?.firstName, description: "first name" }),
-            Rule<string>({ name: "password" }).withContext.shouldNotInclude({ selector: (context) => context?.data?.lastName, description: "last name" }),
-            Rule<string>({ name: "password" }).withContext.shouldNotInclude({ selector: (context) => context?.data?.email, description: "email" }),
-        ],
+        rules: FieldDefinition({
+            name: "password",
+            rules: [
+                [isRequired],
+                [shouldNotInclude({ selector: (context) => context?.data?.firstName, description: "first name" })],
+                [shouldNotInclude({ selector: (context) => context?.data?.lastName, description: "last name" })],
+                [shouldNotInclude({ selector: (context) => context?.data?.email, description: "email" })],
+            ],
+        }),
     },
-    securityQuestion1: { rules: [Rule<string>().isRequired, Rule<string>().hasLengthBetween(2, 30), Rule<string>().shouldMatch(/[a-z]/i)] },
-    securityQuestion2: { rules: [Rule<string>().isRequired, Rule<string>().hasLengthBetween(2, 30), Rule<string>().shouldMatch(/[a-z]/i)] },
+    securityQuestion1: {
+        rules: FieldDefinition({
+            name: "answer",
+            rules: [
+                [isRequired], [hasLengthBetween(2, 30)], [shouldMatch(/[a-z]/i)],
+            ],
+        }),
+    },
+    securityQuestion2: {
+        rules: FieldDefinition({
+            name: "answer",
+            rules: [
+                [isRequired], [hasLengthBetween(2, 30)], [shouldMatch(/[a-z]/i)],
+            ],
+        }),
+    },
 };
 
 const AccountDetails: NextPageWithLayout = () => (

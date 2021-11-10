@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import Checkbox from "@src/components/checkbox/Checkbox";
 import userEvent from "@testing-library/user-event";
-import Rule from "@src/features/rule-creators/ruleCreators";
+import FieldDefinition, { isRequired } from "@src/features/rule-creators/FieldDefinition";
 
 describe("Checkbox", () => {
     it("should render input with id", () => {
@@ -34,7 +34,7 @@ describe("Checkbox", () => {
         [true],
         [false],
     ])("should have validation (test required, initial not clicked, double click => %s)", (shouldDbClick: boolean) => {
-        const rule = Rule<boolean>().isRequired;
+        const [rule] = FieldDefinition({ rules: [[isRequired]] });
         const { container } = render(<Checkbox id="test" validation={{ rules: [rule] }} />);
 
         const element = container.querySelector("input");
@@ -52,7 +52,7 @@ describe("Checkbox", () => {
     });
 
     it("should have correct order of elements - error, checkbox, label", () => {
-        const rule = Rule<boolean>().isRequired;
+        const [rule] = FieldDefinition({ rules: [[isRequired]] });
         const id = "test-id";
         const { container } = render(<Checkbox id={id} validation={{ rules: [rule] }} />);
 
