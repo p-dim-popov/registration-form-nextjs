@@ -23,7 +23,7 @@ const RegisterFormFooter: React.FC = () => {
 
                         const errors = Object.entries(definitions)
                             .flatMap(([fieldName, rules]) => rules
-                                .map(([test, message]) => (
+                                .map(({ test, message }) => (
                                     test(context.data[fieldName], context)
                                         ? null
                                         : message)))
