@@ -10,12 +10,12 @@ export interface IValidationErrorsProps extends ICanBeHidden {
 const ValidationErrors: React.FC<IValidationErrorsProps> = ({
     isHidden, errorMessages,
 }) => (
-    <>
+    <ul>
         {
             !isHidden && errorMessages
                 .map((m) => (<ValidationError message={m} key={m} />))
         }
-    </>
+    </ul>
 );
 
 export default ValidationErrors;
