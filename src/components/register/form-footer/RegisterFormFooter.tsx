@@ -1,21 +1,21 @@
 import React, { useContext } from "react";
 import RegisterContext, { getNextRegisterPage } from "@src/contexts/register/RegisterContext";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 const RegisterFormFooter: React.FC = () => {
     const context = useContext(RegisterContext);
-    const router = useRouter();
+    const nextRegisterPage = getNextRegisterPage(context.page);
 
     return (
         <section className="flex flex-col items-center mt-20">
-            <button
-                type="button"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-44 rounded-full"
-                onClick={() => {
-                    const nextPage = getNextRegisterPage(context.page);
-                    if (nextPage) {
-                        router.push(nextPage);
-                    } else {
+            <Link href={nextRegisterPage}>
+                <a
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-44 rounded-full"
+                    onClick={() => {
+                        if (nextRegisterPage) {
+                            return;
+                        }
+
                         const definitions = Object.values(context.definitions)
                             .reduce((acc, cur) => ({
                                 ...acc, ...cur,
@@ -29,11 +29,11 @@ const RegisterFormFooter: React.FC = () => {
                                         : message)))
                             .filter((x) => !!x);
                         alert(JSON.stringify({ errors, data: context.data, definitions }, null, 4));
-                    }
-                }}
-            >
-                Continue
-            </button>
+                    }}
+                >
+                    Continue
+                </a>
+            </Link>
             <div className="border-t-2 border-gray-200 min-w-full self-baseline my-8" />
             <div>
                 Need help?
