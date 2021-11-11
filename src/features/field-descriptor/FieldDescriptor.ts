@@ -1,6 +1,6 @@
 import { IUseValidationRule } from "@src/hooks/useValidation/useValidation";
 import { IFormContext } from "@src/contexts/form/FormContext";
-import { isBefore, parse } from "date-fns";
+import { differenceInYears, isBefore, parse } from "date-fns";
 
 type ICreateRuleOptionsWithValue<T> = T;
 
@@ -93,7 +93,15 @@ export const isValidBirthDate = (format: string = "d-M-yyyy"): IFieldRule<string
         const parsedDate = parse(String(value), format, new Date());
         return isBefore(parsedDate, new Date());
     },
-    message: message ?? "Field is not valid",
+    message: message ?? "Field should be before current date",
+});
+
+export const shouldBeAgedMoreThan = (years: number, format: string = "d-M-yyyy"): IFieldRule<string> => (message?: string) => ({
+    test: (value) => {
+        const parsedDate = parse(String(value), format, new Date());
+        return differenceInYears(new Date(), parsedDate) > years;
+    },
+    message: message ?? `Should be aged more than ${years} years`,
 });
 
 export interface IFieldDefinitionOptions<T, TContext extends IFormContext<T>> {

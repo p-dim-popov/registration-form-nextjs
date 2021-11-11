@@ -8,7 +8,7 @@ import DateInput from "@src/components/date-input/DateInput";
 import describeField, {
     hasLengthBetween,
     isRequired,
-    isValidBirthDate, shouldMatch,
+    isValidBirthDate, shouldBeAgedMoreThan, shouldMatch,
 } from "@src/features/field-descriptor/FieldDescriptor";
 
 const ONLY_LETTERS_SPACE_APOSTROPHES_AND_DASHES_REGEX = /^[a-z- ']+$/gmi;
@@ -37,7 +37,16 @@ const validations = {
             ],
         }),
     },
-    dob: { rules: describeField({ name: "birth date", rules: [[isRequired], [isValidBirthDate()]] }) },
+    dob: {
+        rules: describeField({
+            name: "birth date",
+            rules: [
+                [isRequired],
+                [isValidBirthDate()],
+                [shouldBeAgedMoreThan(18)],
+            ],
+        }),
+    },
     gender: { rules: describeField({ name: "gender", rules: [[isRequired]] }) },
 };
 
