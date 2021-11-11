@@ -18,7 +18,7 @@ export const RegisterPagesOrder = [
     RegisterPage.ContactDetails,
 ];
 
-export const getNextRegisterPage = (page: RegisterPage): RegisterPage | undefined => RegisterPagesOrder[RegisterPagesOrder.indexOf(page) + 1];
+export const getNextRegisterPage = (page?: RegisterPage): RegisterPage | "" => RegisterPagesOrder[(!page ? -1 : RegisterPagesOrder.indexOf(page)) + 1];
 
 export const getRegisterPageContextDefaultValue = (): IRegisterContext => ({
     data: {},
