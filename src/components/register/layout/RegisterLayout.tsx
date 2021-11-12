@@ -11,6 +11,8 @@ import FormContext, {
     IFormData,
 } from "@src/contexts/form/FormContext";
 import { IUseValidationRule } from "@src/hooks/useValidation/useValidation";
+import Image from "next/image";
+import starSmiling from "@public/star-smiling.png";
 
 export interface IRegisterLayoutProps {
     page: RegisterPage;
@@ -50,6 +52,7 @@ const RegisterLayout: React.FC<IRegisterLayoutProps> = ({
 
     return (
         <div className="lg:bg-gradient-to-b from-blue-100 to-blue-50 bg-blue-100 flex items-center justify-center bg-white">
+            <Image alt="star smiling" src={starSmiling} width={75} height={75} className="border rounded-full shadow-inner cursor-grab" />
             <RegisterContext.Provider
                 value={{
                     data: formData,

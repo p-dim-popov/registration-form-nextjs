@@ -10,7 +10,8 @@
                     "./"
                 ],
                 "alias": {
-                    "@src": "./src"
+                    "@src": "./src",
+                    "@public": "./public"
                 },
                 "extensions": [
                     ".js",

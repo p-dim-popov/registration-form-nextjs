@@ -28,4 +28,10 @@ describe("Layout", () => {
         const formSection = headerFormFooterSection?.querySelector("section:nth-child(2)");
         expect(formSection).toHaveClass(..."flex flex-col items-center".split(" "));
     });
+
+    it("should have star image", () => {
+        const { container } = render(<RegisterLayout page={RegisterPage.AccountDetails} />);
+
+        expect(container.querySelector("img")).toBeInTheDocument();
+    });
 });
