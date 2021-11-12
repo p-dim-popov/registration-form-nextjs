@@ -1,8 +1,17 @@
 import React, { useContext } from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Draggable from "@src/components/draggable/Draggable";
-import userEvent from "@testing-library/user-event";
-import DraggableContext from "@src/contexts/DraggableContext";
+import DraggableContext, { IDraggableContext } from "@src/contexts/DraggableContext";
+
+const renderAndGetStateOfDraggable = (): IDraggableContext => {
+    const Mock: React.FC = () => (
+        <input placeholder={JSON.stringify(useContext(DraggableContext))} />
+    );
+    const {
+        container,
+    } = render(<Draggable><Mock /></Draggable>);
+    return JSON.parse(container.querySelector("input")!.placeholder);
+};
 
 describe("Draggable", () => {
     it("should render children in a div", () => {
@@ -24,5 +33,11 @@ describe("Draggable", () => {
         } = render(<Draggable><Mock /></Draggable>);
         const value = container.querySelector("input")!.placeholder;
         expect(JSON.parse(value)).toBeInstanceOf(Object);
+    });
+
+    it("should have initial position: { x: 0, y: vh / 2 }", () => {
+        const state = renderAndGetStateOfDraggable();
+        expect(state.x).toEqual(0);
+        expect(state.y).toEqual(window.innerHeight / 2);
     });
 });

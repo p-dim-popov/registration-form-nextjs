@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { DraggableContextProvider, IDraggableContext } from "@src/contexts/DraggableContext";
 
 const Draggable: React.FC = ({ children }) => {
@@ -12,6 +12,10 @@ const Draggable: React.FC = ({ children }) => {
             isDragging: false,
         },
     );
+
+    useEffect(() => {
+        setState({ y: window.innerHeight / 2 });
+    }, []);
 
     return (
         <div draggable>
