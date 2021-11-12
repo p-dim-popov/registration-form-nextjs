@@ -1,7 +1,7 @@
 import React from "react";
 
 const Draggable: React.FC = ({ children }) => (
-    <div>
+    <div draggable>
         {children}
     </div>
 );

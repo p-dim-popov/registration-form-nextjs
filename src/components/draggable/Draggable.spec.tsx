@@ -7,4 +7,9 @@ describe("Draggable", () => {
         render(<Draggable>test</Draggable>);
         expect(screen.queryByText(/test/i)?.parentElement).toBeInstanceOf(HTMLDivElement);
     });
+
+    it("should be marked draggable", () => {
+        const { container } = render(<Draggable />);
+        expect(container.querySelector("div")).toHaveAttribute("draggable", "true");
+    });
 });
